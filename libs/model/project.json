@@ -1,0 +1,57 @@
+{
+  "root": "libs/model",
+  "sourceRoot": "libs/model/src",
+  "projectType": "library",
+  "targets": {
+    "generate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma generate",
+        "cwd": "libs/model"
+      }
+    },
+    "migrate-dev": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma migrate dev --create-only --name {args.name}",
+        "cwd": "libs/model"
+      }
+    },
+    "migrate-save": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma migrate dev",
+        "cwd": "libs/model"
+      }
+    },
+    "migrate-reset": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma migrate reset",
+        "cwd": "libs/model"
+      }
+    },
+    "migrate-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma migrate deploy",
+        "cwd": "libs/model"
+      }
+    },
+    "migrate-status": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma migrate status",
+        "cwd": "libs/model"
+      }
+    },
+    "studio": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prisma studio",
+        "cwd": "libs/model"
+      }
+    }
+  },
+  "tags": []
+}

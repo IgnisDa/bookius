@@ -1,6 +1,9 @@
 {
   "version": 2,
   "projects": {
+    "config": "libs/config",
+    "general": "libs/general",
+    "model": "libs/model",
     "server": "apps/server"
   }
 }

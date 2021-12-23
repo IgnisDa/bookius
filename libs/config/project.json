@@ -1,0 +1,7 @@
+{
+  "root": "libs/config",
+  "sourceRoot": "libs/config/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
+}

@@ -5,24 +5,35 @@
   "targets": {
     "build": {
       "executor": "@nrwl/node:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
+        "assets": [],
         "outputPath": "dist/apps/server",
         "main": "apps/server/src/main.ts",
         "tsConfig": "apps/server/tsconfig.app.json",
-        "assets": ["apps/server/src/assets"]
+        "tsPlugins": [
+          {
+            "name": "@nestjs/graphql/plugin",
+            "options": {
+              "typeFileNameSuffix": [
+                ".input.ts",
+                ".dto.ts",
+                ".result.ts",
+                ".interface.ts"
+              ],
+              "introspectComments": true
+            }
+          }
+        ]
       },
       "configurations": {
         "production": {
-          "optimization": true,
+          "optimization": false,
           "extractLicenses": true,
           "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/server/src/environments/environment.ts",
-              "with": "apps/server/src/environments/environment.prod.ts"
-            }
-          ]
+          "verbose": true
         }
       }
     },
@@ -32,19 +43,23 @@
         "buildTarget": "server:build"
       }
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+    "build-prod": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "lintFilePatterns": ["apps/server/**/*.ts"]
+        "commands": [
+          "nx run model:generate",
+          "nx run server:build:production"
+        ]
       }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/server"],
+    "start-prod": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "jestConfig": "apps/server/jest.config.js",
-        "passWithNoTests": true
+        "commands": [
+          "nx run model:migrate-status",
+          "nx run model:migrate-deploy",
+          "node dist/apps/server/main"
+        ]
       }
     }
   },
