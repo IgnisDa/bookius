@@ -1,0 +1,48 @@
+{
+    "extends": [
+        "config:base"
+    ],
+    "schedule": [
+        "before 3am on Monday"
+    ],
+    "labels": [
+        "dependencies"
+    ],
+    "separateMajorMinor": "true",
+    "packageRules": [
+        {
+            "matchDepTypes": [
+                "devDependencies"
+            ],
+            "matchUpdateTypes": [
+                "major",
+                "minor",
+                "patch",
+                "pin",
+                "digest",
+                "lockFileMaintenance",
+                "rollback",
+                "bump"
+            ],
+            "groupName": "devDependencies",
+            "semanticCommitType": "chore"
+        },
+        {
+            "matchDepTypes": [
+                "dependencies"
+            ],
+            "matchUpdateTypes": [
+                "major",
+                "minor",
+                "patch",
+                "pin",
+                "digest",
+                "lockFileMaintenance",
+                "rollback",
+                "bump"
+            ],
+            "groupName": "dependencies",
+            "semanticCommitType": "fix"
+        }
+    ]
+}
