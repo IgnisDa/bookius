@@ -7,6 +7,7 @@ import { ConnectionStringParser } from 'connection-string-parser';
 import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
 import { join } from 'path';
 import { ApplicationConfig } from './config';
+import { CoreModule } from './core/core.module';
 
 const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
 
@@ -43,6 +44,7 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
       sortSchema: true,
     }),
     PrismaModule,
+    CoreModule,
   ],
 })
 export class AppModule {}
