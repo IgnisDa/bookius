@@ -3,6 +3,7 @@
   "projects": {
     "config": "libs/config",
     "general": "libs/general",
+    "generated": "libs/generated",
     "model": "libs/model",
     "server": "apps/server",
     "site": "apps/site"

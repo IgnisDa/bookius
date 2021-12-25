@@ -17,6 +17,7 @@
     "paths": {
       "@bookius/config": ["libs/config/src/index.ts"],
       "@bookius/general": ["libs/general/src/index.ts"],
+      "@bookius/generated": ["libs/generated/src/index.ts"],
       "@bookius/model": ["libs/model/src/index.ts"]
     }
   },

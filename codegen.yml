@@ -1,8 +1,13 @@
+hooks:
+  afterOneFileWrite:
+    - prettier --write
 overwrite: true
 schema: 'dist/apps/server/src/schema.graphql'
-documents: './apps/site/**/*.{ts,tsx}'
+documents: 'apps/site/**/*.{ts,tsx}'
+config:
+  gqlImport: urql#gql
 generates:
-  ./apps/site/graphql.ts:
+  libs/generated/src/lib/graphql.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
@@ -10,6 +15,6 @@ generates:
     config:
       withHooks: true
       nonOptionalTypename: true
-  ./apps/site/graphql.schema.json:
+  libs/generated/src/graphql.schema.json:
     plugins:
       - 'urql-introspection'

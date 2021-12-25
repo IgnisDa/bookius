@@ -7,6 +7,8 @@
     "prisma.prisma",
     "ms-vscode.vscode-typescript-next",
     "wix.vscode-import-cost",
-    "graphql.vscode-graphql"
+    "graphql.vscode-graphql",
+    "willstakayama.vscode-nextjs-snippets",
+    "voorjaar.windicss-intellisense"
   ]
 }

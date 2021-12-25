@@ -1,13 +1,22 @@
-import { GetStaticProps } from 'next';
+import { useGetStatusQuery } from '@bookius/generated';
+import { InferGetServerSidePropsType } from 'next';
 import { GET_STATUS } from '../graphql/queries';
 import { getSsrUrqlClient } from '../helpers/getUrqlClient';
 import { withNoAuthUrqlClient } from '../helpers/withAppUrqlClient';
 
-export const Index = () => {
-  return <div className="text-5xl">Hello world!</div>;
+const Index = (
+  _props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const [{ data }] = useGetStatusQuery();
+  return (
+    <div>
+      <div>Hello</div>
+      <div>{JSON.stringify(data.getStatus)}</div>
+    </div>
+  );
 };
 
-export const getStaticProps: GetStaticProps = async (_ctx) => {
+export const getServerSideProps = async () => {
   const { client, ssrCache } = getSsrUrqlClient();
 
   // This query is used to populate the cache for the query
@@ -19,7 +28,6 @@ export const getStaticProps: GetStaticProps = async (_ctx) => {
       // urqlState is a keyword here so withUrqlClient can pick it up.
       urqlState: ssrCache.extractData(),
     },
-    revalidate: 600,
   };
 };
 
