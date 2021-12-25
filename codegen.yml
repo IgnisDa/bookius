@@ -1,0 +1,15 @@
+overwrite: true
+schema: 'dist/apps/server/src/schema.graphql'
+documents: './apps/site/**/*.{ts,tsx}'
+generates:
+  ./apps/site/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-urql'
+    config:
+      withHooks: true
+      nonOptionalTypename: true
+  ./apps/site/graphql.schema.json:
+    plugins:
+      - 'urql-introspection'

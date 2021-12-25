@@ -40,3 +40,6 @@ Thumbs.db
 
 # Keep environment variables out of version control
 .env
+
+# Personal files
+personal

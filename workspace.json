@@ -4,6 +4,7 @@
     "config": "libs/config",
     "general": "libs/general",
     "model": "libs/model",
-    "server": "apps/server"
+    "server": "apps/server",
+    "site": "apps/site"
   }
 }
