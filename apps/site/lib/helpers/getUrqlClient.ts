@@ -4,20 +4,14 @@ import { ssrExchange } from 'urql';
 
 export function getSsrUrqlClient() {
   const ssrCache = ssrExchange({ isClient: false });
-  const client = initUrqlClient(
-    getUrqlClientOptions(false)(ssrCache),
-    false // canEnableSuspense
-  );
+  const client = initUrqlClient(getUrqlClientOptions(false)(ssrCache), false);
 
   return { client, ssrCache };
 }
 
 export function getBrowserUrqlClient() {
   const ssrCache = ssrExchange({ isClient: true });
-  const client = initUrqlClient(
-    getUrqlClientOptions(true)(ssrCache),
-    false // canEnableSuspense
-  );
+  const client = initUrqlClient(getUrqlClientOptions(true)(ssrCache), false);
 
   return { client, ssrCache };
 }
