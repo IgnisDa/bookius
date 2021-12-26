@@ -38,3 +38,43 @@ model UserProfile {
   // the country as represented in the country service file
   countryId Int?
 }
+
+/// This model will keep track of books that will be made available to the users
+model Book {
+  id             BigInt              @id @default(autoincrement())
+  title          String
+  description    String?
+  openLibraryKey String
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  architects     ArchitectsOnBooks[]
+}
+
+/// The role of a person in the complete production of a book
+enum ArchitectRole {
+  AUTHOR
+  ILLUSTRATOR
+}
+
+/// The people who have worked on a book
+model ArchitectsOnBooks {
+  book     Book          @relation(fields: [bookId], references: [id])
+  author   Author        @relation(fields: [authorId], references: [id])
+  bookId   BigInt
+  authorId BigInt
+  role     ArchitectRole
+
+  @@id([bookId, authorId])
+  @@unique([bookId, authorId, role])
+}
+
+/// This model will keep track of authors that will be made available to the users
+model Author {
+  id             BigInt              @id @default(autoincrement())
+  name           String
+  bio            String?
+  openLibraryKey String
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  books          ArchitectsOnBooks[]
+}
