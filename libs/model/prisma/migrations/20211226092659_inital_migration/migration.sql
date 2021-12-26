@@ -1,3 +1,4 @@
+/* CUSTOM COMMANDS */
 CREATE EXTENSION IF NOT EXISTS "citext";
 
 -- CreateTable
@@ -36,4 +37,4 @@ CREATE UNIQUE INDEX "UserProfile_username_key" ON "UserProfile"("username");
 CREATE UNIQUE INDEX "UserProfile_email_key" ON "UserProfile"("email");
 
 -- AddForeignKey
-ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

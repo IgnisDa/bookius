@@ -28,7 +28,7 @@ model User {
 /// This model will track profile information about the user
 model UserProfile {
   id        String   @id @default(uuid()) @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @unique
   bio       String?
   age       Int?     @db.SmallInt
