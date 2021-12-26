@@ -107,8 +107,8 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent>
-        <ModalCloseButton />
+      <ModalContent mx={3}>
+        <ModalCloseButton isDisabled={isLoading} />
         <Box
           onSubmit={onSubmit}
           as="form"
