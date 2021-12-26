@@ -2,4 +2,10 @@
 . "$(dirname "$0")/_/husky.sh"
 
 files=$(git diff --cached --name-only)
-exec pnpx cspell -- --no-summary $files
+if [ -z "$files" ]
+then
+    echo "No files were cached"
+    exit 0
+else
+    exec pnpx cspell -- --no-summary $files
+fi
