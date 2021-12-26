@@ -1,14 +1,25 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactElement } from 'react';
 import { Sidebar } from './elements/Sidebar';
 
 export const defaultLayout = (page: ReactElement) => {
   return (
-    <div className="flex flex-row">
+    <Flex>
       <Sidebar />
-      <div className="flex flex-col min-h-screen flex-1">
-        <main className="flex-1">{page}</main>
-        <footer className="flex-none">Footer</footer>
-      </div>
-    </div>
+      <Flex
+        flexDirection="column"
+        h="100vh"
+        flexGrow={1}
+        flexShrink={1}
+        flexBasis={0}
+      >
+        <Box as="main" flexGrow={1} flexShrink={1} flexBasis={0}>
+          {page}
+        </Box>
+        <Box as="footer" flex="none">
+          Footer
+        </Box>
+      </Flex>
+    </Flex>
   );
 };

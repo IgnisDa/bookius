@@ -8,7 +8,6 @@
     "ms-vscode.vscode-typescript-next",
     "wix.vscode-import-cost",
     "graphql.vscode-graphql",
-    "willstakayama.vscode-nextjs-snippets",
-    "voorjaar.windicss-intellisense"
+    "willstakayama.vscode-nextjs-snippets"
   ]
 }
