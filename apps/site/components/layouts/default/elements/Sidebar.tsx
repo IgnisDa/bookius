@@ -25,7 +25,6 @@ import {
 import Cookie from 'js-cookie';
 import { Magic } from 'magic-sdk';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { FiHome, FiLogIn, FiLogOut } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
@@ -139,7 +138,6 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
   const rand = Math.random() > 0.5;
 
@@ -155,9 +153,11 @@ export const Sidebar = () => {
         spacing={6}
       >
         <Tooltip label="Home" placement="top-end">
-          <Button py={7} as="a" href="/">
-            <Icon as={FiHome} boxSize={8} />
-          </Button>
+          <NextLink href="/">
+            <Button py={7}>
+              <Icon as={FiHome} boxSize={8} />
+            </Button>
+          </NextLink>
         </Tooltip>
         <Tooltip label={rand ? 'Login' : 'Logout'} placement="top-end">
           <Button onClick={() => setIsOpen(true)} py={7}>
