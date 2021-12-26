@@ -7,6 +7,7 @@ import './styles.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'urql';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
+import { theme } from '../lib/helpers/theme';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -26,7 +27,7 @@ function NextApp({ Component, pageProps }: AppPropsWithLayout) {
         <title>Bookius</title>
       </Head>
       <Provider value={client}>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           {getLayout(<Component {...pageProps} />)}
         </ChakraProvider>
       </Provider>
