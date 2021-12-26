@@ -9,6 +9,7 @@
         "bookius",
         "Buildable",
         "cacheable",
+        "Chakra",
         "Citext",
         "createdb",
         "cuid",
@@ -17,6 +18,7 @@
         "dedup",
         "devcontainer",
         "developr",
+        "headlessui",
         "ignisda",
         "luxon",
         "Millis",
@@ -27,11 +29,11 @@
         "pnpx",
         "printr",
         "psql",
-        "tslog",
-        "windi",
         "svgr",
-        "windicss",
-        "urql"
+        "tslog",
+        "urql",
+        "windi",
+        "windicss"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.
