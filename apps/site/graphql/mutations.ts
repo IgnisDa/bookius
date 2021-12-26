@@ -1,14 +1,11 @@
 import { gql } from 'urql';
 
 export const LOGIN_USER = gql`
-  mutation LoginUser($DIDToken: String!) {
-    loginUser(DIDToken: $DIDToken) {
+  mutation LoginUser($issuer: String!) {
+    loginUser(issuer: $issuer) {
       __typename
       ... on LoginResult {
         status
-        user {
-          id
-        }
       }
       ... on LoginError {
         message
@@ -18,14 +15,10 @@ export const LOGIN_USER = gql`
 `;
 
 export const CREATE_USER = gql`
-  mutation CreateUser($DIDToken: String!) {
-    createUser(DIDToken: $DIDToken) {
+  mutation CreateUser($issuer: String!) {
+    createUser(issuer: $issuer) {
       __typename
-      ... on UserDto {
-        id
-      }
       ... on CreateUserError {
-        userExists
         message
       }
     }

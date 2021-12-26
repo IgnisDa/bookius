@@ -1,5 +1,7 @@
 import { sleep } from '@bookius/general/frontend';
 import {
+  CheckUserByIssuerQuery,
+  CheckUserByIssuerQueryVariables,
   useCreateUserMutation,
   useLoginUserMutation,
 } from '@bookius/generated';
@@ -18,7 +20,6 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  Tooltip,
   useToast,
   VStack,
 } from '@chakra-ui/react';
@@ -26,9 +27,11 @@ import Cookie from 'js-cookie';
 import { Magic } from 'magic-sdk';
 import NextLink from 'next/link';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { FiHome, FiLogIn, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiLogIn } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
+import { CHECK_USER_BY_ISSUER } from '../../../../graphql/queries';
 import { AUTH_TOKEN_KEY } from '../../../../lib/constants';
+import { client } from '../../../../lib/helpers/urqlClient';
 
 interface LoginDialogProps {
   isOpen: boolean;
@@ -52,20 +55,38 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
     try {
       const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
       const DIDToken = await magic.auth.loginWithMagicLink({ email: email });
-      const { data } = await executeLoginUserMutation({ DIDToken });
-      if (data.loginUser.__typename === 'LoginResult') {
+      const issuer = (await magic.user.getMetadata()).issuer;
+      const { data: checkUserByIssuerData } = await client
+        .query<CheckUserByIssuerQuery, CheckUserByIssuerQueryVariables>(
+          CHECK_USER_BY_ISSUER,
+          { issuer: issuer }
+        )
+        .toPromise();
+      if (!checkUserByIssuerData.checkUserByIssuer) {
+        // the user does not exist, we have to create it first
+        const { data } = await executeCreateUserMutation({ issuer });
+        if (data.createUser.__typename === 'UserDto') {
+          toast({
+            description: 'Your account was created successfully!',
+            duration: 3000,
+            status: 'info',
+          });
+        }
+      }
+      // login the user
+      const { data } = await executeLoginUserMutation({ issuer });
+      if (data.loginUser.__typename === 'LoginError')
+        toast({
+          description: data.loginUser.message,
+          duration: 3000,
+          status: 'error',
+        });
+      else {
         toast({
           description: 'You were logged in successfully!',
           duration: 3000,
           status: 'success',
         });
-      } else {
-        // the user does not exist, we have to create it first
-        const { data } = await executeCreateUserMutation({ DIDToken });
-        if (data.createUser.__typename === 'UserDto') {
-          // login the user
-          await executeLoginUserMutation({ DIDToken });
-        }
       }
       Cookie.set(AUTH_TOKEN_KEY, DIDToken);
       setIsLoading(false);
@@ -79,7 +100,12 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
+    <Modal
+      isOpen={isOpen}
+      closeOnOverlayClick={!isLoading}
+      onClose={() => setIsOpen(false)}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
@@ -139,8 +165,6 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const rand = Math.random() > 0.5;
-
   return (
     <>
       <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -152,18 +176,14 @@ export const Sidebar = () => {
         direction="column"
         spacing={6}
       >
-        <Tooltip label="Home" placement="top-end">
-          <NextLink href="/">
-            <Button py={7}>
-              <Icon as={FiHome} boxSize={8} />
-            </Button>
-          </NextLink>
-        </Tooltip>
-        <Tooltip label={rand ? 'Login' : 'Logout'} placement="top-end">
-          <Button onClick={() => setIsOpen(true)} py={7}>
-            <Icon as={rand ? FiLogIn : FiLogOut} boxSize={8} />
+        <NextLink href="/" passHref={true}>
+          <Button py={7} as="a">
+            <Icon as={FiHome} boxSize={8} />
           </Button>
-        </Tooltip>
+        </NextLink>
+        <Button onClick={() => setIsOpen(true)} py={7}>
+          <Icon as={FiLogIn} boxSize={8} />
+        </Button>
       </VStack>
     </>
   );

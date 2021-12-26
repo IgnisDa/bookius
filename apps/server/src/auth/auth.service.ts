@@ -1,9 +1,8 @@
 import { PrismaService } from '@bookius/model';
 import { Magic } from '@magic-sdk/admin';
 import { Injectable } from '@nestjs/common';
-import { ApplicationConfig } from '../config';
-import { CreateUserError } from './dto/create-user.result';
 import { names, uniqueNamesGenerator } from 'unique-names-generator';
+import { ApplicationConfig } from '../config';
 
 @Injectable()
 export class AuthService {
@@ -12,11 +11,10 @@ export class AuthService {
     private readonly prisma: PrismaService
   ) {}
 
-  private async getMagicTokenMetadata(DIDToken: string) {
+  private async getMagicTokenMetadata(issuer: string) {
     const secretKey: string = this.applicationConfig.MAGIC_SECRET_KEY;
     const mAdmin = new Magic(secretKey);
     try {
-      const issuer = mAdmin.token.getIssuer(DIDToken);
       const metadata = await mAdmin.users.getMetadataByIssuer(issuer);
       return metadata;
     } catch ($e) {
@@ -24,7 +22,7 @@ export class AuthService {
     }
   }
 
-  async getUserWithMagicDidToken(DIDToken: string) {
+  async getUserWithMagicDIDToken(DIDToken: string) {
     const metadata = await this.getMagicTokenMetadata(DIDToken);
     if (!metadata) return null;
     const user = await this.prisma.user.findUnique({
@@ -33,13 +31,11 @@ export class AuthService {
     return user;
   }
 
-  async createUser(DIDToken: string) {
-    const errors = new CreateUserError();
-    if (await this.getUserWithMagicDidToken(DIDToken)) {
-      errors.userExists = true;
-      errors.message = 'A user with this token already exists in the database';
-      return Promise.reject(errors);
-    }
+  async checkUserByIssuer(issuer: string) {
+    return !!(await this.prisma.user.findUnique({ where: { issuer } }));
+  }
+
+  async createUser(issuer: string) {
     let username: string;
     // create a random username for the user
     while (true) {
@@ -52,20 +48,25 @@ export class AuthService {
         break;
       }
     }
-    const metadata = await this.getMagicTokenMetadata(DIDToken);
+    const metadata = await this.getMagicTokenMetadata(issuer);
     if (!metadata)
       return Promise.reject({ message: 'Received an incorrect magic token' });
-    const user = await this.prisma.user.create({
-      data: {
-        issuer: metadata.issuer,
-        profile: { create: { username: username, email: metadata.email } },
-      },
-    });
-    return user;
+    try {
+      return await this.prisma.user.create({
+        data: {
+          issuer: metadata.issuer,
+          profile: { create: { username: username, email: metadata.email } },
+        },
+      });
+    } catch {
+      return Promise.reject({
+        message: 'This user already exists in the database',
+      });
+    }
   }
 
-  async loginUser(DIDToken: string) {
-    const metadata = await this.getMagicTokenMetadata(DIDToken);
+  async loginUser(issuer: string) {
+    const metadata = await this.getMagicTokenMetadata(issuer);
     if (!metadata)
       return Promise.reject({ message: 'Received an incorrect magic token' });
     const user = await this.prisma.user.findUnique({

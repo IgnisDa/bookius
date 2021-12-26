@@ -10,12 +10,6 @@ export class CreateUserError {
     nullable: true,
   })
   message?: string;
-
-  @Field({
-    defaultValue: false,
-    description: 'Whether a user with this username already exists',
-  })
-  userExists: boolean;
 }
 
 export const CreateUserResultUnion = createUnionType({

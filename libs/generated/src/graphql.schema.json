@@ -43,17 +43,6 @@
               "name": "Any"
             },
             "args": []
-          },
-          {
-            "name": "userExists",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
           }
         ],
         "interfaces": []
@@ -155,7 +144,7 @@
             },
             "args": [
               {
-                "name": "DIDToken",
+                "name": "issuer",
                 "type": {
                   "kind": "NON_NULL",
                   "ofType": {
@@ -178,7 +167,7 @@
             },
             "args": [
               {
-                "name": "DIDToken",
+                "name": "issuer",
                 "type": {
                   "kind": "NON_NULL",
                   "ofType": {
@@ -196,6 +185,28 @@
         "kind": "OBJECT",
         "name": "Query",
         "fields": [
+          {
+            "name": "checkUserByIssuer",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": [
+              {
+                "name": "issuer",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
           {
             "name": "getStatus",
             "type": {

@@ -5,3 +5,9 @@ export const GET_STATUS = gql`
     getStatus
   }
 `;
+
+export const CHECK_USER_BY_ISSUER = gql`
+  query CheckUserByIssuer($issuer: String!) {
+    checkUserByIssuer(issuer: $issuer)
+  }
+`;

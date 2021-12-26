@@ -32,8 +32,6 @@ export type CreateUserError = {
   __typename: 'CreateUserError';
   /** General errors relating to the registration attempt */
   message?: Maybe<Scalars['String']>;
-  /** Whether a user with this username already exists */
-  userExists: Scalars['Boolean'];
 };
 
 /** Result type returned as the result when new user is created. */
@@ -67,17 +65,23 @@ export type Mutation = {
 };
 
 export type MutationCreateUserArgs = {
-  DIDToken: Scalars['String'];
+  issuer: Scalars['String'];
 };
 
 export type MutationLoginUserArgs = {
-  DIDToken: Scalars['String'];
+  issuer: Scalars['String'];
 };
 
 export type Query = {
   __typename: 'Query';
+  /** Check whether a user with the given issuer exists in the database. */
+  checkUserByIssuer: Scalars['Boolean'];
   /** Get status of the service. */
   getStatus: Scalars['Boolean'];
+};
+
+export type QueryCheckUserByIssuerArgs = {
+  issuer: Scalars['String'];
 };
 
 /** Critical details about a user of the service */
@@ -88,48 +92,46 @@ export type UserDto = {
 };
 
 export type LoginUserMutationVariables = Exact<{
-  DIDToken: Scalars['String'];
+  issuer: Scalars['String'];
 }>;
 
 export type LoginUserMutation = {
   __typename: 'Mutation';
   loginUser:
     | { __typename: 'LoginError'; message: string }
-    | {
-        __typename: 'LoginResult';
-        status: boolean;
-        user: { __typename: 'UserDto'; id: string };
-      };
+    | { __typename: 'LoginResult'; status: boolean };
 };
 
 export type CreateUserMutationVariables = Exact<{
-  DIDToken: Scalars['String'];
+  issuer: Scalars['String'];
 }>;
 
 export type CreateUserMutation = {
   __typename: 'Mutation';
   createUser:
-    | {
-        __typename: 'CreateUserError';
-        userExists: boolean;
-        message?: string | null | undefined;
-      }
-    | { __typename: 'UserDto'; id: string };
+    | { __typename: 'CreateUserError'; message?: string | null | undefined }
+    | { __typename: 'UserDto' };
 };
 
 export type GetStatusQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetStatusQuery = { __typename: 'Query'; getStatus: boolean };
 
+export type CheckUserByIssuerQueryVariables = Exact<{
+  issuer: Scalars['String'];
+}>;
+
+export type CheckUserByIssuerQuery = {
+  __typename: 'Query';
+  checkUserByIssuer: boolean;
+};
+
 export const LoginUserDocument = gql`
-  mutation LoginUser($DIDToken: String!) {
-    loginUser(DIDToken: $DIDToken) {
+  mutation LoginUser($issuer: String!) {
+    loginUser(issuer: $issuer) {
       __typename
       ... on LoginResult {
         status
-        user {
-          id
-        }
       }
       ... on LoginError {
         message
@@ -144,14 +146,10 @@ export function useLoginUserMutation() {
   );
 }
 export const CreateUserDocument = gql`
-  mutation CreateUser($DIDToken: String!) {
-    createUser(DIDToken: $DIDToken) {
+  mutation CreateUser($issuer: String!) {
+    createUser(issuer: $issuer) {
       __typename
-      ... on UserDto {
-        id
-      }
       ... on CreateUserError {
-        userExists
         message
       }
     }
@@ -174,6 +172,23 @@ export function useGetStatusQuery(
 ) {
   return Urql.useQuery<GetStatusQuery>({
     query: GetStatusDocument,
+    ...options,
+  });
+}
+export const CheckUserByIssuerDocument = gql`
+  query CheckUserByIssuer($issuer: String!) {
+    checkUserByIssuer(issuer: $issuer)
+  }
+`;
+
+export function useCheckUserByIssuerQuery(
+  options: Omit<
+    Urql.UseQueryArgs<CheckUserByIssuerQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<CheckUserByIssuerQuery>({
+    query: CheckUserByIssuerDocument,
     ...options,
   });
 }
