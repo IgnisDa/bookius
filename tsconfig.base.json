@@ -10,16 +10,33 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@bookius/config": ["libs/config/src/index.ts"],
-      "@bookius/general": ["libs/general/src/index.ts"],
-      "@bookius/generated": ["libs/generated/src/index.ts"],
-      "@bookius/model": ["libs/model/src/index.ts"]
+      "@bookius/config": [
+        "libs/config/src/index.ts"
+      ],
+      "@bookius/general": [
+        "libs/general/src/index.ts"
+      ],
+      "@bookius/general/frontend": [
+        "libs/general/src/frontend.ts"
+      ],
+      "@bookius/generated": [
+        "libs/generated/src/index.ts"
+      ],
+      "@bookius/model": [
+        "libs/model/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }
