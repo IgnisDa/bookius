@@ -8,6 +8,7 @@ import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
 import { join } from 'path';
 import { ApplicationConfig } from './config';
 import { CoreModule } from './core/core.module';
+import { AuthModule } from './auth/auth.module';
 
 const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
 
@@ -45,6 +46,7 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
     }),
     PrismaModule,
     CoreModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
