@@ -4,45 +4,37 @@
   "projectType": "library",
   "targets": {
     "generate": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "@nx-tools/nx-prisma:generate",
       "options": {
-        "command": "prisma generate",
-        "cwd": "libs/model"
+        "schema": "libs/model/prisma/schema.prisma"
       }
     },
-    "migrate-dev": {
-      "executor": "@nrwl/workspace:run-commands",
+    "migrate": {
+      "executor": "@nx-tools/nx-prisma:migrate",
       "options": {
-        "command": "prisma migrate dev --create-only --name {args.name}",
-        "cwd": "libs/model"
+        "schema": "libs/model/prisma/schema.prisma",
+        "create-only": true,
+        "skip-seed": true,
+        "skip-generate": true
       }
     },
-    "migrate-save": {
-      "executor": "@nrwl/workspace:run-commands",
+    "deploy": {
+      "executor": "@nx-tools/nx-prisma:deploy",
       "options": {
-        "command": "prisma migrate dev",
-        "cwd": "libs/model"
+        "schema": "libs/model/prisma/schema.prisma"
       }
     },
-    "migrate-reset": {
-      "executor": "@nrwl/workspace:run-commands",
+    "reset": {
+      "executor": "@nx-tools/nx-prisma:reset",
       "options": {
-        "command": "prisma migrate reset",
-        "cwd": "libs/model"
+        "schema": "libs/model/prisma/schema.prisma",
+        "force": true
       }
     },
-    "migrate-deploy": {
-      "executor": "@nrwl/workspace:run-commands",
+    "status": {
+      "executor": "@nx-tools/nx-prisma:status",
       "options": {
-        "command": "prisma migrate deploy",
-        "cwd": "libs/model"
-      }
-    },
-    "migrate-status": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "prisma migrate status",
-        "cwd": "libs/model"
+        "schema": "libs/model/prisma/schema.prisma"
       }
     },
     "studio": {
