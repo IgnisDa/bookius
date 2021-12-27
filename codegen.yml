@@ -2,7 +2,7 @@ hooks:
   afterOneFileWrite:
     - prettier --write
 overwrite: true
-schema: 'dist/apps/server/src/schema.graphql'
+schema: 'libs/generated/src/schema.graphql'
 documents: 'apps/site/**/*.{ts,tsx}'
 config:
   gqlImport: urql#gql

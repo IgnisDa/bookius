@@ -1,0 +1,118 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+The standard interface that contains the error message when something goes wrong
+"""
+interface APIError {
+  """The error message giving details about what went wrong"""
+  message: String!
+}
+
+"""The people who have worked on a book"""
+type ArchitectDto {
+  """Details about the author"""
+  author: AuthorDto!
+
+  """Role of this particular architect"""
+  role: ArchitectRole!
+}
+
+"""The role of a person in the complete production of a book"""
+enum ArchitectRole {
+  AUTHOR
+  ILLUSTRATOR
+}
+
+"""An author that is available to be viewed by the user"""
+type AuthorDto {
+  """The date and time when this author was added to the service"""
+  createdAt: DateTime!
+
+  """The primary key of the author"""
+  id: BigInt!
+
+  """Name of the author"""
+  name: String!
+
+  """The date and time when information about this author was last updated"""
+  updatedAt: DateTime!
+}
+
+"""BigInt custom scalar type"""
+scalar BigInt
+
+"""A book that is available to be viewed by the user"""
+type BookDto {
+  architects: [ArchitectDto!]!
+
+  """The date and time when this book was added to the service"""
+  createdAt: DateTime!
+
+  """The primary key of the book"""
+  id: BigInt!
+
+  """Name of the book"""
+  title: String!
+
+  """The date and time when information about this book was last updated"""
+  updatedAt: DateTime!
+}
+
+"""Type returned for the error when a new user is created."""
+type CreateUserError {
+  """General errors relating to the registration attempt"""
+  message: String
+}
+
+"""Result type returned as the result when new user is created."""
+union CreateUserResultUnion = CreateUserError | UserDto
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""The type returned for the errors when login is unsuccessful"""
+type LoginError implements APIError {
+  """The error message corresponding to this login attempt"""
+  message: String!
+}
+
+"""The type returned on successful login"""
+type LoginResult {
+  """Wether the login attempt was successful"""
+  status: Boolean!
+
+  """The user this login result is associated with"""
+  user: UserDto!
+}
+
+"""Result type returned as the result when someone tries to login"""
+union LoginResultUnion = LoginError | LoginResult
+
+type Mutation {
+  """Mutation to create a new user with a given authentication token."""
+  createUser(issuer: String!): CreateUserResultUnion!
+
+  """Login using an authentication token."""
+  loginUser(issuer: String!): LoginResultUnion!
+}
+
+type Query {
+  """Get a list of all books"""
+  books: [BookDto!]!
+
+  """Check whether a user with the given issuer exists in the database."""
+  checkUserByIssuer(issuer: String!): Boolean!
+
+  """Get status of the service."""
+  getStatus: Boolean!
+}
+
+"""Critical details about a user of the service"""
+type UserDto {
+  """The primary key of the user"""
+  id: ID!
+}

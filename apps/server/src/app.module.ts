@@ -40,7 +40,13 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
       load: dotenvLoader(),
     }),
     GraphQLModule.forRoot({
-      autoSchemaFile: join(__dirname, 'src', 'schema.graphql'),
+      autoSchemaFile: join(
+        process.cwd(),
+        'libs',
+        'generated',
+        'src',
+        'schema.graphql'
+      ),
       playground: IS_PRODUCTION,
       introspection: IS_PRODUCTION,
       sortSchema: true,
