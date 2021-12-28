@@ -1,10 +1,10 @@
 import Cookies from 'js-cookie';
 import {
-  createClient,
-  ssrExchange,
-  dedupExchange,
   cacheExchange,
+  createClient,
+  dedupExchange,
   fetchExchange,
+  ssrExchange,
 } from 'urql';
 import { AUTH_TOKEN_KEY } from '../constants';
 
