@@ -37,6 +37,14 @@
         "schema": "libs/model/prisma/schema.prisma"
       }
     },
+    "seed": {
+      "executor": "@nx-tools/nx-prisma:seed",
+      "options": {
+        "schema": "libs/model/prisma/schema.prisma",
+        "script": "libs/model/prisma/seed.ts",
+        "tsConfig": "libs/model/tsconfig.json"
+      }
+    },
     "studio": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
