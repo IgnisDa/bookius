@@ -23,12 +23,17 @@ export class AuthService {
   }
 
   async getUserWithMagicDIDToken(DIDToken: string) {
-    const metadata = await this.getMagicTokenMetadata(DIDToken);
-    if (!metadata) return null;
-    const user = await this.prisma.user.findUnique({
-      where: { issuer: metadata.issuer },
-    });
-    return user;
+    const secretKey: string = this.applicationConfig.MAGIC_SECRET_KEY;
+    const mAdmin = new Magic(secretKey);
+    try {
+      const metadata = await mAdmin.users.getMetadataByToken(DIDToken);
+      const user = await this.prisma.user.findUnique({
+        where: { issuer: metadata.issuer },
+      });
+      return user;
+    } catch ($e) {
+      return null;
+    }
   }
 
   async checkUserByIssuer(issuer: string) {
