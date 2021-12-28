@@ -17,4 +17,7 @@ export class AuthorDto {
 
   /** Name of the author */
   name: string;
+
+  /** A brief description of the author */
+  bio?: string;
 }
