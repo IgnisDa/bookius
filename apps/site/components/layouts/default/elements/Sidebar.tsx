@@ -23,11 +23,12 @@ import {
   useToast,
   VStack,
 } from '@chakra-ui/react';
-import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 import { Magic } from 'magic-sdk';
 import NextLink from 'next/link';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { FiHome, FiLogIn } from 'react-icons/fi';
+import { ImBooks } from 'react-icons/im';
 import { HiOutlineMail } from 'react-icons/hi';
 import { CHECK_USER_BY_ISSUER } from '../../../../graphql/queries';
 import { AUTH_TOKEN_KEY } from '../../../../lib/constants';
@@ -88,7 +89,7 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
           status: 'success',
         });
       }
-      Cookie.set(AUTH_TOKEN_KEY, DIDToken);
+      Cookies.set(AUTH_TOKEN_KEY, DIDToken, { expires: 7, secure: true });
       setIsLoading(false);
 
       await sleep(1000);
@@ -127,7 +128,7 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
             </Heading>
           </Box>
           <FormControl mt={4} isRequired>
-            <FormLabel htmlFor="id" hidden>
+            <FormLabel htmlFor="email" hidden>
               Email
             </FormLabel>
             <InputGroup>
@@ -179,6 +180,11 @@ export const Sidebar = () => {
         <NextLink href="/" passHref={true}>
           <Button py={7} as="a">
             <Icon as={FiHome} boxSize={8} />
+          </Button>
+        </NextLink>
+        <NextLink href="/shelves" passHref={true}>
+          <Button py={7} as="a">
+            <Icon as={ImBooks} boxSize={8} />
           </Button>
         </NextLink>
         <Button onClick={() => setIsOpen(true)} py={7}>
