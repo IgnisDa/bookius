@@ -21,4 +21,7 @@ export class BookDto {
 
   @Field(() => [ArchitectDto])
   architects: ArchitectDto[];
+
+  /** A brief description of the author */
+  description?: string;
 }

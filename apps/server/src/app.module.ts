@@ -10,6 +10,7 @@ import { ApplicationConfig } from './config';
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
+import { ShelvesModule } from './shelves/shelves.module';
 
 const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
 
@@ -55,6 +56,7 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
     CoreModule,
     AuthModule,
     BooksModule,
+    ShelvesModule,
   ],
 })
 export class AppModule {}
