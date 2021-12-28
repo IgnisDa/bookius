@@ -24,3 +24,11 @@ export const CREATE_USER = gql`
     }
   }
 `;
+
+export const CREATE_USER_SHELF = gql`
+  mutation CreateUserShelf($input: CreateUserShelfInput!) {
+    createUserShelf(input: $input) {
+      id
+    }
+  }
+`;

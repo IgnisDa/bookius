@@ -27,6 +27,9 @@ enum ArchitectRole {
 
 """An author that is available to be viewed by the user"""
 type AuthorDto {
+  """A brief description of the author"""
+  bio: String
+
   """The date and time when this author was added to the service"""
   createdAt: DateTime!
 
@@ -50,6 +53,27 @@ type BookDto {
   """The date and time when this book was added to the service"""
   createdAt: DateTime!
 
+  """A brief description of the author"""
+  description: String
+
+  """The primary key of the book"""
+  id: BigInt!
+
+  """Name of the book"""
+  title: String!
+
+  """The date and time when information about this book was last updated"""
+  updatedAt: DateTime!
+}
+
+"""Details about a book without their architect details"""
+type BookDtoWithoutArchitect {
+  """The date and time when this book was added to the service"""
+  createdAt: DateTime!
+
+  """A brief description of the author"""
+  description: String
+
   """The primary key of the book"""
   id: BigInt!
 
@@ -68,6 +92,18 @@ type CreateUserError {
 
 """Result type returned as the result when new user is created."""
 union CreateUserResultUnion = CreateUserError | UserDto
+
+"""The input type used to create a new shelf"""
+input CreateUserShelfInput {
+  """A description of the new shelf"""
+  description: String
+
+  """Whether the shelf will be publicly available"""
+  isPublic: Boolean = true
+
+  """Name of the new shelf"""
+  name: String!
+}
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
@@ -96,6 +132,9 @@ type Mutation {
   """Mutation to create a new user with a given authentication token."""
   createUser(issuer: String!): CreateUserResultUnion!
 
+  """Create a shelf for the current user."""
+  createUserShelf(input: CreateUserShelfInput!): ShelfDto!
+
   """Login using an authentication token."""
   loginUser(issuer: String!): LoginResultUnion!
 }
@@ -109,6 +148,42 @@ type Query {
 
   """Get status of the service."""
   getStatus: Boolean!
+
+  """Get a list of all shelves created by this user."""
+  getUserShelves: [ShelfDto!]!
+}
+
+"""Counts of various statistics related to shelves"""
+type ShelfCountDto {
+  """The number of books in this shelf"""
+  books: Float!
+}
+
+"""A shelf that is created by a user"""
+type ShelfDto {
+  """Counts of various statistics related to shelves"""
+  _count: ShelfCountDto!
+
+  """The books that are contained in this shelf"""
+  books: [BookDtoWithoutArchitect!]!
+
+  """The date and time when this shelf was created"""
+  createdAt: DateTime!
+
+  """A brief description about the shelf and what is contains"""
+  description: String!
+
+  """Unique identifier for the shelf"""
+  id: ID!
+
+  """Whether the shelf is visible to other users"""
+  isPublic: Boolean!
+
+  """Name of the shelf"""
+  name: String!
+
+  """The date and time when information about this shelf was last updated"""
+  updatedAt: DateTime!
 }
 
 """Critical details about a user of the service"""
