@@ -1,35 +1,31 @@
-// import { useGetStatusQuery } from '@bookius/generated';
+import { useGetAllBooksQuery } from '@bookius/generated';
+import { Text } from '@chakra-ui/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-// import { GET_STATUS } from '../graphql/queries';
-// import { getSsrUrqlClient } from '../lib/helpers/getUrqlClient';
-// import { withNoAuthUrqlClient } from '../lib/helpers/withAppUrqlClient';
+import { GET_ALL_BOOKS } from '../graphql/queries';
+import { client, ssrCache } from '../lib/helpers/urqlClient';
 
 const Index = (
   _props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
+  const [{ data }] = useGetAllBooksQuery();
   return (
     <div>
-      <div>Hello</div>
+      {data.books.map((book, index) => (
+        <Text as="pre" key={index} fontSize="xs" mb={10}>
+          {JSON.stringify(book, null, 4)}
+        </Text>
+      ))}
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const { client, ssrCache } = getSsrUrqlClient();
-  // // logger.info(ctx.req.cookies);
-
-  // // This query is used to populate the cache for the query
-  // // used on this page.
-  // await client
-  //   .query(GET_STATUS, null, {
-  //     fetchOptions: { headers: { authorization: ctx.req.cookies.name } },
-  //   })
-  //   .toPromise();
-
+export const getServerSideProps: GetServerSideProps = async (_ctx) => {
+  // This query is used to populate the cache for the query used on this page.
+  await client.query(GET_ALL_BOOKS).toPromise();
   return {
     props: {
       // urqlState is a keyword here so withUrqlClient can pick it up.
-      // urqlState: ssrCache.extractData(),
+      urqlState: ssrCache.extractData(),
     },
   };
 };
