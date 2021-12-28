@@ -23,6 +23,7 @@ model User {
   issuer    String       @unique
   createdAt DateTime     @default(now())
   profile   UserProfile?
+  shelves   Shelf[]
 }
 
 /// This model will track profile information about the user
@@ -41,13 +42,14 @@ model UserProfile {
 
 /// This model will keep track of books that will be made available to the users
 model Book {
-  id             BigInt              @id @default(autoincrement())
-  title          String
-  description    String?
-  openLibraryKey String
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
-  architects     ArchitectsOnBooks[]
+  id          BigInt              @id @default(autoincrement())
+  title       String
+  description String?
+  isbn        String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  architects  ArchitectsOnBooks[]
+  shelves     Shelf[]
 }
 
 /// The role of a person in the complete production of a book
@@ -77,4 +79,17 @@ model Author {
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
   books          ArchitectsOnBooks[]
+}
+
+/// A shelf is created by users to collect a number of books together
+model Shelf {
+  id          String   @id @default(cuid())
+  name        String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  description String?
+  isPublic    Boolean  @default(false) // if true, this will be visible to other users
+  books       Book[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
