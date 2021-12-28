@@ -171,7 +171,7 @@ type ShelfDto {
   createdAt: DateTime!
 
   """A brief description about the shelf and what is contains"""
-  description: String!
+  description: String
 
   """Unique identifier for the shelf"""
   id: ID!

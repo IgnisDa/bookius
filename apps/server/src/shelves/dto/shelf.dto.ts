@@ -29,7 +29,7 @@ export class ShelfDto {
   name: string;
 
   /** A brief description about the shelf and what is contains */
-  description: string;
+  description?: string;
 
   /** The date and time when this shelf was created */
   createdAt: Date;
