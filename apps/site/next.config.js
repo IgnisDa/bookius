@@ -5,10 +5,23 @@ const withNx = require('@nrwl/next/plugins/with-nx');
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
-  nx: {
-    // Set this to true if you would like to to use SVGR
-    // See: https://github.com/gregberge/svgr
-    svgr: false,
+  // See: https://github.com/gregberge/svgr
+  nx: { svgr: false },
+  webpack5: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
+  swcMinify: true,
+  webpack: (config, { dev, isServer }) => {
+    // Replace React with Preact only in client production build
+    if (!dev && !isServer) {
+      Object.assign(config.resolve.alias, {
+        react: 'preact/compat',
+        'react-dom/test-utils': 'preact/test-utils',
+        'react-dom': 'preact/compat',
+      });
+    }
+
+    return config;
   },
 };
 
