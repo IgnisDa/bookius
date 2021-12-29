@@ -60,8 +60,8 @@ enum ArchitectRole {
 
 /// The people who have worked on a book
 model ArchitectsOnBooks {
-  book     Book          @relation(fields: [bookId], references: [id])
-  author   Author        @relation(fields: [authorId], references: [id])
+  book     Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  author   Author        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   bookId   BigInt
   authorId BigInt
   role     ArchitectRole
