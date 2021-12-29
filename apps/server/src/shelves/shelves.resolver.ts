@@ -18,8 +18,8 @@ export class ShelvesResolver {
   @Query(() => [ShelfDto], {
     description: 'Get a list of all shelves created by this user.',
   })
-  async getUserShelves(@CurrentUser() currentUser: User) {
-    return await this.shelvesService.getUserShelves(currentUser);
+  async userShelves(@CurrentUser() currentUser: User) {
+    return await this.shelvesService.userShelves(currentUser);
   }
 
   /* MUTATIONS */

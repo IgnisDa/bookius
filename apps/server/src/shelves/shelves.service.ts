@@ -7,7 +7,7 @@ import { CreateUserShelfInput } from './dto/create-user-shelf.dto';
 export class ShelvesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUserShelves(currentUser: User) {
+  async userShelves(currentUser: User) {
     const resp = await this.prisma.shelf.findMany({
       where: { userId: currentUser.id },
       include: { books: true, _count: true },
