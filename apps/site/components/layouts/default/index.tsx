@@ -13,7 +13,7 @@ export const defaultLayout = (page: ReactElement) => {
         flexShrink={1}
         flexBasis={0}
       >
-        <Box as="main" flexGrow={1} flexShrink={1} flexBasis={0}>
+        <Box as="main" flexGrow={1} flexShrink={1} flexBasis={0} ml={32}>
           {page}
         </Box>
         <Box as="footer" flex="none">

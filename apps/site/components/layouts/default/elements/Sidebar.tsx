@@ -8,6 +8,7 @@ import {
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -26,13 +27,19 @@ import {
 import Cookies from 'js-cookie';
 import { Magic } from 'magic-sdk';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { FiHome, FiLogIn } from 'react-icons/fi';
-import { ImBooks } from 'react-icons/im';
-import { HiOutlineMail } from 'react-icons/hi';
+import { FiBookmark, FiHeart, FiHome, FiLogIn } from 'react-icons/fi';
+import {
+  HiOutlineCalendar,
+  HiOutlineCollection,
+  HiOutlineMail,
+} from 'react-icons/hi';
+import { ChakraNextImage } from '../../../../components/miscellaneous/ChakraImage';
 import { CHECK_USER_BY_ISSUER } from '../../../../graphql/queries';
 import { AUTH_TOKEN_KEY } from '../../../../lib/constants';
 import { client } from '../../../../lib/helpers/urqlClient';
+import logo from '../../../../public/logo.png';
 
 interface LoginDialogProps {
   isOpen: boolean;
@@ -163,34 +170,82 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
   );
 };
 
+const LINKS = [
+  { name: 'Home', href: '/', icon: FiHome },
+  { name: 'Favorite', href: '/favorites', icon: FiHeart },
+  { name: 'Shelves', href: '/shelves', icon: HiOutlineCollection },
+  { name: 'Bookmarks', href: '/bookmarks', icon: FiBookmark },
+  { name: 'Calendar', href: '/calendar', icon: HiOutlineCalendar },
+];
+
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
 
   return (
     <>
       <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
-      <VStack
+      <Flex
+        w={20}
         as="aside"
-        alignItems="center"
-        justifyContent="center"
-        ml={5}
         direction="column"
-        spacing={6}
+        position="fixed"
+        align="center"
+        top={0}
+        left={0}
+        bottom={0}
+        justifyContent="space-between"
+        py={10}
+        bgColor="brand.accent.purple"
+        my={2}
+        borderRightRadius={20}
       >
-        <NextLink href="/" passHref={true}>
-          <Button py={7} as="a">
-            <Icon as={FiHome} boxSize={8} />
-          </Button>
+        <NextLink href="/" passHref>
+          <a>
+            <Box
+              w={16}
+              h={16}
+              _hover={{ transform: 'scale(1.05)' }}
+              transitionProperty="transform"
+              transitionDuration="0.2s"
+            >
+              <ChakraNextImage src={logo} alt="Logo Image" />
+            </Box>
+          </a>
         </NextLink>
-        <NextLink href="/shelves" passHref={true}>
-          <Button py={7} as="a">
-            <Icon as={ImBooks} boxSize={8} />
+        <VStack spacing={3}>
+          {LINKS.map((link, index) => (
+            <NextLink href={link.href} passHref={true} key={index}>
+              <Button
+                py={7}
+                as="a"
+                variant={router.pathname !== link.href ? 'ghost' : 'solid'}
+                color={router.pathname !== link.href ? 'white' : 'black'}
+                _hover={{
+                  bgColor:
+                    router.pathname === link.href
+                      ? 'gray.100'
+                      : 'brand.accent.purple',
+                }}
+              >
+                <Icon
+                  as={link.icon}
+                  boxSize={7}
+                  _hover={{ transform: 'scale(1.2)' }}
+                  transitionProperty="transform"
+                  transitionDuration="0.2s"
+                />
+              </Button>
+            </NextLink>
+          ))}
+        </VStack>
+        <Box>
+          <Button onClick={() => setIsOpen(true)} py={7} variant="ghost">
+            <Icon as={FiLogIn} boxSize={8} />
           </Button>
-        </NextLink>
-        <Button onClick={() => setIsOpen(true)} py={7}>
-          <Icon as={FiLogIn} boxSize={8} />
-        </Button>
-      </VStack>
+        </Box>
+      </Flex>
     </>
   );
 };
