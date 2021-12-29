@@ -155,14 +155,18 @@ export type MutationLoginUserArgs = {
 
 export type Query = {
   __typename: 'Query';
-  /** Get a list of all books */
+  /** Get a list of all books in the service. */
   books: Array<BookDto>;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
   /** Get status of the service. */
   getStatus: Scalars['Boolean'];
+  /** Get a small list of authors that are related to the user. */
+  userRelatedAuthors: Array<AuthorDto>;
+  /** Get a small list of books that are related to the user. */
+  userRelatedBooks: Array<BookDto>;
   /** Get a list of all shelves created by this user. */
-  getUserShelves: Array<ShelfDto>;
+  userShelves: Array<ShelfDto>;
 };
 
 export type QueryCheckUserByIssuerArgs = {
@@ -186,7 +190,7 @@ export type ShelfDto = {
   /** The date and time when this shelf was created */
   createdAt: Scalars['DateTime'];
   /** A brief description about the shelf and what is contains */
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   /** Unique identifier for the shelf */
   id: Scalars['ID'];
   /** Whether the shelf is visible to other users */
@@ -268,12 +272,38 @@ export type GetUserShelvesShortQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserShelvesShortQuery = {
   __typename: 'Query';
-  getUserShelves: Array<{
+  userShelves: Array<{
     __typename: 'ShelfDto';
     name: string;
+    id: string;
     isPublic: boolean;
     _count: { __typename: 'ShelfCountDto'; books: number };
   }>;
+};
+
+export type GetUserRelatedBooksQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserRelatedBooksQuery = {
+  __typename: 'Query';
+  userRelatedBooks: Array<{
+    __typename: 'BookDto';
+    title: string;
+    id: any;
+    architects: Array<{
+      __typename: 'ArchitectDto';
+      role: ArchitectRole;
+      author: { __typename: 'AuthorDto'; name: string };
+    }>;
+  }>;
+};
+
+export type GetUserRelatedAuthorsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetUserRelatedAuthorsQuery = {
+  __typename: 'Query';
+  userRelatedAuthors: Array<{ __typename: 'AuthorDto'; id: any; name: string }>;
 };
 
 export const LoginUserDocument = gql`
@@ -381,9 +411,10 @@ export function useGetAllBooksQuery(
   });
 }
 export const GetUserShelvesShortDocument = gql`
-  query getUserShelvesShort {
-    getUserShelves {
+  query GetUserShelvesShort {
+    userShelves {
       name
+      id
       isPublic
       _count {
         books
@@ -400,6 +431,52 @@ export function useGetUserShelvesShortQuery(
 ) {
   return Urql.useQuery<GetUserShelvesShortQuery>({
     query: GetUserShelvesShortDocument,
+    ...options,
+  });
+}
+export const GetUserRelatedBooksDocument = gql`
+  query GetUserRelatedBooks {
+    userRelatedBooks {
+      title
+      id
+      architects {
+        author {
+          name
+        }
+        role
+      }
+    }
+  }
+`;
+
+export function useGetUserRelatedBooksQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetUserRelatedBooksQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetUserRelatedBooksQuery>({
+    query: GetUserRelatedBooksDocument,
+    ...options,
+  });
+}
+export const GetUserRelatedAuthorsDocument = gql`
+  query GetUserRelatedAuthors {
+    userRelatedAuthors {
+      id
+      name
+    }
+  }
+`;
+
+export function useGetUserRelatedAuthorsQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetUserRelatedAuthorsQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetUserRelatedAuthorsQuery>({
+    query: GetUserRelatedAuthorsDocument,
     ...options,
   });
 }

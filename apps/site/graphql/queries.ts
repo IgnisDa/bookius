@@ -29,13 +29,38 @@ export const GET_ALL_BOOKS = gql`
 `;
 
 export const GET_USER_SHELVES_SHORT = gql`
-  query getUserShelvesShort {
-    getUserShelves {
+  query GetUserShelvesShort {
+    userShelves {
       name
+      id
       isPublic
       _count {
         books
       }
+    }
+  }
+`;
+
+export const GET_USER_RELATED_BOOKS = gql`
+  query GetUserRelatedBooks {
+    userRelatedBooks {
+      title
+      id
+      architects {
+        author {
+          name
+        }
+        role
+      }
+    }
+  }
+`;
+
+export const GET_USER_RELATED_AUTHORS = gql`
+  query GetUserRelatedAuthors {
+    userRelatedAuthors {
+      id
+      name
     }
   }
 `;
