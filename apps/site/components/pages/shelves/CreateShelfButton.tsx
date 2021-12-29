@@ -50,7 +50,7 @@ const CreateShelfDialog: FunctionComponent<CreateShelfDialogProps> = ({
     const { data } = await executeCreateUserShelfMutation({
       input: { name: name, description: description, isPublic: isPublic },
     });
-    if (data.createUserShelf.__typename === 'ShelfDto') {
+    if (data?.createUserShelf.__typename === 'ShelfDto') {
       setIsLoading(false);
       setIsOpen(false);
       refreshShelves();

@@ -1,7 +1,7 @@
 import { useGetUserShelvesShortQuery } from '@bookius/generated';
-import { Box, Button, Text } from '@chakra-ui/react';
-import { CreateShelfButton } from '../../components/pages/shelves/CreateShelfButton';
+import { Box } from '@chakra-ui/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { CreateShelfButton } from '../../components/pages/shelves/CreateShelfButton';
 import { GET_USER_SHELVES_SHORT } from '../../graphql/queries';
 import {
   getFetchOptions,
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     return getRedirectUnauthenticatedRequests();
 
   await client
-    .query(GET_USER_SHELVES_SHORT, null, getFetchOptions(req))
+    .query(GET_USER_SHELVES_SHORT, undefined, getFetchOptions(req))
     .toPromise();
   return { props: { urqlState: ssrCache.extractData() } };
 };

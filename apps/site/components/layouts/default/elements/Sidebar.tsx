@@ -29,7 +29,7 @@ import { Magic } from 'magic-sdk';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { FiBookmark, FiHeart, FiHome, FiLogIn } from 'react-icons/fi';
+import { FiBookmark, FiHeart, FiLogIn, FiPieChart } from 'react-icons/fi';
 import {
   HiOutlineCalendar,
   HiOutlineCollection,
@@ -61,19 +61,21 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
     setIsLoading(true);
     e.preventDefault();
     try {
-      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
+      const magic = new Magic(
+        process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
+      );
       const DIDToken = await magic.auth.loginWithMagicLink({ email: email });
-      const issuer = (await magic.user.getMetadata()).issuer;
+      const issuer = (await magic.user.getMetadata()).issuer as string;
       const { data: checkUserByIssuerData } = await client
         .query<CheckUserByIssuerQuery, CheckUserByIssuerQueryVariables>(
           CHECK_USER_BY_ISSUER,
           { issuer: issuer }
         )
         .toPromise();
-      if (!checkUserByIssuerData.checkUserByIssuer) {
+      if (!checkUserByIssuerData?.checkUserByIssuer) {
         // the user does not exist, we have to create it first
         const { data } = await executeCreateUserMutation({ issuer });
-        if (data.createUser.__typename === 'UserDto') {
+        if (data?.createUser.__typename === 'UserDto') {
           toast({
             description: 'Your account was created successfully!',
             duration: 3000,
@@ -83,7 +85,7 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
       }
       // login the user
       const { data } = await executeLoginUserMutation({ issuer });
-      if (data.loginUser.__typename === 'LoginError')
+      if (data?.loginUser.__typename === 'LoginError')
         toast({
           description: data.loginUser.message,
           duration: 3000,
@@ -96,7 +98,10 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
           status: 'success',
         });
       }
-      Cookies.set(AUTH_TOKEN_KEY, DIDToken, { expires: 7, secure: true });
+      Cookies.set(AUTH_TOKEN_KEY, DIDToken as string, {
+        expires: 7,
+        secure: true,
+      });
       setIsLoading(false);
 
       await sleep(1000);
@@ -171,7 +176,7 @@ const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
 };
 
 const LINKS = [
-  { name: 'Home', href: '/', icon: FiHome },
+  { name: 'Dashboard', href: '/dashboard', icon: FiPieChart },
   { name: 'Favorite', href: '/favorites', icon: FiHeart },
   { name: 'Shelves', href: '/shelves', icon: HiOutlineCollection },
   { name: 'Bookmarks', href: '/bookmarks', icon: FiBookmark },

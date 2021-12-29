@@ -13,7 +13,7 @@ const isServerSide = typeof window === 'undefined';
 export const ssrCache = ssrExchange({ isClient: !isServerSide });
 
 export const client = createClient({
-  url: process.env.NEXT_PUBLIC_GRAPHQL_API,
+  url: process.env.NEXT_PUBLIC_GRAPHQL_API as string,
   exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange],
   fetchOptions: () =>
     isServerSide
