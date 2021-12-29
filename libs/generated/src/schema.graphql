@@ -140,7 +140,7 @@ type Mutation {
 }
 
 type Query {
-  """Get a list of all books"""
+  """Get a list of all books in the service."""
   books: [BookDto!]!
 
   """Check whether a user with the given issuer exists in the database."""
@@ -149,8 +149,14 @@ type Query {
   """Get status of the service."""
   getStatus: Boolean!
 
+  """Get a small list of authors that are related to the user."""
+  userRelatedAuthors: [AuthorDto!]!
+
+  """Get a small list of books that are related to the user."""
+  userRelatedBooks: [BookDto!]!
+
   """Get a list of all shelves created by this user."""
-  getUserShelves: [ShelfDto!]!
+  userShelves: [ShelfDto!]!
 }
 
 """Counts of various statistics related to shelves"""
