@@ -1,6 +1,10 @@
 import { extendTheme } from '@chakra-ui/react';
 
 export const theme = extendTheme({
+  fonts: {
+    heading: 'Neucha',
+    body: 'Biotif',
+  },
   colors: {
     brand: {
       accent: {

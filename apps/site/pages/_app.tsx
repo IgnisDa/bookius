@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { ReactElement, ReactNode } from 'react';
 import { Provider } from 'urql';
 import { defaultLayout } from '../components/layouts/default';
+import Fonts from '../components/miscellaneous/Fonts';
 import { theme } from '../lib/helpers/theme';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 import './styles.css';
@@ -30,6 +31,7 @@ function NextApp({ Component, pageProps }: AppPropsWithLayout) {
       <DefaultSeo />
       <Provider value={client}>
         <ChakraProvider theme={theme}>
+          <Fonts />
           {getLayout(<Component {...pageProps} />)}
         </ChakraProvider>
       </Provider>
