@@ -6,6 +6,7 @@
     // words - list of words to be always considered correct
     "words": [
         "autoincrement",
+        "Biotif",
         "bookius",
         "Buildable",
         "cacheable",
@@ -24,6 +25,7 @@
         "luxon",
         "Millis",
         "nestjs",
+        "Neucha",
         "nrwl",
         "pgsql",
         "pnpm",
