@@ -20,8 +20,10 @@ const nextConfig = {
         'react-dom': 'preact/compat',
       });
     }
-
     return config;
+  },
+  images: {
+    domains: ['picsum.photos'],
   },
 };
 
