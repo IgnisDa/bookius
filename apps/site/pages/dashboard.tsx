@@ -24,7 +24,11 @@ const Dashboard = (
   const [{ data: userRelatedAuthorsData }] = useGetUserRelatedAuthorsQuery();
 
   return (
-    <VStack alignItems="start" spacing={20}>
+    <VStack
+      alignItems="start"
+      spacing={20}
+      w={{ base: 'full', lg: '90%', xl: '75%', '2xl': '65%' }}
+    >
       <MyBooksComponent books={userRelatedBooksData!} />
       <PopularAuthorsComponent authors={userRelatedAuthorsData!} />
     </VStack>

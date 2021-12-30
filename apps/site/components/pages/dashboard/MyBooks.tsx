@@ -1,7 +1,7 @@
 import { GetUserRelatedBooksQuery } from '@bookius/generated';
+import { Heading } from '@bookius/ui';
 import {
   Box,
-  Heading,
   HStack,
   Icon,
   Image,
@@ -22,11 +22,9 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   books,
 }) => {
   return (
-    <Box w={{ base: 'full', lg: '90%', xl: '75%', '2xl': '65%' }}>
+    <Box>
       <HStack justify="space-between">
-        <Heading size="lg" color="gray.700">
-          My Books
-        </Heading>
+        <Heading>My Books</Heading>
         <NextLink href="/books" passHref>
           <HStack as="a" spacing={2} alignItems="center">
             <Text>More</Text>

@@ -4,7 +4,7 @@ import { Sidebar } from './elements/Sidebar';
 
 export const defaultLayout = (page: ReactElement) => {
   return (
-    <Flex>
+    <Flex css={{ backgroundColor: '#f9f9f9' }}>
       <Sidebar />
       <Flex
         flexDirection="column"
