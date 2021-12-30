@@ -6,6 +6,7 @@
     "generated": "libs/generated",
     "model": "libs/model",
     "server": "apps/server",
-    "site": "apps/site"
+    "site": "apps/site",
+    "ui": "libs/ui"
   }
 }
