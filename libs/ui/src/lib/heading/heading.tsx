@@ -8,7 +8,7 @@ export const Heading = styled('h1', {
       lg: { fontSize: t.space[8] },
     },
     color: {
-      darkGray: { color: t.colors.gray600 },
+      darkGray: { color: t.colors.gray11 },
     },
   },
   defaultVariants: {

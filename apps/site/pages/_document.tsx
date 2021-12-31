@@ -1,6 +1,6 @@
 import React from 'react';
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
-import { getCssText } from '@bookius/ui';
+import { getCssText, theme as t } from '@bookius/ui';
 
 export default class Document extends NextDocument {
   render() {
@@ -13,6 +13,7 @@ export default class Document extends NextDocument {
           />
         </Head>
         <body>
+          {/* {getCssText()} */}
           <Main />
           <NextScript />
         </body>

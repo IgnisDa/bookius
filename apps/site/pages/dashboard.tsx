@@ -2,8 +2,9 @@ import {
   useGetUserRelatedAuthorsQuery,
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
-import { VStack } from '@chakra-ui/react';
+import { Button, Flex, styled, theme as t } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useState } from 'react';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
 import { PopularAuthorsComponent } from '../components/pages/dashboard/PopularAuthors';
 import {
@@ -17,6 +18,13 @@ import {
 } from '../lib/helpers/getAuthOptions';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 
+const VerticalStack = styled(Flex, {
+  width: '100%',
+  spaceY: t.space[8],
+  '@xl': { width: '90%' },
+  '@2xl': { width: '75%' },
+});
+
 const Dashboard = (
   _props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
@@ -24,14 +32,12 @@ const Dashboard = (
   const [{ data: userRelatedAuthorsData }] = useGetUserRelatedAuthorsQuery();
 
   return (
-    <VStack
-      alignItems="start"
-      spacing={20}
-      w={{ base: 'full', lg: '90%', xl: '75%', '2xl': '65%' }}
-    >
-      <MyBooksComponent books={userRelatedBooksData!} />
-      <PopularAuthorsComponent authors={userRelatedAuthorsData!} />
-    </VStack>
+    <>
+      <VerticalStack direction={'column'}>
+        <MyBooksComponent books={userRelatedBooksData!} />
+        <PopularAuthorsComponent authors={userRelatedAuthorsData!} />
+      </VerticalStack>
+    </>
   );
 };
 

@@ -1,9 +1,10 @@
 import { GetUserRelatedAuthorsQuery } from '@bookius/generated';
-import { Box, Flex, Heading, styled, theme as t } from '@bookius/ui';
+import { Box, Flex, Heading, Icon, styled, theme as t } from '@bookius/ui';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as Separator from '@radix-ui/react-separator';
 import { FunctionComponent } from 'react';
 import { VscNotebook } from 'react-icons/vsc';
+import { MoreButton } from '../../miscellaneous/MoreButton';
 
 interface PopularAuthorsComponentProps {
   authors: GetUserRelatedAuthorsQuery;
@@ -12,22 +13,20 @@ interface PopularAuthorsComponentProps {
 const ContainerBox = styled(Box, {
   background: 'White',
   shadow: 'md',
-  width: '40%',
   borderRadius: t.space[5],
   paddingY: t.space[3],
+  '@lg': { width: '40%' },
 });
 
 const StyledSeparator = styled(Separator.Root, {
-  backgroundColor: t.colors.gray200,
+  backgroundColor: t.colors.gray8,
   '&[data-orientation=horizontal]': { height: '0.6px', width: '100%' },
 });
 
-const PaddedBox = styled(Box, {
+const PaddedBox = styled(Flex, {
   paddingX: t.space[6],
   paddingY: t.space[4],
 });
-
-const AuthorBox = styled(Flex, { alignItems: 'center' }, PaddedBox);
 
 const Avatar = styled(AvatarPrimitive.Root, {
   display: 'inline-flex',
@@ -82,13 +81,14 @@ export const PopularAuthorsComponent: FunctionComponent<
 > = ({ authors }) => {
   return (
     <ContainerBox>
-      <PaddedBox>
+      <PaddedBox justify={'between'} align={'center'}>
         <Heading>Popular Authors</Heading>
+        <MoreButton href="/authors" />
       </PaddedBox>
       {authors.userRelatedAuthors.map((author) => (
         <Box key={author.id}>
           <StyledSeparator />
-          <AuthorBox>
+          <PaddedBox align={'center'}>
             <Avatar>
               <AuthorAvatarImage
                 src={`https://picsum.photos/seed/${author.id}/200/300`}
@@ -101,8 +101,10 @@ export const PopularAuthorsComponent: FunctionComponent<
               </AuthorAvatarFallback>
             </Avatar>
             <AuthorName>{author.name}</AuthorName>
-            <AuthorIcon />
-          </AuthorBox>
+            <Icon label={`Icon for ${author.name}`}>
+              <AuthorIcon />
+            </Icon>
+          </PaddedBox>
         </Box>
       ))}
     </ContainerBox>

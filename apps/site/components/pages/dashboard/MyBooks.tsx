@@ -1,94 +1,109 @@
 import { GetUserRelatedBooksQuery } from '@bookius/generated';
-import { Heading } from '@bookius/ui';
 import {
   Box,
-  HStack,
-  Icon,
-  Image,
-  LinkBox,
+  css,
+  FlexGrow,
+  Flex,
+  Heading,
   Text,
-  VStack,
-} from '@chakra-ui/react';
+  Icon,
+  styled,
+  theme as t,
+  clampNumberOfLines,
+} from '@bookius/ui';
 import { zip } from 'lodash';
-import NextLink from 'next/link';
 import { FunctionComponent } from 'react';
-import { FaArrowRight, FaRegStar, FaStar } from 'react-icons/fa';
+import { FaRegStar, FaStar } from 'react-icons/fa';
+import { MoreButton } from '../../miscellaneous/MoreButton';
 
 interface MyBooksComponentProps {
   books: GetUserRelatedBooksQuery;
 }
+
+const BooksContainer = styled(Flex, {
+  marginTop: t.space[4],
+  spaceY: t.space[6],
+  '@lg': { spaceX: t.space[5], spaceY: t.space[0] },
+});
+
+const BookContainer = styled(FlexGrow, {
+  shadow: 'sm',
+  alignItems: 'center',
+  justifyItems: 'center',
+  paddingY: t.space[5],
+  paddingX: t.space[4],
+  spaceX: t.space[5],
+
+  borderRadius: t.space[3],
+  variants: {
+    color: {
+      lightBlue: { backgroundColor: t.colors.accentLightBlue },
+      purple: { backgroundColor: t.colors.accentPurple },
+      limeGreen: { backgroundColor: t.colors.accentLimeGreen },
+    },
+  },
+});
+
+const BookImage = styled('img', {
+  width: t.space[24],
+  height: t.space[40],
+  objectFit: 'cover',
+  objectPosition: 'center',
+  borderRadius: t.space[3],
+});
+
+const TitleText = styled(Text, {
+  textTransform: 'capitalize',
+  fontWeight: 700,
+  fontSize: t.fontSizes.lg,
+});
+
+const NameText = styled(Text, {
+  color: t.colors.gray12,
+  fontSize: t.fontSizes.sm,
+});
+
+const iconCss = css({ color: 'white' });
 
 export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   books,
 }) => {
   return (
     <Box>
-      <HStack justify="space-between">
+      <Flex justify={'between'} align={'center'}>
         <Heading>My Books</Heading>
-        <NextLink href="/books" passHref>
-          <HStack as="a" spacing={2} alignItems="center">
-            <Text>More</Text>
-            <Icon as={FaArrowRight} boxSize="3" />
-          </HStack>
-        </NextLink>
-      </HStack>
-      <HStack mt={4} spacing={6}>
+        <MoreButton href="/books" />
+      </Flex>
+      <BooksContainer direction={{ '@initial': 'column', '@lg': 'row' }}>
         {zip(books?.userRelatedBooks.slice(0, 3), [
-          'brand.accent.lightBlue',
-          'brand.accent.purple',
-          'brand.accent.limeGreen',
+          'lightBlue',
+          'purple',
+          'limeGreen',
         ]).map(([book, color]) => (
-          <LinkBox
-            as={HStack}
-            boxShadow="sm"
-            key={book?.id}
-            alignItems="center"
-            justifyItems="center"
-            bgColor={color}
-            rounded={8}
-            py={5}
-            px={4}
-            spacing={3}
-            flexGrow={1}
-            flexShrink={1}
-            flexBasis={0}
-          >
-            <Image
-              src={`https://picsum.photos/seed/${book?.id}/200`}
-              w={24}
-              h={40}
-              objectFit="cover"
-              rounded={8}
-            />
-            <LinkBox>
-              <NextLink href={`/books/${book?.id}`} passHref>
-                <VStack spacing={4} textAlign="left" alignItems="start">
-                  <Text
-                    noOfLines={1}
-                    fontWeight={700}
-                    fontSize="lg"
-                    casing="capitalize"
-                  >
-                    {book?.title!}
-                  </Text>
-                  <Text color="gray.700" fontSize="sm">
-                    {book?.architects[0]?.author.name || 'Author Name'}
-                  </Text>
-                  <HStack>
-                    {[...Array(5)].map((_, index) => (
-                      <Icon
-                        as={index < 4 ? FaStar : FaRegStar}
-                        key={index}
-                        color="white"
-                      />
-                    ))}
-                  </HStack>
-                </VStack>
-              </NextLink>
-            </LinkBox>
-          </LinkBox>
+          <BookContainer key={book?.id} color={color as any}>
+            <BookImage src={`https://picsum.photos/seed/${book?.id}/200`} />
+            <Flex direction={'column'}>
+              <TitleText className={clampNumberOfLines(2)}>
+                {book?.title!}
+              </TitleText>
+              <NameText>
+                {book?.architects[0]?.author.name || 'Author Name'}
+              </NameText>
+              <Flex css={{ spaceX: t.space[1] }}>
+                {[...Array(5)].map((_, index) => (
+                  <Icon label={index < 4 ? 'filled' : 'unfilled'} key={index}>
+                    {index < 4 ? (
+                      <FaStar className={iconCss()} />
+                    ) : (
+                      <FaRegStar className={iconCss()} />
+                    )}
+                  </Icon>
+                ))}
+              </Flex>
+            </Flex>
+          </BookContainer>
         ))}
-      </HStack>
+      </BooksContainer>
     </Box>
   );
 };

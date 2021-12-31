@@ -1,1 +1,7 @@
 @import '@fontsource/neucha/400.css';
+@import 'react-toastify/dist/ReactToastify.min.css';
+@import 'normalize.css';
+
+: root {
+  --toastify-toast-width: 400px;
+}

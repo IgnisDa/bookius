@@ -1,7 +1,6 @@
 import { useGetUserShelvesShortQuery } from '@bookius/generated';
-import { Box } from '@chakra-ui/react';
+import { Box } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { CreateShelfButton } from '../../components/pages/shelves/CreateShelfButton';
 import { GET_USER_SHELVES_SHORT } from '../../graphql/queries';
 import {
   getFetchOptions,
@@ -21,10 +20,8 @@ const ShelvesIndex = (
 
   return (
     <>
-      <CreateShelfButton refreshShelves={refreshShelves} />
-      <Box fontSize={5}>
-        <pre>{JSON.stringify(data, null, 4)}</pre>
-      </Box>
+      {/* <CreateShelfButton refreshShelves={refreshShelves} /> */}
+      <Box>{/* <pre>{JSON.stringify(data, null, 4)}</pre> */}</Box>
     </>
   );
 };
