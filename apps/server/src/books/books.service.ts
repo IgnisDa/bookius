@@ -35,6 +35,8 @@ export class BooksService {
       include: {
         book: { include: { architects: { include: { author: true } } } },
       },
+      where: { userId: currentUser.id },
+      orderBy: { updatedOn: 'desc' },
     });
     return resp;
   }
