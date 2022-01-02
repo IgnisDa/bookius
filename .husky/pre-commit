@@ -7,7 +7,6 @@ then
     echo "No files were cached"
     exit 0
 else
+    npx pretty-quick --staged
     exec pnpx cspell -- --no-summary $files
 fi
-
-npx pretty-quick --staged

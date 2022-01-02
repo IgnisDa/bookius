@@ -19,7 +19,6 @@
         "devcontainer",
         "developr",
         "fontsource",
-        "webfont",
         "headerapikey",
         "headlessui",
         "ignisda",
@@ -37,7 +36,10 @@
         "svgr",
         "toastify",
         "tslog",
-        "urql"
+        "upsert",
+        "urql",
+        "webfont",
+        "GraphQLUUID"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.
