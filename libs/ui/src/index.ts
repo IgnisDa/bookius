@@ -4,4 +4,5 @@ export * from './lib/icon/icon';
 export * from './lib/text/text';
 export * from './lib/heading/heading';
 export * from './lib/box/box';
+export * from './lib/animations';
 export * from './stitches.config';

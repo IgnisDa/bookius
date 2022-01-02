@@ -1,6 +1,7 @@
 import { ComponentProps, FC } from 'react';
 import { ImSpinner9 } from 'react-icons/im';
-import { keyframes, styled, theme as t } from '../../stitches.config';
+import { styled, theme as t } from '../../stitches.config';
+import { loader } from '../animations';
 import { Box, Flex } from '../box/box';
 
 const StitchesButton = styled('button', {
@@ -52,11 +53,6 @@ type ButtonProps = {
   isLoading?: boolean;
   loadingText?: string;
 } & StitchesButtonProps;
-
-const loader = keyframes({
-  '0%': { transform: 'rotateZ(0)' },
-  '100%': { transform: 'rotateZ(360deg)' },
-});
 
 const Spinner = styled(ImSpinner9, {
   animation: `${loader} 1s ease-in-out infinite`,
