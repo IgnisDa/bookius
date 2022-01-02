@@ -1,6 +1,9 @@
 import { css, styled, theme as t } from '../../stitches.config';
 
-export const Text = styled('p', { fontFamily: t.fonts.body });
+export const Text = styled('p', {
+  fontFamily: t.fonts.body,
+  margin: t.space[0],
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const clampNumberOfLines = (noOfLines: number) =>

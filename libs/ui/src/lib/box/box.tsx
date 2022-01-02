@@ -23,6 +23,7 @@ export const Flex = styled(Box, {
       center: { justifyContent: 'center' },
       end: { justifyContent: 'flex-end' },
       between: { justifyContent: 'space-between' },
+      around: { justifyContent: 'space-around' },
     },
     wrap: {
       noWrap: { flexWrap: 'nowrap' },
