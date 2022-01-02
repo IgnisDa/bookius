@@ -9,6 +9,7 @@ import { Provider } from 'urql';
 import { defaultLayout } from '../components/layouts/default';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 import './styles.css';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -18,7 +19,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function NextApp({ Component, pageProps }: AppPropsWithLayout) {
+function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? defaultLayout;
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
@@ -27,12 +28,22 @@ function NextApp({ Component, pageProps }: AppPropsWithLayout) {
     <>
       <Head>
         <title>Bookius</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <DefaultSeo />
       <Provider value={client}>
         <ToastContainer position="bottom-center" />
-        {getLayout(<Component {...pageProps} />)}
+        {getLayout(
+          <AnimatePresence exitBeforeEnter>
+            <motion.div
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              key={router.pathname}
+            >
+              <Component {...pageProps} />
+            </motion.div>
+          </AnimatePresence>
+        )}
       </Provider>
     </>
   );
