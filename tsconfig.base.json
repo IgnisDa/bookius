@@ -19,6 +19,7 @@
       "@bookius/general": ["libs/general/src/index.ts"],
       "@bookius/general/frontend": ["libs/general/src/frontend.ts"],
       "@bookius/generated": ["libs/generated/src/index.ts"],
+      "@bookius/generated/*": ["libs/generated/src/lib/*"],
       "@bookius/model": ["libs/model/src/index.ts"],
       "@bookius/ui": ["libs/ui/src/index.ts"]
     }
