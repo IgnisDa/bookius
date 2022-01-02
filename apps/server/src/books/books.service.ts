@@ -28,4 +28,14 @@ export class BooksService {
     const resp = await this.prisma.author.findMany({ take: 10 });
     return sampleSize(resp, 5);
   }
+
+  async userBookProgressLogs(currentUser: User, take: number) {
+    const resp = await this.prisma.bookProgressLog.findMany({
+      take: take,
+      include: {
+        book: { include: { architects: { include: { author: true } } } },
+      },
+    });
+    return resp;
+  }
 }

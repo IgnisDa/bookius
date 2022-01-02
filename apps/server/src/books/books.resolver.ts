@@ -1,11 +1,15 @@
+import {
+  Author,
+  Book,
+  BookProgressLog,
+} from '@bookius/generated/prisma-nestjs-graphql';
 import { UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { BooksService } from './books.service';
-import { AuthorDto } from './dto/author.dto';
-import { BookDto } from './dto/book.dto';
+import { UserBookProgressLogsInput } from './dto/user-book-progress-logs.dto';
 
 @Resolver()
 export class BooksResolver {
@@ -13,7 +17,7 @@ export class BooksResolver {
 
   /* QUERIES */
 
-  @Query(() => [BookDto], {
+  @Query(() => [Book], {
     description: 'Get a list of all books in the service.',
   })
   async books() {
@@ -21,7 +25,7 @@ export class BooksResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [BookDto], {
+  @Query(() => [Book], {
     description: 'Get a small list of books that are related to the user.',
   })
   async userRelatedBooks(@CurrentUser() currentUser: User) {
@@ -29,10 +33,21 @@ export class BooksResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [AuthorDto], {
+  @Query(() => [Author], {
     description: 'Get a small list of authors that are related to the user.',
   })
   async userRelatedAuthors(@CurrentUser() currentUser: User) {
     return await this.booksService.userRelatedAuthors(currentUser);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [BookProgressLog], {
+    description: 'Get list of book progresses that are related to the user.',
+  })
+  async userBookProgressLogs(
+    @Args() { take }: UserBookProgressLogsInput,
+    @CurrentUser() currentUser: User
+  ) {
+    return await this.booksService.userBookProgressLogs(currentUser, take);
   }
 }

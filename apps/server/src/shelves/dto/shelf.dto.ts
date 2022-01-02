@@ -1,10 +1,10 @@
+import { Book } from '@bookius/generated/prisma-nestjs-graphql';
 import { Field, ID, ObjectType, OmitType } from '@nestjs/graphql';
-import { BookDto } from '../../books/dto/book.dto';
 
 @ObjectType({
   description: 'Details about a book without their architect details',
 })
-export class BookDtoWithoutArchitect extends OmitType(BookDto, [
+export class BookDtoWithoutArchitect extends OmitType(Book, [
   'architects',
 ] as const) {}
 
