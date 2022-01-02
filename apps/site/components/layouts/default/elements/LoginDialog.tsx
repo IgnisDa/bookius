@@ -31,6 +31,7 @@ import { AUTH_TOKEN_KEY } from 'apps/site/lib/constants';
 import { client } from 'apps/site/lib/helpers/urqlClient';
 import Cookies from 'js-cookie';
 import { Magic } from 'magic-sdk';
+import Router from 'next/router';
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { HiOutlineMail } from 'react-icons/hi';
 import { toast } from 'react-toastify';
@@ -128,11 +129,16 @@ const Label = styled('label', {
 type LoginDialogProps = {
   isOpen: boolean;
   setIsOpen: (newValue: boolean) => void;
+  setIsLoggedIn: (newValue: boolean) => void;
 };
 
 const MailIcon = styled(HiOutlineMail, { size: t.space[8] });
 
-export const LoginDialog: FC<LoginDialogProps> = ({ isOpen, setIsOpen }) => {
+export const LoginDialog: FC<LoginDialogProps> = ({
+  isOpen,
+  setIsOpen,
+  setIsLoggedIn,
+}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -180,6 +186,8 @@ export const LoginDialog: FC<LoginDialogProps> = ({ isOpen, setIsOpen }) => {
       await sleep(1000);
       setIsOpen(false);
       setEmail('');
+      Router.push('/dashboard');
+      setIsLoggedIn(true);
     } catch (error) {
       console.error('An unexpected error happened occurred:', error);
       setIsLoading(false);
@@ -189,10 +197,10 @@ export const LoginDialog: FC<LoginDialogProps> = ({ isOpen, setIsOpen }) => {
   return (
     <DialogRoot open={isOpen}>
       <Container>
-        <DialogTitle>
+        <DialogTitle asChild>
           <Heading css={{ fontSize: t.fontSizes['2xl'] }}>Get Started</Heading>
         </DialogTitle>
-        <DialogDescription>
+        <DialogDescription asChild>
           <Text>You need to be logged in to start tracking your books.</Text>
         </DialogDescription>
         <Flex

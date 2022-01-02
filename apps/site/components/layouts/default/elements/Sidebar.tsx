@@ -1,10 +1,23 @@
-import { Box, Button, css, Flex, Icon, styled, theme as t } from '@bookius/ui';
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  loader,
+  styled,
+  theme as t,
+} from '@bookius/ui';
+import { AUTH_TOKEN_KEY } from 'apps/site/lib/constants';
+import Cookies from 'js-cookie';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CgSpinnerTwoAlt } from 'react-icons/cg';
 import { FiBookmark, FiHeart, FiLogIn, FiPieChart } from 'react-icons/fi';
 import { HiOutlineCalendar, HiOutlineCollection } from 'react-icons/hi';
+import { RiSettings3Line } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 import logo from '../../../../public/logo.png';
 import { LoginDialog } from './LoginDialog';
 
@@ -43,19 +56,48 @@ const LogoBox = styled(Box, {
   },
 });
 
+const BottomButton = styled(Icon, {
+  size: t.space[9],
+  transitionProperty: 'transform',
+  transitionDuration: '0.2s',
+  '&:hover': { transform: 'scale(1.2)' },
+});
+
 export const Sidebar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
+
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      if (Cookies.get(AUTH_TOKEN_KEY)) setIsLoggedIn(true);
+      else setIsLoggedIn(false);
+    }, 3000);
+  }, []);
 
   const router = useRouter();
 
+  let accountButton;
+
+  if (typeof isLoggedIn === 'undefined')
+    accountButton = (
+      <BottomButton
+        as={CgSpinnerTwoAlt}
+        css={{ animation: `${loader} 1s ease-in-out infinite` }}
+      />
+    );
+  else if (isLoggedIn === true)
+    accountButton = <BottomButton as={RiSettings3Line} />;
+  else accountButton = <BottomButton as={FiLogIn} />;
+
   return (
     <aside>
-      <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+      <LoginDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setIsLoggedIn={setIsLoggedIn}
+      />
       <SidebarContainer
-        direction={{
-          '@initial': 'row',
-          '@lg': 'column',
-        }}
+        direction={{ '@initial': 'row', '@lg': 'column' }}
         justify={'between'}
       >
         <NextLink href="/" passHref>
@@ -94,21 +136,20 @@ export const Sidebar = () => {
         </Flex>
         <Flex isCentered>
           <Button
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              if (typeof isLoggedIn === 'undefined') return;
+              else if (!isLoggedIn) setIsOpen(true);
+              else if (isLoggedIn) {
+                Cookies.remove(AUTH_TOKEN_KEY);
+                setIsLoggedIn(false);
+                toast.info('You have been logged out!');
+                router.push('/');
+              }
+            }}
             variant={'black'}
             ghost
-            paddingReset
           >
-            <Icon label="Login">
-              <FiLogIn
-                className={css({
-                  size: t.space[8],
-                  '&:hover': { transform: 'scale(1.2)' },
-                  transitionProperty: 'transform',
-                  transitionDuration: '0.2s',
-                })()}
-              />
-            </Icon>
+            <Icon label="Login">{accountButton}</Icon>
           </Button>
         </Flex>
       </SidebarContainer>
