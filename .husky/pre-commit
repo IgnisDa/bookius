@@ -9,3 +9,5 @@ then
 else
     exec pnpx cspell -- --no-summary $files
 fi
+
+npx pretty-quick --staged
