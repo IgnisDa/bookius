@@ -16,10 +16,9 @@ export const getRedirectUnauthenticatedRequests = (
   } = {
     statusCode: HttpStatus.FOUND,
     destination: '/',
-    errorMessage: 'You are not authorized to see this page',
   }
 ) => ({
-  props: { errorMessage: options.errorMessage },
+  props: {},
   redirect: {
     destination: options.destination,
     statusCode: options.statusCode,
