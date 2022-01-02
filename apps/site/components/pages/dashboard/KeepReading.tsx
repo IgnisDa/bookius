@@ -13,6 +13,7 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
 import { FunctionComponent } from 'react';
 import { MoreButton } from '../../miscellaneous/MoreButton';
+import { ReadingProgress } from './ReadingProgress';
 
 interface PopularAuthorsComponentProps {
   logs: GetUserBooksProgressLogsQuery;
@@ -123,7 +124,7 @@ export const KeepReadingComponent: FunctionComponent<
       </PaddedBox>
       {logs.userBookProgressLogs.length > 0 ? (
         <Flex direction={'column'}>
-          {logs.userBookProgressLogs.map((log) => (
+          {logs.userBookProgressLogs.map((log, index) => (
             <Box key={log.id}>
               <PaddedBox align={'center'}>
                 <Avatar>
@@ -149,11 +150,7 @@ export const KeepReadingComponent: FunctionComponent<
                       {log.numPages}
                     </Box>
                   </Flex>
-                  <ProgressRoot value={80}>
-                    <ProgressIndicator
-                      style={{ width: `${log.percentage}%` }}
-                    />
-                  </ProgressRoot>
+                  <ReadingProgress index={index} progress={log.percentage} />
                 </FlexGrow>
               </PaddedBox>
             </Box>
