@@ -41,6 +41,7 @@
     "class-validator": "^0.13.2",
     "connection-string-parser": "^1.0.4",
     "core-js": "^3.20.1",
+    "framer-motion": "^5.5.5",
     "graphql": "15.8.0",
     "graphql-scalars": "^1.14.1",
     "graphql-type-json": "^0.3.2",
