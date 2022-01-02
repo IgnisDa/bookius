@@ -64,3 +64,24 @@ export const GET_USER_RELATED_AUTHORS = gql`
     }
   }
 `;
+
+export const GET_USER_BOOKS_PROGRESS_LOGS = gql`
+  query GetUserBooksProgressLogs($take: Int) {
+    userBookProgressLogs(take: $take) {
+      id
+      percentage
+      updatedOn
+      startedOn
+      numPages
+      book {
+        title
+        id
+        architects {
+          author {
+            name
+          }
+        }
+      }
+    }
+  }
+`;

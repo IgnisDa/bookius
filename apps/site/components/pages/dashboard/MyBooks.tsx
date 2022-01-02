@@ -54,13 +54,13 @@ const BookImage = styled('img', {
 
 const TitleText = styled(Text, {
   textTransform: 'capitalize',
-  fontWeight: 700,
-  fontSize: t.fontSizes.lg,
+  fontWeight: 500,
+  fontSize: t.fontSizes.xl,
 });
 
 const NameText = styled(Text, {
   color: t.colors.gray12,
-  fontSize: t.fontSizes.sm,
+  fontSize: t.fontSizes.base,
 });
 
 const iconCss = css({ color: 'white' });
@@ -82,12 +82,16 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
         ]).map(([book, color]) => (
           <BookContainer key={book?.id} color={color as any}>
             <BookImage src={`https://picsum.photos/seed/${book?.id}/200`} />
-            <Flex direction={'column'}>
+            <Flex
+              direction={'column'}
+              justify={'around'}
+              css={{ marginY: t.space[4] }}
+            >
               <TitleText className={clampNumberOfLines(2)}>
                 {book?.title!}
               </TitleText>
               <NameText>
-                {book?.architects[0]?.author.name || 'Author Name'}
+                {book?.architects?.at(0)?.author.name || 'Author Name'}
               </NameText>
               <Flex css={{ spaceX: t.space[1] }}>
                 {[...Array(5)].map((_, index) => (

@@ -1,13 +1,16 @@
 import {
+  useGetUserBooksProgressLogsQuery,
   useGetUserRelatedAuthorsQuery,
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
 import { Button, Flex, styled, theme as t } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useState } from 'react';
+import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
 import { PopularAuthorsComponent } from '../components/pages/dashboard/PopularAuthors';
 import {
+  GET_USER_BOOKS_PROGRESS_LOGS,
   GET_USER_RELATED_AUTHORS,
   GET_USER_RELATED_BOOKS,
 } from '../graphql/queries';
@@ -30,12 +33,26 @@ const Dashboard = (
 ) => {
   const [{ data: userRelatedBooksData }] = useGetUserRelatedBooksQuery();
   const [{ data: userRelatedAuthorsData }] = useGetUserRelatedAuthorsQuery();
+  const [{ data: useGetUserBooksProgressLogsData }] =
+    useGetUserBooksProgressLogsQuery({ variables: { take: 5 } });
 
   return (
     <>
       <VerticalStack direction={'column'}>
         <MyBooksComponent books={userRelatedBooksData!} />
-        <PopularAuthorsComponent authors={userRelatedAuthorsData!} />
+        <Flex
+          direction={{
+            '@initial': 'column',
+            '@lg': 'row',
+          }}
+          css={{
+            spaceY: t.space[8],
+            '@lg': { spaceX: t.space[5], spaceY: t.space[0] },
+          }}
+        >
+          <PopularAuthorsComponent authors={userRelatedAuthorsData!} />
+          <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
+        </Flex>
       </VerticalStack>
     </>
   );
@@ -45,16 +62,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!hasRequiredRequestCookies(req))
     return getRedirectUnauthenticatedRequests();
   await client
-    .query(GET_USER_RELATED_BOOKS, undefined, {
-      requestPolicy: 'network-only',
-      ...getFetchOptions(req),
-    })
+    .query(GET_USER_RELATED_BOOKS, undefined, getFetchOptions(req))
     .toPromise();
   await client
-    .query(GET_USER_RELATED_AUTHORS, undefined, {
-      requestPolicy: 'network-only',
-      ...getFetchOptions(req),
-    })
+    .query(GET_USER_RELATED_AUTHORS, undefined, getFetchOptions(req))
+    .toPromise();
+  await client
+    .query(GET_USER_BOOKS_PROGRESS_LOGS, { take: 5 }, getFetchOptions(req))
     .toPromise();
   return {
     props: {

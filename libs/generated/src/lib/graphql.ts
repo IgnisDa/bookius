@@ -19,10 +19,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** BigInt custom scalar type */
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   BigInt: any;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
+  /** An arbitrary-precision Decimal type */
+  Decimal: any;
 };
 
 /** The standard interface that contains the error message when something goes wrong */
@@ -31,65 +33,255 @@ export type ApiError = {
   message: Scalars['String'];
 };
 
-/** The people who have worked on a book */
-export type ArchitectDto = {
-  __typename: 'ArchitectDto';
-  /** Details about the author */
-  author: AuthorDto;
-  /** Role of this particular architect */
-  role: ArchitectRole;
-};
-
 /** The role of a person in the complete production of a book */
 export enum ArchitectRole {
   Author = 'AUTHOR',
   Illustrator = 'ILLUSTRATOR',
 }
 
-/** An author that is available to be viewed by the user */
-export type AuthorDto = {
-  __typename: 'AuthorDto';
-  /** A brief description of the author */
+/** The people who have worked on a book */
+export type ArchitectsOnBooks = {
+  __typename: 'ArchitectsOnBooks';
+  author: Author;
+  authorId: Scalars['String'];
+  book: Book;
+  bookId: Scalars['String'];
+  role: ArchitectRole;
+};
+
+export type ArchitectsOnBooksAvgAggregate = {
+  __typename: 'ArchitectsOnBooksAvgAggregate';
+  authorId?: Maybe<Scalars['Float']>;
+  bookId?: Maybe<Scalars['Float']>;
+};
+
+export type ArchitectsOnBooksCountAggregate = {
+  __typename: 'ArchitectsOnBooksCountAggregate';
+  _all: Scalars['Int'];
+  authorId: Scalars['Int'];
+  bookId: Scalars['Int'];
+  role: Scalars['Int'];
+};
+
+export type ArchitectsOnBooksMaxAggregate = {
+  __typename: 'ArchitectsOnBooksMaxAggregate';
+  authorId?: Maybe<Scalars['String']>;
+  bookId?: Maybe<Scalars['String']>;
+  role?: Maybe<ArchitectRole>;
+};
+
+export type ArchitectsOnBooksMinAggregate = {
+  __typename: 'ArchitectsOnBooksMinAggregate';
+  authorId?: Maybe<Scalars['String']>;
+  bookId?: Maybe<Scalars['String']>;
+  role?: Maybe<ArchitectRole>;
+};
+
+export type ArchitectsOnBooksSumAggregate = {
+  __typename: 'ArchitectsOnBooksSumAggregate';
+  authorId?: Maybe<Scalars['String']>;
+  bookId?: Maybe<Scalars['String']>;
+};
+
+/** This model will keep track of authors that will be made available to the users */
+export type Author = {
+  __typename: 'Author';
+  _count: AuthorCount;
   bio?: Maybe<Scalars['String']>;
-  /** The date and time when this author was added to the service */
+  books?: Maybe<Array<ArchitectsOnBooks>>;
   createdAt: Scalars['DateTime'];
-  /** The primary key of the author */
   id: Scalars['BigInt'];
-  /** Name of the author */
   name: Scalars['String'];
-  /** The date and time when information about this author was last updated */
+  openLibraryKey: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
-/** A book that is available to be viewed by the user */
-export type BookDto = {
-  __typename: 'BookDto';
-  architects: Array<ArchitectDto>;
-  /** The date and time when this book was added to the service */
+export type AuthorAvgAggregate = {
+  __typename: 'AuthorAvgAggregate';
+  id?: Maybe<Scalars['Float']>;
+};
+
+export type AuthorCount = {
+  __typename: 'AuthorCount';
+  books: Scalars['Int'];
+};
+
+export type AuthorCountAggregate = {
+  __typename: 'AuthorCountAggregate';
+  _all: Scalars['Int'];
+  bio: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  id: Scalars['Int'];
+  name: Scalars['Int'];
+  openLibraryKey: Scalars['Int'];
+  updatedAt: Scalars['Int'];
+};
+
+export type AuthorMaxAggregate = {
+  __typename: 'AuthorMaxAggregate';
+  bio?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['BigInt']>;
+  name?: Maybe<Scalars['String']>;
+  openLibraryKey?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type AuthorMinAggregate = {
+  __typename: 'AuthorMinAggregate';
+  bio?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['BigInt']>;
+  name?: Maybe<Scalars['String']>;
+  openLibraryKey?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type AuthorSumAggregate = {
+  __typename: 'AuthorSumAggregate';
+  id?: Maybe<Scalars['BigInt']>;
+};
+
+/** This model will keep track of books that will be made available to the users */
+export type Book = {
+  __typename: 'Book';
+  BookProgressLog?: Maybe<Array<BookProgressLog>>;
+  _count: BookCount;
+  architects?: Maybe<Array<ArchitectsOnBooks>>;
   createdAt: Scalars['DateTime'];
-  /** A brief description of the author */
   description?: Maybe<Scalars['String']>;
-  /** The primary key of the book */
   id: Scalars['BigInt'];
-  /** Name of the book */
+  isbn: Scalars['String'];
+  shelves?: Maybe<Array<Shelf>>;
   title: Scalars['String'];
-  /** The date and time when information about this book was last updated */
   updatedAt: Scalars['DateTime'];
+};
+
+export type BookAvgAggregate = {
+  __typename: 'BookAvgAggregate';
+  id?: Maybe<Scalars['Float']>;
+};
+
+export type BookCount = {
+  __typename: 'BookCount';
+  BookProgressLog: Scalars['Int'];
+  architects: Scalars['Int'];
+  shelves: Scalars['Int'];
+};
+
+export type BookCountAggregate = {
+  __typename: 'BookCountAggregate';
+  _all: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  description: Scalars['Int'];
+  id: Scalars['Int'];
+  isbn: Scalars['Int'];
+  title: Scalars['Int'];
+  updatedAt: Scalars['Int'];
 };
 
 /** Details about a book without their architect details */
 export type BookDtoWithoutArchitect = {
   __typename: 'BookDtoWithoutArchitect';
-  /** The date and time when this book was added to the service */
+  BookProgressLog?: Maybe<Array<BookProgressLog>>;
+  _count: BookCount;
   createdAt: Scalars['DateTime'];
-  /** A brief description of the author */
   description?: Maybe<Scalars['String']>;
-  /** The primary key of the book */
   id: Scalars['BigInt'];
-  /** Name of the book */
+  isbn: Scalars['String'];
+  shelves?: Maybe<Array<Shelf>>;
   title: Scalars['String'];
-  /** The date and time when information about this book was last updated */
   updatedAt: Scalars['DateTime'];
+};
+
+export type BookMaxAggregate = {
+  __typename: 'BookMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['BigInt']>;
+  isbn?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type BookMinAggregate = {
+  __typename: 'BookMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['BigInt']>;
+  isbn?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+/** Model to track a user's reading progress with a particular book */
+export type BookProgressLog = {
+  __typename: 'BookProgressLog';
+  book: Book;
+  bookId: Scalars['String'];
+  id: Scalars['BigInt'];
+  numPages: Scalars['Int'];
+  /** Face value, so if a book is 82% complete, this value will be `82.00` */
+  percentage: Scalars['Decimal'];
+  startedOn: Scalars['DateTime'];
+  updatedOn: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
+};
+
+export type BookProgressLogAvgAggregate = {
+  __typename: 'BookProgressLogAvgAggregate';
+  bookId?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  numPages?: Maybe<Scalars['Float']>;
+  percentage?: Maybe<Scalars['Decimal']>;
+};
+
+export type BookProgressLogCountAggregate = {
+  __typename: 'BookProgressLogCountAggregate';
+  _all: Scalars['Int'];
+  bookId: Scalars['Int'];
+  id: Scalars['Int'];
+  numPages: Scalars['Int'];
+  percentage: Scalars['Int'];
+  startedOn: Scalars['Int'];
+  updatedOn: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
+export type BookProgressLogMaxAggregate = {
+  __typename: 'BookProgressLogMaxAggregate';
+  bookId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['BigInt']>;
+  numPages?: Maybe<Scalars['Int']>;
+  percentage?: Maybe<Scalars['Decimal']>;
+  startedOn?: Maybe<Scalars['DateTime']>;
+  updatedOn?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type BookProgressLogMinAggregate = {
+  __typename: 'BookProgressLogMinAggregate';
+  bookId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['BigInt']>;
+  numPages?: Maybe<Scalars['Int']>;
+  percentage?: Maybe<Scalars['Decimal']>;
+  startedOn?: Maybe<Scalars['DateTime']>;
+  updatedOn?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type BookProgressLogSumAggregate = {
+  __typename: 'BookProgressLogSumAggregate';
+  bookId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['BigInt']>;
+  numPages?: Maybe<Scalars['Int']>;
+  percentage?: Maybe<Scalars['Decimal']>;
+};
+
+export type BookSumAggregate = {
+  __typename: 'BookSumAggregate';
+  id?: Maybe<Scalars['BigInt']>;
 };
 
 /** Type returned for the error when a new user is created. */
@@ -156,21 +348,59 @@ export type MutationLoginUserArgs = {
 export type Query = {
   __typename: 'Query';
   /** Get a list of all books in the service. */
-  books: Array<BookDto>;
+  books: Array<Book>;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
   /** Get status of the service. */
   getStatus: Scalars['Boolean'];
+  /** Get list of book progresses that are related to the user. */
+  userBookProgressLogs: Array<BookProgressLog>;
   /** Get a small list of authors that are related to the user. */
-  userRelatedAuthors: Array<AuthorDto>;
+  userRelatedAuthors: Array<Author>;
   /** Get a small list of books that are related to the user. */
-  userRelatedBooks: Array<BookDto>;
+  userRelatedBooks: Array<Book>;
   /** Get a list of all shelves created by this user. */
   userShelves: Array<ShelfDto>;
 };
 
 export type QueryCheckUserByIssuerArgs = {
   issuer: Scalars['String'];
+};
+
+export type QueryUserBookProgressLogsArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+/** A shelf is created by users to collect a number of books together */
+export type Shelf = {
+  __typename: 'Shelf';
+  _count: ShelfCount;
+  books?: Maybe<Array<Book>>;
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  isPublic: Scalars['Boolean'];
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
+};
+
+export type ShelfCount = {
+  __typename: 'ShelfCount';
+  books: Scalars['Int'];
+};
+
+export type ShelfCountAggregate = {
+  __typename: 'ShelfCountAggregate';
+  _all: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  description: Scalars['Int'];
+  id: Scalars['Int'];
+  isPublic: Scalars['Int'];
+  name: Scalars['Int'];
+  updatedAt: Scalars['Int'];
+  userId: Scalars['Int'];
 };
 
 /** Counts of various statistics related to shelves */
@@ -201,11 +431,136 @@ export type ShelfDto = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ShelfMaxAggregate = {
+  __typename: 'ShelfMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type ShelfMinAggregate = {
+  __typename: 'ShelfMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+/** This model will represent a user of the service. */
+export type User = {
+  __typename: 'User';
+  BookProgressLog?: Maybe<Array<BookProgressLog>>;
+  _count: UserCount;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  issuer: Scalars['String'];
+  profile?: Maybe<UserProfile>;
+  shelves?: Maybe<Array<Shelf>>;
+};
+
+export type UserCount = {
+  __typename: 'UserCount';
+  BookProgressLog: Scalars['Int'];
+  shelves: Scalars['Int'];
+};
+
+export type UserCountAggregate = {
+  __typename: 'UserCountAggregate';
+  _all: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  id: Scalars['Int'];
+  issuer: Scalars['Int'];
+};
+
 /** Critical details about a user of the service */
 export type UserDto = {
   __typename: 'UserDto';
   /** The primary key of the user */
   id: Scalars['ID'];
+};
+
+export type UserMaxAggregate = {
+  __typename: 'UserMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
+  issuer?: Maybe<Scalars['String']>;
+};
+
+export type UserMinAggregate = {
+  __typename: 'UserMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
+  issuer?: Maybe<Scalars['String']>;
+};
+
+/** This model will track profile information about the user */
+export type UserProfile = {
+  __typename: 'UserProfile';
+  age?: Maybe<Scalars['Int']>;
+  bio?: Maybe<Scalars['String']>;
+  countryId?: Maybe<Scalars['Int']>;
+  email: Scalars['String'];
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type UserProfileAvgAggregate = {
+  __typename: 'UserProfileAvgAggregate';
+  age?: Maybe<Scalars['Float']>;
+  countryId?: Maybe<Scalars['Float']>;
+};
+
+export type UserProfileCountAggregate = {
+  __typename: 'UserProfileCountAggregate';
+  _all: Scalars['Int'];
+  age: Scalars['Int'];
+  bio: Scalars['Int'];
+  countryId: Scalars['Int'];
+  email: Scalars['Int'];
+  id: Scalars['Int'];
+  updatedAt: Scalars['Int'];
+  userId: Scalars['Int'];
+  username: Scalars['Int'];
+};
+
+export type UserProfileMaxAggregate = {
+  __typename: 'UserProfileMaxAggregate';
+  age?: Maybe<Scalars['Int']>;
+  bio?: Maybe<Scalars['String']>;
+  countryId?: Maybe<Scalars['Int']>;
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type UserProfileMinAggregate = {
+  __typename: 'UserProfileMinAggregate';
+  age?: Maybe<Scalars['Int']>;
+  bio?: Maybe<Scalars['String']>;
+  countryId?: Maybe<Scalars['Int']>;
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type UserProfileSumAggregate = {
+  __typename: 'UserProfileSumAggregate';
+  age?: Maybe<Scalars['Int']>;
+  countryId?: Maybe<Scalars['Int']>;
 };
 
 export type LoginUserMutationVariables = Exact<{
@@ -257,14 +612,17 @@ export type GetAllBooksQueryVariables = Exact<{ [key: string]: never }>;
 export type GetAllBooksQuery = {
   __typename: 'Query';
   books: Array<{
-    __typename: 'BookDto';
+    __typename: 'Book';
     id: any;
     title: string;
-    architects: Array<{
-      __typename: 'ArchitectDto';
-      role: ArchitectRole;
-      author: { __typename: 'AuthorDto'; name: string; id: any };
-    }>;
+    architects?:
+      | Array<{
+          __typename: 'ArchitectsOnBooks';
+          role: ArchitectRole;
+          author: { __typename: 'Author'; name: string; id: any };
+        }>
+      | null
+      | undefined;
   }>;
 };
 
@@ -286,14 +644,17 @@ export type GetUserRelatedBooksQueryVariables = Exact<{ [key: string]: never }>;
 export type GetUserRelatedBooksQuery = {
   __typename: 'Query';
   userRelatedBooks: Array<{
-    __typename: 'BookDto';
+    __typename: 'Book';
     title: string;
     id: any;
-    architects: Array<{
-      __typename: 'ArchitectDto';
-      role: ArchitectRole;
-      author: { __typename: 'AuthorDto'; name: string };
-    }>;
+    architects?:
+      | Array<{
+          __typename: 'ArchitectsOnBooks';
+          role: ArchitectRole;
+          author: { __typename: 'Author'; name: string };
+        }>
+      | null
+      | undefined;
   }>;
 };
 
@@ -303,7 +664,35 @@ export type GetUserRelatedAuthorsQueryVariables = Exact<{
 
 export type GetUserRelatedAuthorsQuery = {
   __typename: 'Query';
-  userRelatedAuthors: Array<{ __typename: 'AuthorDto'; id: any; name: string }>;
+  userRelatedAuthors: Array<{ __typename: 'Author'; id: any; name: string }>;
+};
+
+export type GetUserBooksProgressLogsQueryVariables = Exact<{
+  take?: Maybe<Scalars['Int']>;
+}>;
+
+export type GetUserBooksProgressLogsQuery = {
+  __typename: 'Query';
+  userBookProgressLogs: Array<{
+    __typename: 'BookProgressLog';
+    id: any;
+    percentage: any;
+    updatedOn: any;
+    startedOn: any;
+    numPages: number;
+    book: {
+      __typename: 'Book';
+      title: string;
+      id: any;
+      architects?:
+        | Array<{
+            __typename: 'ArchitectsOnBooks';
+            author: { __typename: 'Author'; name: string };
+          }>
+        | null
+        | undefined;
+    };
+  }>;
 };
 
 export const LoginUserDocument = gql`
@@ -477,6 +866,38 @@ export function useGetUserRelatedAuthorsQuery(
 ) {
   return Urql.useQuery<GetUserRelatedAuthorsQuery>({
     query: GetUserRelatedAuthorsDocument,
+    ...options,
+  });
+}
+export const GetUserBooksProgressLogsDocument = gql`
+  query GetUserBooksProgressLogs($take: Int) {
+    userBookProgressLogs(take: $take) {
+      id
+      percentage
+      updatedOn
+      startedOn
+      numPages
+      book {
+        title
+        id
+        architects {
+          author {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+export function useGetUserBooksProgressLogsQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetUserBooksProgressLogsQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetUserBooksProgressLogsQuery>({
+    query: GetUserBooksProgressLogsDocument,
     ...options,
   });
 }

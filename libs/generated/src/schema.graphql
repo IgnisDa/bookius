@@ -10,78 +10,238 @@ interface APIError {
   message: String!
 }
 
-"""The people who have worked on a book"""
-type ArchitectDto {
-  """Details about the author"""
-  author: AuthorDto!
-
-  """Role of this particular architect"""
-  role: ArchitectRole!
-}
-
 """The role of a person in the complete production of a book"""
 enum ArchitectRole {
   AUTHOR
   ILLUSTRATOR
 }
 
-"""An author that is available to be viewed by the user"""
-type AuthorDto {
-  """A brief description of the author"""
+"""The people who have worked on a book"""
+type ArchitectsOnBooks {
+  author: Author!
+  authorId: String!
+  book: Book!
+  bookId: String!
+  role: ArchitectRole!
+}
+
+type ArchitectsOnBooksAvgAggregate {
+  authorId: Float
+  bookId: Float
+}
+
+type ArchitectsOnBooksCountAggregate {
+  _all: Int!
+  authorId: Int!
+  bookId: Int!
+  role: Int!
+}
+
+type ArchitectsOnBooksMaxAggregate {
+  authorId: String
+  bookId: String
+  role: ArchitectRole
+}
+
+type ArchitectsOnBooksMinAggregate {
+  authorId: String
+  bookId: String
+  role: ArchitectRole
+}
+
+type ArchitectsOnBooksSumAggregate {
+  authorId: String
+  bookId: String
+}
+
+"""
+This model will keep track of authors that will be made available to the users
+"""
+type Author {
+  _count: AuthorCount!
   bio: String
-
-  """The date and time when this author was added to the service"""
+  books: [ArchitectsOnBooks!]
   createdAt: DateTime!
-
-  """The primary key of the author"""
   id: BigInt!
-
-  """Name of the author"""
   name: String!
-
-  """The date and time when information about this author was last updated"""
+  openLibraryKey: String!
   updatedAt: DateTime!
 }
 
-"""BigInt custom scalar type"""
+type AuthorAvgAggregate {
+  id: Float
+}
+
+type AuthorCount {
+  books: Int!
+}
+
+type AuthorCountAggregate {
+  _all: Int!
+  bio: Int!
+  createdAt: Int!
+  id: Int!
+  name: Int!
+  openLibraryKey: Int!
+  updatedAt: Int!
+}
+
+type AuthorMaxAggregate {
+  bio: String
+  createdAt: DateTime
+  id: BigInt
+  name: String
+  openLibraryKey: String
+  updatedAt: DateTime
+}
+
+type AuthorMinAggregate {
+  bio: String
+  createdAt: DateTime
+  id: BigInt
+  name: String
+  openLibraryKey: String
+  updatedAt: DateTime
+}
+
+type AuthorSumAggregate {
+  id: BigInt
+}
+
+"""
+The `BigInt` scalar type represents non-fractional signed whole numeric values.
+"""
 scalar BigInt
 
-"""A book that is available to be viewed by the user"""
-type BookDto {
-  architects: [ArchitectDto!]!
-
-  """The date and time when this book was added to the service"""
+"""
+This model will keep track of books that will be made available to the users
+"""
+type Book {
+  BookProgressLog: [BookProgressLog!]
+  _count: BookCount!
+  architects: [ArchitectsOnBooks!]
   createdAt: DateTime!
-
-  """A brief description of the author"""
   description: String
-
-  """The primary key of the book"""
   id: BigInt!
-
-  """Name of the book"""
+  isbn: String!
+  shelves: [Shelf!]
   title: String!
-
-  """The date and time when information about this book was last updated"""
   updatedAt: DateTime!
+}
+
+type BookAvgAggregate {
+  id: Float
+}
+
+type BookCount {
+  BookProgressLog: Int!
+  architects: Int!
+  shelves: Int!
+}
+
+type BookCountAggregate {
+  _all: Int!
+  createdAt: Int!
+  description: Int!
+  id: Int!
+  isbn: Int!
+  title: Int!
+  updatedAt: Int!
 }
 
 """Details about a book without their architect details"""
 type BookDtoWithoutArchitect {
-  """The date and time when this book was added to the service"""
+  BookProgressLog: [BookProgressLog!]
+  _count: BookCount!
   createdAt: DateTime!
-
-  """A brief description of the author"""
   description: String
-
-  """The primary key of the book"""
   id: BigInt!
-
-  """Name of the book"""
+  isbn: String!
+  shelves: [Shelf!]
   title: String!
-
-  """The date and time when information about this book was last updated"""
   updatedAt: DateTime!
+}
+
+type BookMaxAggregate {
+  createdAt: DateTime
+  description: String
+  id: BigInt
+  isbn: String
+  title: String
+  updatedAt: DateTime
+}
+
+type BookMinAggregate {
+  createdAt: DateTime
+  description: String
+  id: BigInt
+  isbn: String
+  title: String
+  updatedAt: DateTime
+}
+
+"""Model to track a user's reading progress with a particular book"""
+type BookProgressLog {
+  book: Book!
+  bookId: String!
+  id: BigInt!
+  numPages: Int!
+
+  """Face value, so if a book is 82% complete, this value will be `82.00`"""
+  percentage: Decimal!
+  startedOn: DateTime!
+  updatedOn: DateTime!
+  user: User!
+  userId: String!
+}
+
+type BookProgressLogAvgAggregate {
+  bookId: Float
+  id: Float
+  numPages: Float
+  percentage: Decimal
+}
+
+type BookProgressLogCountAggregate {
+  _all: Int!
+  bookId: Int!
+  id: Int!
+  numPages: Int!
+  percentage: Int!
+  startedOn: Int!
+  updatedOn: Int!
+  userId: Int!
+}
+
+type BookProgressLogMaxAggregate {
+  bookId: String
+  id: BigInt
+  numPages: Int
+  percentage: Decimal
+  startedOn: DateTime
+  updatedOn: DateTime
+  userId: String
+}
+
+type BookProgressLogMinAggregate {
+  bookId: String
+  id: BigInt
+  numPages: Int
+  percentage: Decimal
+  startedOn: DateTime
+  updatedOn: DateTime
+  userId: String
+}
+
+type BookProgressLogSumAggregate {
+  bookId: String
+  id: BigInt
+  numPages: Int
+  percentage: Decimal
+}
+
+type BookSumAggregate {
+  id: BigInt
 }
 
 """Type returned for the error when a new user is created."""
@@ -109,6 +269,9 @@ input CreateUserShelfInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+"""An arbitrary-precision Decimal type"""
+scalar Decimal
 
 """The type returned for the errors when login is unsuccessful"""
 type LoginError implements APIError {
@@ -141,7 +304,7 @@ type Mutation {
 
 type Query {
   """Get a list of all books in the service."""
-  books: [BookDto!]!
+  books: [Book!]!
 
   """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
@@ -149,14 +312,46 @@ type Query {
   """Get status of the service."""
   getStatus: Boolean!
 
+  """Get list of book progresses that are related to the user."""
+  userBookProgressLogs(take: Int): [BookProgressLog!]!
+
   """Get a small list of authors that are related to the user."""
-  userRelatedAuthors: [AuthorDto!]!
+  userRelatedAuthors: [Author!]!
 
   """Get a small list of books that are related to the user."""
-  userRelatedBooks: [BookDto!]!
+  userRelatedBooks: [Book!]!
 
   """Get a list of all shelves created by this user."""
   userShelves: [ShelfDto!]!
+}
+
+"""A shelf is created by users to collect a number of books together"""
+type Shelf {
+  _count: ShelfCount!
+  books: [Book!]
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  isPublic: Boolean!
+  name: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+type ShelfCount {
+  books: Int!
+}
+
+type ShelfCountAggregate {
+  _all: Int!
+  createdAt: Int!
+  description: Int!
+  id: Int!
+  isPublic: Int!
+  name: Int!
+  updatedAt: Int!
+  userId: Int!
 }
 
 """Counts of various statistics related to shelves"""
@@ -192,8 +387,125 @@ type ShelfDto {
   updatedAt: DateTime!
 }
 
+type ShelfMaxAggregate {
+  createdAt: DateTime
+  description: String
+  id: String
+  isPublic: Boolean
+  name: String
+  updatedAt: DateTime
+  userId: String
+}
+
+type ShelfMinAggregate {
+  createdAt: DateTime
+  description: String
+  id: String
+  isPublic: Boolean
+  name: String
+  updatedAt: DateTime
+  userId: String
+}
+
+"""
+A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
+"""
+scalar UUID
+
+"""This model will represent a user of the service."""
+type User {
+  BookProgressLog: [BookProgressLog!]
+  _count: UserCount!
+  createdAt: DateTime!
+  id: ID!
+  issuer: String!
+  profile: UserProfile
+  shelves: [Shelf!]
+}
+
+type UserCount {
+  BookProgressLog: Int!
+  shelves: Int!
+}
+
+type UserCountAggregate {
+  _all: Int!
+  createdAt: Int!
+  id: Int!
+  issuer: Int!
+}
+
 """Critical details about a user of the service"""
 type UserDto {
   """The primary key of the user"""
   id: ID!
+}
+
+type UserMaxAggregate {
+  createdAt: DateTime
+  id: String
+  issuer: String
+}
+
+type UserMinAggregate {
+  createdAt: DateTime
+  id: String
+  issuer: String
+}
+
+"""This model will track profile information about the user"""
+type UserProfile {
+  age: Int
+  bio: String
+  countryId: Int
+  email: String!
+  id: UUID!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+  username: String!
+}
+
+type UserProfileAvgAggregate {
+  age: Float
+  countryId: Float
+}
+
+type UserProfileCountAggregate {
+  _all: Int!
+  age: Int!
+  bio: Int!
+  countryId: Int!
+  email: Int!
+  id: Int!
+  updatedAt: Int!
+  userId: Int!
+  username: Int!
+}
+
+type UserProfileMaxAggregate {
+  age: Int
+  bio: String
+  countryId: Int
+  email: String
+  id: UUID
+  updatedAt: DateTime
+  userId: String
+  username: String
+}
+
+type UserProfileMinAggregate {
+  age: Int
+  bio: String
+  countryId: Int
+  email: String
+  id: UUID
+  updatedAt: DateTime
+  userId: String
+  username: String
+}
+
+type UserProfileSumAggregate {
+  age: Int
+  countryId: Int
 }
