@@ -28,6 +28,7 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
     <>
       <Head>
         <title>Bookius</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <DefaultSeo />
       <Provider value={client}>
