@@ -6,7 +6,7 @@ CREATE TABLE "BookProgressLog" (
         AND "percentage" <= 100
     ),
     "bookId" BIGINT NOT NULL,
-    "numPages" SMALLINT NOT NULL CHECK ("percentage" > 0),
+    "numPages" SMALLINT NOT NULL CHECK ("numPages" > 0),
     "userId" TEXT NOT NULL,
     "startedOn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedOn" TIMESTAMP(3) NOT NULL,
