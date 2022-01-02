@@ -273,6 +273,11 @@ scalar DateTime
 """An arbitrary-precision Decimal type"""
 scalar Decimal
 
+"""
+A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
+"""
+scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
+
 """The type returned for the errors when login is unsuccessful"""
 type LoginError implements APIError {
   """The error message corresponding to this login attempt"""
@@ -458,7 +463,7 @@ type UserProfile {
   age: Int
   bio: String
   countryId: Int
-  email: String!
+  email: EmailAddress!
   id: UUID!
   updatedAt: DateTime!
   user: User!
@@ -487,7 +492,7 @@ type UserProfileMaxAggregate {
   age: Int
   bio: String
   countryId: Int
-  email: String
+  email: EmailAddress
   id: UUID
   updatedAt: DateTime
   userId: String
@@ -498,7 +503,7 @@ type UserProfileMinAggregate {
   age: Int
   bio: String
   countryId: Int
-  email: String
+  email: EmailAddress
   id: UUID
   updatedAt: DateTime
   userId: String
