@@ -6,23 +6,17 @@
 The standard interface that contains the error message when something goes wrong
 """
 interface APIError {
-  """
-  The error message giving details about what went wrong
-  """
+  """The error message giving details about what went wrong"""
   message: String!
 }
 
-"""
-The role of a person in the complete production of a book
-"""
+"""The role of a person in the complete production of a book"""
 enum ArchitectRole {
   AUTHOR
   ILLUSTRATOR
 }
 
-"""
-The people who have worked on a book
-"""
+"""The people who have worked on a book"""
 type ArchitectsOnBooks {
   author: Author!
   authorId: BigInt!
@@ -245,18 +239,14 @@ input BookOrderByWithRelationInput {
   updatedAt: SortOrder
 }
 
-"""
-Model to track a user's reading progress with a particular book
-"""
+"""Model to track a user's reading progress with a particular book"""
 type BookProgressLog {
   book: Book!
   bookId: BigInt!
   id: BigInt!
   numPages: Int!
 
-  """
-  Face value, so if a book is 82% complete, this value will be `82.00`
-  """
+  """Face value, so if a book is 82% complete, this value will be `82.00`"""
   percentage: Decimal!
   startedOn: DateTime!
   updatedOn: DateTime!
@@ -376,19 +366,13 @@ input BoolFilter {
   not: NestedBoolFilter
 }
 
-"""
-Type returned for the error when a new user is created.
-"""
+"""Type returned for the error when a new user is created."""
 type CreateUserError {
-  """
-  General errors relating to the registration attempt
-  """
+  """General errors relating to the registration attempt"""
   message: String
 }
 
-"""
-Result type returned as the result when new user is created.
-"""
+"""Result type returned as the result when new user is created."""
 union CreateUserResultUnion = CreateUserError | UserDto
 
 input CreateUserShelfInput {
@@ -413,9 +397,7 @@ input DateTimeFilter {
   notIn: [DateTime!]
 }
 
-"""
-An arbitrary-precision Decimal type
-"""
+"""An arbitrary-precision Decimal type"""
 scalar Decimal
 
 input DecimalFilter {
@@ -463,50 +445,32 @@ input IntNullableFilter {
   notIn: [Int!]
 }
 
-"""
-The type returned for the errors when login is unsuccessful
-"""
+"""The type returned for the errors when login is unsuccessful"""
 type LoginError implements APIError {
-  """
-  The error message corresponding to this login attempt
-  """
+  """The error message corresponding to this login attempt"""
   message: String!
 }
 
-"""
-The type returned on successful login
-"""
+"""The type returned on successful login"""
 type LoginResult {
-  """
-  Wether the login attempt was successful
-  """
+  """Wether the login attempt was successful"""
   status: Boolean!
 
-  """
-  The user this login result is associated with
-  """
+  """The user this login result is associated with"""
   user: UserDto!
 }
 
-"""
-Result type returned as the result when someone tries to login
-"""
+"""Result type returned as the result when someone tries to login"""
 union LoginResultUnion = LoginError | LoginResult
 
 type Mutation {
-  """
-  Mutation to create a new user with a given authentication token.
-  """
+  """Mutation to create a new user with a given authentication token."""
   createUser(issuer: String!): CreateUserResultUnion!
 
-  """
-  Create a shelf for the current user.
-  """
+  """Create a shelf for the current user."""
   createUserShelf(input: CreateUserShelfInput!): Shelf!
 
-  """
-  Login using an authentication token.
-  """
+  """Login using an authentication token."""
   loginUser(issuer: String!): LoginResultUnion!
 }
 
@@ -606,53 +570,25 @@ input NestedStringNullableFilter {
 }
 
 type Query {
-  """
-  Check whether a user with the given issuer exists in the database.
-  """
+  """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
 
-  """
-  Get a filtered list of all books in the service.
-  """
-  filterBooks(
-    cursor: BookWhereUniqueInput
-    distinct: [BookScalarFieldEnum!]
-    orderBy: [BookOrderByWithRelationInput!]
-    skip: Int
-    take: Int
-    where: BookWhereInput
-  ): [Book!]!
+  """Get a filtered list of all books in the service."""
+  filterBooks(cursor: BookWhereUniqueInput, distinct: [BookScalarFieldEnum!], orderBy: [BookOrderByWithRelationInput!], skip: Int, take: Int, where: BookWhereInput): [Book!]!
 
-  """
-  Get a list of all shelves created by this user.
-  """
-  filterUserShelves(
-    cursor: ShelfWhereUniqueInput
-    distinct: [ShelfScalarFieldEnum!]
-    orderBy: [ShelfOrderByWithRelationInput!]
-    skip: Int
-    take: Int
-    where: ShelfWhereInput
-  ): [Shelf!]!
+  """Get a list of all shelves created by this user."""
+  filterUserShelves(cursor: ShelfWhereUniqueInput, distinct: [ShelfScalarFieldEnum!], orderBy: [ShelfOrderByWithRelationInput!], skip: Int, take: Int, where: ShelfWhereInput): [Shelf!]!
 
-  """
-  Get status of the service.
-  """
+  """Get status of the service."""
   getStatus: Boolean!
 
-  """
-  Get list of book progresses that are related to the user.
-  """
+  """Get list of book progresses that are related to the user."""
   userBookProgressLogs(take: Int): [BookProgressLog!]!
 
-  """
-  Get a small list of authors that are related to the user.
-  """
+  """Get a small list of authors that are related to the user."""
   userRelatedAuthors: [Author!]!
 
-  """
-  Get a small list of books that are related to the user.
-  """
+  """Get a small list of books that are related to the user."""
   userRelatedBooks: [Book!]!
 }
 
@@ -661,9 +597,7 @@ enum QueryMode {
   insensitive
 }
 
-"""
-A shelf is created by users to collect a number of books together
-"""
+"""A shelf is created by users to collect a number of books together"""
 type Shelf {
   _count: ShelfCount!
   books: [Book!]
@@ -803,9 +737,7 @@ A field whose value is a generic Universally Unique Identifier: https://en.wikip
 """
 scalar UUID
 
-"""
-This model will represent a user of the service.
-"""
+"""This model will represent a user of the service."""
 type User {
   BookProgressLog: [BookProgressLog!]
   _count: UserCount!
@@ -828,9 +760,7 @@ type UserCountAggregate {
   issuer: Int!
 }
 
-"""
-Critical details about a user of the service
-"""
+"""Critical details about a user of the service"""
 type UserDto {
   id: ID!
 }
@@ -856,9 +786,7 @@ input UserOrderByWithRelationInput {
   shelves: ShelfOrderByRelationAggregateInput
 }
 
-"""
-This model will track profile information about the user
-"""
+"""This model will track profile information about the user"""
 type UserProfile {
   age: Int
   bio: String

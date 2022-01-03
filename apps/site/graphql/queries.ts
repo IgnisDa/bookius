@@ -14,7 +14,7 @@ export const CHECK_USER_BY_ISSUER = gql`
 
 export const GET_ALL_BOOKS = gql`
   query GetAllBooks {
-    books {
+    filterBooks {
       id
       title
       architects {
@@ -30,7 +30,7 @@ export const GET_ALL_BOOKS = gql`
 
 export const GET_USER_SHELVES_SHORT = gql`
   query GetUserShelvesShort {
-    userShelves {
+    filterUserShelves {
       name
       id
       isPublic

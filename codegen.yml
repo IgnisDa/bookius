@@ -4,17 +4,24 @@ hooks:
 overwrite: true
 schema: 'libs/generated/src/schema.graphql'
 documents: 'apps/site/**/*.{ts,tsx}'
-config:
-  gqlImport: urql#gql
 generates:
   libs/generated/src/lib/graphql.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-urql'
+      - add:
+          content: "import { DateTime } from 'luxon'"
     config:
       withHooks: true
       nonOptionalTypename: true
-  libs/generated/src/graphql.schema.json:
+      gqlImport: urql#gql
+      scalars:
+        BigInt: number
+        DateTime: DateTime
+        Decimal: number
+        EmailAddress: string
+        UUID: string
+  libs/generated/src/lib/graphql.schema.json:
     plugins:
-      - 'urql-introspection'
+      - 'introspection'

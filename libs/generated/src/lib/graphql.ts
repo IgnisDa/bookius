@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { gql } from 'urql';
 import * as Urql from 'urql';
 export type Maybe<T> = T | null;
@@ -20,11 +21,15 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
-  BigInt: any;
+  BigInt: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: any;
+  DateTime: DateTime;
   /** An arbitrary-precision Decimal type */
-  Decimal: any;
+  Decimal: number;
+  /** A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/. */
+  EmailAddress: string;
+  /** A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier. */
+  UUID: string;
 };
 
 /** The standard interface that contains the error message when something goes wrong */
@@ -43,9 +48,9 @@ export enum ArchitectRole {
 export type ArchitectsOnBooks = {
   __typename: 'ArchitectsOnBooks';
   author: Author;
-  authorId: Scalars['String'];
+  authorId: Scalars['BigInt'];
   book: Book;
-  bookId: Scalars['String'];
+  bookId: Scalars['BigInt'];
   role: ArchitectRole;
 };
 
@@ -63,24 +68,45 @@ export type ArchitectsOnBooksCountAggregate = {
   role: Scalars['Int'];
 };
 
+export type ArchitectsOnBooksListRelationFilter = {
+  every?: InputMaybe<ArchitectsOnBooksWhereInput>;
+  none?: InputMaybe<ArchitectsOnBooksWhereInput>;
+  some?: InputMaybe<ArchitectsOnBooksWhereInput>;
+};
+
 export type ArchitectsOnBooksMaxAggregate = {
   __typename: 'ArchitectsOnBooksMaxAggregate';
-  authorId?: Maybe<Scalars['String']>;
-  bookId?: Maybe<Scalars['String']>;
+  authorId?: Maybe<Scalars['BigInt']>;
+  bookId?: Maybe<Scalars['BigInt']>;
   role?: Maybe<ArchitectRole>;
 };
 
 export type ArchitectsOnBooksMinAggregate = {
   __typename: 'ArchitectsOnBooksMinAggregate';
-  authorId?: Maybe<Scalars['String']>;
-  bookId?: Maybe<Scalars['String']>;
+  authorId?: Maybe<Scalars['BigInt']>;
+  bookId?: Maybe<Scalars['BigInt']>;
   role?: Maybe<ArchitectRole>;
+};
+
+export type ArchitectsOnBooksOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
 };
 
 export type ArchitectsOnBooksSumAggregate = {
   __typename: 'ArchitectsOnBooksSumAggregate';
-  authorId?: Maybe<Scalars['String']>;
-  bookId?: Maybe<Scalars['String']>;
+  authorId?: Maybe<Scalars['BigInt']>;
+  bookId?: Maybe<Scalars['BigInt']>;
+};
+
+export type ArchitectsOnBooksWhereInput = {
+  AND?: InputMaybe<Array<ArchitectsOnBooksWhereInput>>;
+  NOT?: InputMaybe<Array<ArchitectsOnBooksWhereInput>>;
+  OR?: InputMaybe<Array<ArchitectsOnBooksWhereInput>>;
+  author?: InputMaybe<AuthorRelationFilter>;
+  authorId?: InputMaybe<BigIntFilter>;
+  book?: InputMaybe<BookRelationFilter>;
+  bookId?: InputMaybe<BigIntFilter>;
+  role?: InputMaybe<EnumArchitectRoleFilter>;
 };
 
 /** This model will keep track of authors that will be made available to the users */
@@ -137,9 +163,38 @@ export type AuthorMinAggregate = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type AuthorRelationFilter = {
+  is?: InputMaybe<AuthorWhereInput>;
+  isNot?: InputMaybe<AuthorWhereInput>;
+};
+
 export type AuthorSumAggregate = {
   __typename: 'AuthorSumAggregate';
   id?: Maybe<Scalars['BigInt']>;
+};
+
+export type AuthorWhereInput = {
+  AND?: InputMaybe<Array<AuthorWhereInput>>;
+  NOT?: InputMaybe<Array<AuthorWhereInput>>;
+  OR?: InputMaybe<Array<AuthorWhereInput>>;
+  bio?: InputMaybe<StringNullableFilter>;
+  books?: InputMaybe<ArchitectsOnBooksListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<BigIntFilter>;
+  name?: InputMaybe<StringFilter>;
+  openLibraryKey?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type BigIntFilter = {
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  not?: InputMaybe<NestedBigIntFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** This model will keep track of books that will be made available to the users */
@@ -180,18 +235,10 @@ export type BookCountAggregate = {
   updatedAt: Scalars['Int'];
 };
 
-/** Details about a book without their architect details */
-export type BookDtoWithoutArchitect = {
-  __typename: 'BookDtoWithoutArchitect';
-  BookProgressLog?: Maybe<Array<BookProgressLog>>;
-  _count: BookCount;
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  id: Scalars['BigInt'];
-  isbn: Scalars['String'];
-  shelves?: Maybe<Array<Shelf>>;
-  title: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+export type BookListRelationFilter = {
+  every?: InputMaybe<BookWhereInput>;
+  none?: InputMaybe<BookWhereInput>;
+  some?: InputMaybe<BookWhereInput>;
 };
 
 export type BookMaxAggregate = {
@@ -214,11 +261,27 @@ export type BookMinAggregate = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type BookOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type BookOrderByWithRelationInput = {
+  BookProgressLog?: InputMaybe<BookProgressLogOrderByRelationAggregateInput>;
+  architects?: InputMaybe<ArchitectsOnBooksOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  isbn?: InputMaybe<SortOrder>;
+  shelves?: InputMaybe<ShelfOrderByRelationAggregateInput>;
+  title?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
 /** Model to track a user's reading progress with a particular book */
 export type BookProgressLog = {
   __typename: 'BookProgressLog';
   book: Book;
-  bookId: Scalars['String'];
+  bookId: Scalars['BigInt'];
   id: Scalars['BigInt'];
   numPages: Scalars['Int'];
   /** Face value, so if a book is 82% complete, this value will be `82.00` */
@@ -249,9 +312,15 @@ export type BookProgressLogCountAggregate = {
   userId: Scalars['Int'];
 };
 
+export type BookProgressLogListRelationFilter = {
+  every?: InputMaybe<BookProgressLogWhereInput>;
+  none?: InputMaybe<BookProgressLogWhereInput>;
+  some?: InputMaybe<BookProgressLogWhereInput>;
+};
+
 export type BookProgressLogMaxAggregate = {
   __typename: 'BookProgressLogMaxAggregate';
-  bookId?: Maybe<Scalars['String']>;
+  bookId?: Maybe<Scalars['BigInt']>;
   id?: Maybe<Scalars['BigInt']>;
   numPages?: Maybe<Scalars['Int']>;
   percentage?: Maybe<Scalars['Decimal']>;
@@ -262,7 +331,7 @@ export type BookProgressLogMaxAggregate = {
 
 export type BookProgressLogMinAggregate = {
   __typename: 'BookProgressLogMinAggregate';
-  bookId?: Maybe<Scalars['String']>;
+  bookId?: Maybe<Scalars['BigInt']>;
   id?: Maybe<Scalars['BigInt']>;
   numPages?: Maybe<Scalars['Int']>;
   percentage?: Maybe<Scalars['Decimal']>;
@@ -271,17 +340,74 @@ export type BookProgressLogMinAggregate = {
   userId?: Maybe<Scalars['String']>;
 };
 
+export type BookProgressLogOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
 export type BookProgressLogSumAggregate = {
   __typename: 'BookProgressLogSumAggregate';
-  bookId?: Maybe<Scalars['String']>;
+  bookId?: Maybe<Scalars['BigInt']>;
   id?: Maybe<Scalars['BigInt']>;
   numPages?: Maybe<Scalars['Int']>;
   percentage?: Maybe<Scalars['Decimal']>;
 };
 
+export type BookProgressLogWhereInput = {
+  AND?: InputMaybe<Array<BookProgressLogWhereInput>>;
+  NOT?: InputMaybe<Array<BookProgressLogWhereInput>>;
+  OR?: InputMaybe<Array<BookProgressLogWhereInput>>;
+  book?: InputMaybe<BookRelationFilter>;
+  bookId?: InputMaybe<BigIntFilter>;
+  id?: InputMaybe<BigIntFilter>;
+  numPages?: InputMaybe<IntFilter>;
+  percentage?: InputMaybe<DecimalFilter>;
+  startedOn?: InputMaybe<DateTimeFilter>;
+  updatedOn?: InputMaybe<DateTimeFilter>;
+  user?: InputMaybe<UserRelationFilter>;
+  userId?: InputMaybe<StringFilter>;
+};
+
+export type BookRelationFilter = {
+  is?: InputMaybe<BookWhereInput>;
+  isNot?: InputMaybe<BookWhereInput>;
+};
+
+export enum BookScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Description = 'description',
+  Id = 'id',
+  Isbn = 'isbn',
+  Title = 'title',
+  UpdatedAt = 'updatedAt',
+}
+
 export type BookSumAggregate = {
   __typename: 'BookSumAggregate';
   id?: Maybe<Scalars['BigInt']>;
+};
+
+export type BookWhereInput = {
+  AND?: InputMaybe<Array<BookWhereInput>>;
+  BookProgressLog?: InputMaybe<BookProgressLogListRelationFilter>;
+  NOT?: InputMaybe<Array<BookWhereInput>>;
+  OR?: InputMaybe<Array<BookWhereInput>>;
+  architects?: InputMaybe<ArchitectsOnBooksListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<BigIntFilter>;
+  isbn?: InputMaybe<StringFilter>;
+  shelves?: InputMaybe<ShelfListRelationFilter>;
+  title?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type BookWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type BoolFilter = {
+  equals?: InputMaybe<Scalars['Boolean']>;
+  not?: InputMaybe<NestedBoolFilter>;
 };
 
 /** Type returned for the error when a new user is created. */
@@ -294,14 +420,61 @@ export type CreateUserError = {
 /** Result type returned as the result when new user is created. */
 export type CreateUserResultUnion = CreateUserError | UserDto;
 
-/** The input type used to create a new shelf */
 export type CreateUserShelfInput = {
-  /** A description of the new shelf */
   description?: InputMaybe<Scalars['String']>;
-  /** Whether the shelf will be publicly available */
   isPublic?: InputMaybe<Scalars['Boolean']>;
-  /** Name of the new shelf */
   name: Scalars['String'];
+};
+
+export type DateTimeFilter = {
+  equals?: InputMaybe<Scalars['DateTime']>;
+  gt?: InputMaybe<Scalars['DateTime']>;
+  gte?: InputMaybe<Scalars['DateTime']>;
+  in?: InputMaybe<Array<Scalars['DateTime']>>;
+  lt?: InputMaybe<Scalars['DateTime']>;
+  lte?: InputMaybe<Scalars['DateTime']>;
+  not?: InputMaybe<NestedDateTimeFilter>;
+  notIn?: InputMaybe<Array<Scalars['DateTime']>>;
+};
+
+export type DecimalFilter = {
+  equals?: InputMaybe<Scalars['Decimal']>;
+  gt?: InputMaybe<Scalars['Decimal']>;
+  gte?: InputMaybe<Scalars['Decimal']>;
+  in?: InputMaybe<Array<Scalars['Decimal']>>;
+  lt?: InputMaybe<Scalars['Decimal']>;
+  lte?: InputMaybe<Scalars['Decimal']>;
+  not?: InputMaybe<NestedDecimalFilter>;
+  notIn?: InputMaybe<Array<Scalars['Decimal']>>;
+};
+
+export type EnumArchitectRoleFilter = {
+  equals?: InputMaybe<ArchitectRole>;
+  in?: InputMaybe<Array<ArchitectRole>>;
+  not?: InputMaybe<NestedEnumArchitectRoleFilter>;
+  notIn?: InputMaybe<Array<ArchitectRole>>;
+};
+
+export type IntFilter = {
+  equals?: InputMaybe<Scalars['Int']>;
+  gt?: InputMaybe<Scalars['Int']>;
+  gte?: InputMaybe<Scalars['Int']>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  lt?: InputMaybe<Scalars['Int']>;
+  lte?: InputMaybe<Scalars['Int']>;
+  not?: InputMaybe<NestedIntFilter>;
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+export type IntNullableFilter = {
+  equals?: InputMaybe<Scalars['Int']>;
+  gt?: InputMaybe<Scalars['Int']>;
+  gte?: InputMaybe<Scalars['Int']>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  lt?: InputMaybe<Scalars['Int']>;
+  lte?: InputMaybe<Scalars['Int']>;
+  not?: InputMaybe<NestedIntNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 /** The type returned for the errors when login is unsuccessful */
@@ -328,7 +501,7 @@ export type Mutation = {
   /** Mutation to create a new user with a given authentication token. */
   createUser: CreateUserResultUnion;
   /** Create a shelf for the current user. */
-  createUserShelf: ShelfDto;
+  createUserShelf: Shelf;
   /** Login using an authentication token. */
   loginUser: LoginResultUnion;
 };
@@ -345,12 +518,109 @@ export type MutationLoginUserArgs = {
   issuer: Scalars['String'];
 };
 
+export type NestedBigIntFilter = {
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  not?: InputMaybe<NestedBigIntFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type NestedBoolFilter = {
+  equals?: InputMaybe<Scalars['Boolean']>;
+  not?: InputMaybe<NestedBoolFilter>;
+};
+
+export type NestedDateTimeFilter = {
+  equals?: InputMaybe<Scalars['DateTime']>;
+  gt?: InputMaybe<Scalars['DateTime']>;
+  gte?: InputMaybe<Scalars['DateTime']>;
+  in?: InputMaybe<Array<Scalars['DateTime']>>;
+  lt?: InputMaybe<Scalars['DateTime']>;
+  lte?: InputMaybe<Scalars['DateTime']>;
+  not?: InputMaybe<NestedDateTimeFilter>;
+  notIn?: InputMaybe<Array<Scalars['DateTime']>>;
+};
+
+export type NestedDecimalFilter = {
+  equals?: InputMaybe<Scalars['Decimal']>;
+  gt?: InputMaybe<Scalars['Decimal']>;
+  gte?: InputMaybe<Scalars['Decimal']>;
+  in?: InputMaybe<Array<Scalars['Decimal']>>;
+  lt?: InputMaybe<Scalars['Decimal']>;
+  lte?: InputMaybe<Scalars['Decimal']>;
+  not?: InputMaybe<NestedDecimalFilter>;
+  notIn?: InputMaybe<Array<Scalars['Decimal']>>;
+};
+
+export type NestedEnumArchitectRoleFilter = {
+  equals?: InputMaybe<ArchitectRole>;
+  in?: InputMaybe<Array<ArchitectRole>>;
+  not?: InputMaybe<NestedEnumArchitectRoleFilter>;
+  notIn?: InputMaybe<Array<ArchitectRole>>;
+};
+
+export type NestedIntFilter = {
+  equals?: InputMaybe<Scalars['Int']>;
+  gt?: InputMaybe<Scalars['Int']>;
+  gte?: InputMaybe<Scalars['Int']>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  lt?: InputMaybe<Scalars['Int']>;
+  lte?: InputMaybe<Scalars['Int']>;
+  not?: InputMaybe<NestedIntFilter>;
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+export type NestedIntNullableFilter = {
+  equals?: InputMaybe<Scalars['Int']>;
+  gt?: InputMaybe<Scalars['Int']>;
+  gte?: InputMaybe<Scalars['Int']>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  lt?: InputMaybe<Scalars['Int']>;
+  lte?: InputMaybe<Scalars['Int']>;
+  not?: InputMaybe<NestedIntNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+export type NestedStringFilter = {
+  contains?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  not?: InputMaybe<NestedStringFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  startsWith?: InputMaybe<Scalars['String']>;
+};
+
+export type NestedStringNullableFilter = {
+  contains?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  not?: InputMaybe<NestedStringNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  startsWith?: InputMaybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename: 'Query';
-  /** Get a list of all books in the service. */
-  books: Array<Book>;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
+  /** Get a filtered list of all books in the service. */
+  filterBooks: Array<Book>;
+  /** Get a list of all shelves created by this user. */
+  filterUserShelves: Array<Shelf>;
   /** Get status of the service. */
   getStatus: Scalars['Boolean'];
   /** Get list of book progresses that are related to the user. */
@@ -359,17 +629,38 @@ export type Query = {
   userRelatedAuthors: Array<Author>;
   /** Get a small list of books that are related to the user. */
   userRelatedBooks: Array<Book>;
-  /** Get a list of all shelves created by this user. */
-  userShelves: Array<ShelfDto>;
 };
 
 export type QueryCheckUserByIssuerArgs = {
   issuer: Scalars['String'];
 };
 
+export type QueryFilterBooksArgs = {
+  cursor?: InputMaybe<BookWhereUniqueInput>;
+  distinct?: InputMaybe<Array<BookScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<BookOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BookWhereInput>;
+};
+
+export type QueryFilterUserShelvesArgs = {
+  cursor?: InputMaybe<ShelfWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ShelfScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ShelfOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ShelfWhereInput>;
+};
+
 export type QueryUserBookProgressLogsArgs = {
   take?: InputMaybe<Scalars['Int']>;
 };
+
+export enum QueryMode {
+  Default = 'default',
+  Insensitive = 'insensitive',
+}
 
 /** A shelf is created by users to collect a number of books together */
 export type Shelf = {
@@ -403,32 +694,10 @@ export type ShelfCountAggregate = {
   userId: Scalars['Int'];
 };
 
-/** Counts of various statistics related to shelves */
-export type ShelfCountDto = {
-  __typename: 'ShelfCountDto';
-  /** The number of books in this shelf */
-  books: Scalars['Float'];
-};
-
-/** A shelf that is created by a user */
-export type ShelfDto = {
-  __typename: 'ShelfDto';
-  /** Counts of various statistics related to shelves */
-  _count: ShelfCountDto;
-  /** The books that are contained in this shelf */
-  books: Array<BookDtoWithoutArchitect>;
-  /** The date and time when this shelf was created */
-  createdAt: Scalars['DateTime'];
-  /** A brief description about the shelf and what is contains */
-  description?: Maybe<Scalars['String']>;
-  /** Unique identifier for the shelf */
-  id: Scalars['ID'];
-  /** Whether the shelf is visible to other users */
-  isPublic: Scalars['Boolean'];
-  /** Name of the shelf */
-  name: Scalars['String'];
-  /** The date and time when information about this shelf was last updated */
-  updatedAt: Scalars['DateTime'];
+export type ShelfListRelationFilter = {
+  every?: InputMaybe<ShelfWhereInput>;
+  none?: InputMaybe<ShelfWhereInput>;
+  some?: InputMaybe<ShelfWhereInput>;
 };
 
 export type ShelfMaxAggregate = {
@@ -451,6 +720,86 @@ export type ShelfMinAggregate = {
   name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
+};
+
+export type ShelfOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type ShelfOrderByWithRelationInput = {
+  books?: InputMaybe<BookOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  isPublic?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  user?: InputMaybe<UserOrderByWithRelationInput>;
+  userId?: InputMaybe<SortOrder>;
+};
+
+export enum ShelfScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Description = 'description',
+  Id = 'id',
+  IsPublic = 'isPublic',
+  Name = 'name',
+  UpdatedAt = 'updatedAt',
+  UserId = 'userId',
+}
+
+export type ShelfWhereInput = {
+  AND?: InputMaybe<Array<ShelfWhereInput>>;
+  NOT?: InputMaybe<Array<ShelfWhereInput>>;
+  OR?: InputMaybe<Array<ShelfWhereInput>>;
+  books?: InputMaybe<BookListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  isPublic?: InputMaybe<BoolFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  user?: InputMaybe<UserRelationFilter>;
+  userId?: InputMaybe<StringFilter>;
+};
+
+export type ShelfWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export enum SortOrder {
+  Asc = 'asc',
+  Desc = 'desc',
+}
+
+export type StringFilter = {
+  contains?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  mode?: InputMaybe<QueryMode>;
+  not?: InputMaybe<NestedStringFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  startsWith?: InputMaybe<Scalars['String']>;
+};
+
+export type StringNullableFilter = {
+  contains?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  mode?: InputMaybe<QueryMode>;
+  not?: InputMaybe<NestedStringNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  startsWith?: InputMaybe<Scalars['String']>;
 };
 
 /** This model will represent a user of the service. */
@@ -482,7 +831,6 @@ export type UserCountAggregate = {
 /** Critical details about a user of the service */
 export type UserDto = {
   __typename: 'UserDto';
-  /** The primary key of the user */
   id: Scalars['ID'];
 };
 
@@ -500,14 +848,23 @@ export type UserMinAggregate = {
   issuer?: Maybe<Scalars['String']>;
 };
 
+export type UserOrderByWithRelationInput = {
+  BookProgressLog?: InputMaybe<BookProgressLogOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  issuer?: InputMaybe<SortOrder>;
+  profile?: InputMaybe<UserProfileOrderByWithRelationInput>;
+  shelves?: InputMaybe<ShelfOrderByRelationAggregateInput>;
+};
+
 /** This model will track profile information about the user */
 export type UserProfile = {
   __typename: 'UserProfile';
   age?: Maybe<Scalars['Int']>;
   bio?: Maybe<Scalars['String']>;
   countryId?: Maybe<Scalars['Int']>;
-  email: Scalars['String'];
-  id: Scalars['ID'];
+  email: Scalars['EmailAddress'];
+  id: Scalars['UUID'];
   updatedAt: Scalars['DateTime'];
   user: User;
   userId: Scalars['String'];
@@ -538,8 +895,8 @@ export type UserProfileMaxAggregate = {
   age?: Maybe<Scalars['Int']>;
   bio?: Maybe<Scalars['String']>;
   countryId?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['EmailAddress']>;
+  id?: Maybe<Scalars['UUID']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
@@ -550,17 +907,66 @@ export type UserProfileMinAggregate = {
   age?: Maybe<Scalars['Int']>;
   bio?: Maybe<Scalars['String']>;
   countryId?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['EmailAddress']>;
+  id?: Maybe<Scalars['UUID']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+};
+
+export type UserProfileOrderByWithRelationInput = {
+  age?: InputMaybe<SortOrder>;
+  bio?: InputMaybe<SortOrder>;
+  countryId?: InputMaybe<SortOrder>;
+  email?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  user?: InputMaybe<UserOrderByWithRelationInput>;
+  userId?: InputMaybe<SortOrder>;
+  username?: InputMaybe<SortOrder>;
+};
+
+export type UserProfileRelationFilter = {
+  is?: InputMaybe<UserProfileWhereInput>;
+  isNot?: InputMaybe<UserProfileWhereInput>;
 };
 
 export type UserProfileSumAggregate = {
   __typename: 'UserProfileSumAggregate';
   age?: Maybe<Scalars['Int']>;
   countryId?: Maybe<Scalars['Int']>;
+};
+
+export type UserProfileWhereInput = {
+  AND?: InputMaybe<Array<UserProfileWhereInput>>;
+  NOT?: InputMaybe<Array<UserProfileWhereInput>>;
+  OR?: InputMaybe<Array<UserProfileWhereInput>>;
+  age?: InputMaybe<IntNullableFilter>;
+  bio?: InputMaybe<StringNullableFilter>;
+  countryId?: InputMaybe<IntNullableFilter>;
+  email?: InputMaybe<StringFilter>;
+  id?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  user?: InputMaybe<UserRelationFilter>;
+  userId?: InputMaybe<StringFilter>;
+  username?: InputMaybe<StringFilter>;
+};
+
+export type UserRelationFilter = {
+  is?: InputMaybe<UserWhereInput>;
+  isNot?: InputMaybe<UserWhereInput>;
+};
+
+export type UserWhereInput = {
+  AND?: InputMaybe<Array<UserWhereInput>>;
+  BookProgressLog?: InputMaybe<BookProgressLogListRelationFilter>;
+  NOT?: InputMaybe<Array<UserWhereInput>>;
+  OR?: InputMaybe<Array<UserWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  issuer?: InputMaybe<StringFilter>;
+  profile?: InputMaybe<UserProfileRelationFilter>;
+  shelves?: InputMaybe<ShelfListRelationFilter>;
 };
 
 export type LoginUserMutationVariables = Exact<{
@@ -591,7 +997,7 @@ export type CreateUserShelfMutationVariables = Exact<{
 
 export type CreateUserShelfMutation = {
   __typename: 'Mutation';
-  createUserShelf: { __typename: 'ShelfDto'; id: string };
+  createUserShelf: { __typename: 'Shelf'; id: string };
 };
 
 export type GetStatusQueryVariables = Exact<{ [key: string]: never }>;
@@ -611,15 +1017,15 @@ export type GetAllBooksQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllBooksQuery = {
   __typename: 'Query';
-  books: Array<{
+  filterBooks: Array<{
     __typename: 'Book';
-    id: any;
+    id: number;
     title: string;
     architects?:
       | Array<{
           __typename: 'ArchitectsOnBooks';
           role: ArchitectRole;
-          author: { __typename: 'Author'; name: string; id: any };
+          author: { __typename: 'Author'; name: string; id: number };
         }>
       | null
       | undefined;
@@ -630,12 +1036,12 @@ export type GetUserShelvesShortQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserShelvesShortQuery = {
   __typename: 'Query';
-  userShelves: Array<{
-    __typename: 'ShelfDto';
+  filterUserShelves: Array<{
+    __typename: 'Shelf';
     name: string;
     id: string;
     isPublic: boolean;
-    _count: { __typename: 'ShelfCountDto'; books: number };
+    _count: { __typename: 'ShelfCount'; books: number };
   }>;
 };
 
@@ -646,7 +1052,7 @@ export type GetUserRelatedBooksQuery = {
   userRelatedBooks: Array<{
     __typename: 'Book';
     title: string;
-    id: any;
+    id: number;
     architects?:
       | Array<{
           __typename: 'ArchitectsOnBooks';
@@ -664,7 +1070,7 @@ export type GetUserRelatedAuthorsQueryVariables = Exact<{
 
 export type GetUserRelatedAuthorsQuery = {
   __typename: 'Query';
-  userRelatedAuthors: Array<{ __typename: 'Author'; id: any; name: string }>;
+  userRelatedAuthors: Array<{ __typename: 'Author'; id: number; name: string }>;
 };
 
 export type GetUserBooksProgressLogsQueryVariables = Exact<{
@@ -675,15 +1081,15 @@ export type GetUserBooksProgressLogsQuery = {
   __typename: 'Query';
   userBookProgressLogs: Array<{
     __typename: 'BookProgressLog';
-    id: any;
-    percentage: any;
-    updatedOn: any;
-    startedOn: any;
+    id: number;
+    percentage: number;
+    updatedOn: DateTime;
+    startedOn: DateTime;
     numPages: number;
     book: {
       __typename: 'Book';
       title: string;
-      id: any;
+      id: number;
       architects?:
         | Array<{
             __typename: 'ArchitectsOnBooks';
@@ -777,7 +1183,7 @@ export function useCheckUserByIssuerQuery(
 }
 export const GetAllBooksDocument = gql`
   query GetAllBooks {
-    books {
+    filterBooks {
       id
       title
       architects {
@@ -801,7 +1207,7 @@ export function useGetAllBooksQuery(
 }
 export const GetUserShelvesShortDocument = gql`
   query GetUserShelvesShort {
-    userShelves {
+    filterUserShelves {
       name
       id
       isPublic

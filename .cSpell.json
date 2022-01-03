@@ -1,59 +1,60 @@
 {
-    // Version of the setting file.  Always 0.2
-    "version": "0.2",
-    // language - current active spelling language
-    "language": "en",
-    // words - list of words to be always considered correct
-    "words": [
-        "autoincrement",
-        "Biotif",
-        "bookius",
-        "Buildable",
-        "cacheable",
-        "Citext",
-        "createdb",
-        "cuid",
-        "datasource",
-        "dbml",
-        "dedup",
-        "devcontainer",
-        "developr",
-        "fontsource",
-        "headerapikey",
-        "headlessui",
-        "ignisda",
-        "luxon",
-        "Millis",
-        "nestjs",
-        "Neucha",
-        "nrwl",
-        "pgsql",
-        "pnpm",
-        "pnpx",
-        "preact",
-        "printr",
-        "psql",
-        "svgr",
-        "toastify",
-        "tslog",
-        "upsert",
-        "urql",
-        "webfont",
-        "GraphQLUUID"
-    ],
-    // flagWords - list of words to be always considered incorrect
-    // This is useful for offensive words and common spelling errors.
-    "flagWords": [],
-    // a list of globs to specify which files are to be ignored.
-    "ignorePaths": [
-        "node_modules/**",
-        "personal/**",
-        ".git/**",
-        "dist/**",
-        "pnpm-lock.yaml",
-        "package.json",
-        "**/migrations/**",
-        ".vscode/extensions.json",
-        ".gitignore"
-    ]
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
+  // language - current active spelling language
+  "language": "en",
+  // words - list of words to be always considered correct
+  "words": [
+    "autoincrement",
+    "behaviour",
+    "Biotif",
+    "bookius",
+    "Buildable",
+    "cacheable",
+    "Citext",
+    "createdb",
+    "cuid",
+    "datasource",
+    "dbml",
+    "dedup",
+    "devcontainer",
+    "developr",
+    "fontsource",
+    "GraphQLUUID",
+    "headerapikey",
+    "headlessui",
+    "ignisda",
+    "luxon",
+    "Millis",
+    "nestjs",
+    "Neucha",
+    "nrwl",
+    "pgsql",
+    "pnpm",
+    "pnpx",
+    "preact",
+    "printr",
+    "psql",
+    "svgr",
+    "toastify",
+    "tslog",
+    "upsert",
+    "urql",
+    "webfont"
+  ],
+  // flagWords - list of words to be always considered incorrect
+  // This is useful for offensive words and common spelling errors.
+  "flagWords": [],
+  // a list of globs to specify which files are to be ignored.
+  "ignorePaths": [
+    "node_modules/**",
+    "personal/**",
+    ".git/**",
+    "dist/**",
+    "pnpm-lock.yaml",
+    "package.json",
+    "**/migrations/**",
+    ".vscode/extensions.json",
+    ".gitignore"
+  ]
 }
