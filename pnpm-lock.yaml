@@ -97,6 +97,7 @@ specifiers:
   next: 12.0.7
   next-seo: 4.28.1
   next-urql: 3.3.2
+  nextjs-progressbar: ^0.0.13
   nodemailer: 6.7.2
   normalize.css: 8.0.1
   passport: 0.5.2
@@ -176,6 +177,7 @@ dependencies:
   next: 12.0.7_e423b6f1d34b5513b88636554f07a035
   next-seo: 4.28.1_d837ce8f3acb2f60f8b7454672a9bcea
   next-urql: 3.3.2_react@17.0.2+urql@2.0.6
+  nextjs-progressbar: 0.0.13_next@12.0.7+react@17.0.2
   nodemailer: 6.7.2
   normalize.css: 8.0.1
   passport: 0.5.2
@@ -12895,6 +12897,18 @@ packages:
       - webpack
     dev: false
 
+  /nextjs-progressbar/0.0.13_next@12.0.7+react@17.0.2:
+    resolution: {integrity: sha512-vuE9/j1yaFyHhMVwdlPZbGbcwnvoZZMH8fXUG+HCa+w5uojRNOMO43EL+o9YZ53QwQHsjWdfUapz+J8D/u3jFw==}
+    peerDependencies:
+      next: '>= 6.0.0 <=12.x.x'
+      react: '>= 16.0.0 <= 17.x.x'
+    dependencies:
+      next: 12.0.7_e423b6f1d34b5513b88636554f07a035
+      nprogress: 0.2.0
+      prop-types: 15.8.0
+      react: 17.0.2
+    dev: false
+
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
 
@@ -13035,6 +13049,10 @@ packages:
       console-control-strings: 1.1.0
       gauge: 2.7.4
       set-blocking: 2.0.0
+
+  /nprogress/0.2.0:
+    resolution: {integrity: sha1-y480xTIT2JVyP8urkH6UIq28r7E=}
+    dev: false
 
   /nth-check/1.0.2:
     resolution: {integrity: sha512-WeBOdju8SnzPN5vTUJYxYUxLeXpCaVP5i5e0LF8fg7WORF2Wd7wFX/pk0tYZk7s8T+J7VLy0Da6J1+wCT0AtHg==}
