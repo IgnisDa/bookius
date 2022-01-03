@@ -3,9 +3,8 @@ import {
   useGetUserRelatedAuthorsQuery,
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
-import { Button, Flex, styled, theme as t } from '@bookius/ui';
+import { Flex, styled, theme as t } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useState } from 'react';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
 import { PopularAuthorsComponent } from '../components/pages/dashboard/PopularAuthors';

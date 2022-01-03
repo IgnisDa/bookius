@@ -1,15 +1,15 @@
 import { GetUserRelatedBooksQuery } from '@bookius/generated';
 import {
   Box,
+  clampNumberOfLines,
   css,
-  FlexGrow,
   Flex,
+  FlexGrow,
   Heading,
-  Text,
   Icon,
   styled,
+  Text,
   theme as t,
-  clampNumberOfLines,
 } from '@bookius/ui';
 import { zip } from 'lodash';
 import { FunctionComponent } from 'react';

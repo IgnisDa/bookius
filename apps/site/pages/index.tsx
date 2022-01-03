@@ -10,7 +10,7 @@ const Index = (
   const [{ data }] = useGetAllBooksQuery();
   return (
     <div>
-      {data?.books.map((book, index) => (
+      {data?.filterBooks.map((book, index) => (
         <Text as="pre" key={index}>
           {JSON.stringify(book, null, 4)}
         </Text>

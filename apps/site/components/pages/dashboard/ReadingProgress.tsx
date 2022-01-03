@@ -28,7 +28,7 @@ export const ReadingProgress: FC<ReadingProgressProps> = ({
 }) => {
   const [displayProgress, setDisplayProgress] = useState(0);
   useEffect(() => {
-    setTimeout(() => setDisplayProgress(progress), index * 800);
+    setTimeout(() => setDisplayProgress(progress), index * 330);
   }, []);
 
   return (
