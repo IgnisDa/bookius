@@ -4,8 +4,8 @@ import { ArgsType } from '@nestjs/graphql';
 import { Int } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { Float } from '@nestjs/graphql';
-import { registerEnumType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { registerEnumType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { ID } from '@nestjs/graphql';
@@ -385,9 +385,9 @@ export class ArchitectsOnBooksGroupByArgs {
 
 @ObjectType()
 export class ArchitectsOnBooksGroupBy {
-  @Field(() => String, { nullable: false })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   bookId!: bigint | number;
-  @Field(() => String, { nullable: false })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   authorId!: bigint | number;
   @Field(() => ArchitectRole, { nullable: false })
   role!: keyof typeof ArchitectRole;
@@ -425,9 +425,9 @@ export class ArchitectsOnBooksMaxAggregateInput {
 
 @ObjectType()
 export class ArchitectsOnBooksMaxAggregate {
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   bookId?: bigint | number;
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   authorId?: bigint | number;
   @Field(() => ArchitectRole, { nullable: true })
   role?: keyof typeof ArchitectRole;
@@ -455,9 +455,9 @@ export class ArchitectsOnBooksMinAggregateInput {
 
 @ObjectType()
 export class ArchitectsOnBooksMinAggregate {
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   bookId?: bigint | number;
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   authorId?: bigint | number;
   @Field(() => ArchitectRole, { nullable: true })
   role?: keyof typeof ArchitectRole;
@@ -561,9 +561,9 @@ export class ArchitectsOnBooksSumAggregateInput {
 
 @ObjectType()
 export class ArchitectsOnBooksSumAggregate {
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   bookId?: bigint | number;
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   authorId?: bigint | number;
 }
 
@@ -962,9 +962,9 @@ export class ArchitectsOnBooks {
   book?: InstanceType<typeof Book>;
   @Field(() => Author, { nullable: false })
   author?: InstanceType<typeof Author>;
-  @Field(() => String, { nullable: false })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   bookId!: bigint;
-  @Field(() => String, { nullable: false })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   authorId!: bigint;
   @Field(() => ArchitectRole, { nullable: false })
   role!: keyof typeof ArchitectRole;
@@ -3318,7 +3318,7 @@ export class BookProgressLogGroupByArgs {
 export class BookProgressLogGroupBy {
   @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   id!: bigint | number;
-  @Field(() => String, { nullable: false })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   bookId!: bigint | number;
   @Field(() => String, { nullable: false })
   userId!: string;
@@ -3374,7 +3374,7 @@ export class BookProgressLogMaxAggregateInput {
 export class BookProgressLogMaxAggregate {
   @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   id?: bigint | number;
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   bookId?: bigint | number;
   @Field(() => String, { nullable: true })
   userId?: string;
@@ -3428,7 +3428,7 @@ export class BookProgressLogMinAggregateInput {
 export class BookProgressLogMinAggregate {
   @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   id?: bigint | number;
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   bookId?: bigint | number;
   @Field(() => String, { nullable: true })
   userId?: string;
@@ -3586,7 +3586,7 @@ export class BookProgressLogSumAggregateInput {
 export class BookProgressLogSumAggregate {
   @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   id?: bigint | number;
-  @Field(() => String, { nullable: true })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: true })
   bookId?: bigint | number;
   @Field(() => GraphQLDecimal, { nullable: true })
   percentage?: Prisma.Decimal;
@@ -4078,7 +4078,7 @@ export class BookProgressLog {
   id!: bigint;
   @Field(() => Book, { nullable: false })
   book?: InstanceType<typeof Book>;
-  @Field(() => String, { nullable: false })
+  @Field(() => Scalars.GraphQLBigInt, { nullable: false })
   bookId!: bigint;
   @Field(() => User, { nullable: false })
   user?: InstanceType<typeof User>;

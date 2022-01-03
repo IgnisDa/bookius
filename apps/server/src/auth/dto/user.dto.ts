@@ -1,9 +1,7 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { User as GeneratedUser } from '@bookius/generated/prisma-nestjs-graphql';
+import { ObjectType, PickType } from '@nestjs/graphql';
 
-@ObjectType({ description: 'Critical details about a user of the service' })
-export class UserDto {
-  @Field(() => ID, {
-    description: 'The primary key of the user',
-  })
-  id: string;
-}
+@ObjectType({
+  description: 'Critical details about a user of the service',
+})
+export class UserDto extends PickType(GeneratedUser, ['id'] as const) {}

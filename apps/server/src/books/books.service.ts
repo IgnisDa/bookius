@@ -2,14 +2,16 @@ import { PrismaService } from '@bookius/model';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { sampleSize } from 'lodash';
+import { FilterBooksArgs } from './dto/filter-books.dto';
 
 @Injectable()
 export class BooksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async books() {
+  async filterBooks(args: FilterBooksArgs) {
     const resp = await this.prisma.book.findMany({
-      include: { architects: { select: { role: true, author: true } } },
+      include: { architects: { include: { author: true } } },
+      ...args,
     });
     return resp;
   }

@@ -9,6 +9,7 @@ import { User } from '@prisma/client';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { BooksService } from './books.service';
+import { FilterBooksArgs } from './dto/filter-books.dto';
 import { UserBookProgressLogsInput } from './dto/user-book-progress-logs.dto';
 
 @Resolver()
@@ -18,10 +19,10 @@ export class BooksResolver {
   /* QUERIES */
 
   @Query(() => [Book], {
-    description: 'Get a list of all books in the service.',
+    description: 'Get a filtered list of all books in the service.',
   })
-  async books() {
-    return await this.booksService.books();
+  async filterBooks(@Args() args: FilterBooksArgs) {
+    return await this.booksService.filterBooks(args);
   }
 
   @UseGuards(GqlAuthGuard)
