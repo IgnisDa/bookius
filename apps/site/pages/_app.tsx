@@ -1,15 +1,16 @@
 import { globalStyles } from '@bookius/ui';
+import { AnimatePresence, motion } from 'framer-motion';
 import { NextPage } from 'next';
 import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import NextNprogress from 'nextjs-progressbar';
 import { ReactElement, ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'urql';
 import { defaultLayout } from '../components/layouts/default';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 import './styles.css';
-import { AnimatePresence, motion } from 'framer-motion';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -31,6 +32,7 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <DefaultSeo />
+      <NextNprogress />
       <Provider value={client}>
         <ToastContainer position="bottom-center" />
         {getLayout(
