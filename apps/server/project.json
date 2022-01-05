@@ -5,9 +5,7 @@
   "targets": {
     "build": {
       "executor": "@nrwl/node:build",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "assets": [],
         "outputPath": "dist/apps/server",
@@ -46,10 +44,7 @@
     "build-prod": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "nx run model:generate",
-          "nx run server:build:production"
-        ]
+        "commands": ["nx run model:generate", "nx run server:build:production"]
       }
     },
     "start-prod": {
@@ -63,5 +58,78 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "dependencies": {
+    "required": [
+      "@magic-sdk/admin",
+      "@nestjs-modules/mailer",
+      "@nestjs/bull",
+      "@nestjs/common",
+      "@nestjs/core",
+      "@nestjs/graphql",
+      "@nestjs/mapped-types",
+      "@nestjs/passport",
+      "@nestjs/platform-express",
+      "@nestjs/schedule",
+      "@prisma/client",
+      "apollo-server-core",
+      "apollo-server-errors",
+      "apollo-server-express",
+      "bull",
+      "class-transformer",
+      "class-validator",
+      "connection-string-parser",
+      "graphql",
+      "graphql-scalars",
+      "graphql-type-json",
+      "graphql-upload",
+      "helmet",
+      "lodash",
+      "luxon",
+      "magic-sdk",
+      "nest-typed-config",
+      "nodemailer",
+      "passport",
+      "passport-headerapikey",
+      "prisma",
+      "prisma-graphql-type-decimal",
+      "reflect-metadata",
+      "regenerator-runtime",
+      "rxjs",
+      "tslib",
+      "tslog",
+      "unique-names-generator"
+    ],
+    "development": [
+      "@nestjs/schematics",
+      "@nestjs/testing",
+      "@nrwl/cli",
+      "@nrwl/eslint-plugin-nx",
+      "@nrwl/jest",
+      "@nrwl/linter",
+      "@nrwl/nest",
+      "@nrwl/node",
+      "@nrwl/workspace",
+      "@nx-tools/nx-prisma",
+      "@types/bull",
+      "@types/cron",
+      "@types/faker",
+      "@types/jest",
+      "@types/lodash",
+      "@types/luxon",
+      "@types/node",
+      "@types/nodemailer",
+      "@types/passport",
+      "@typescript-eslint/eslint-plugin",
+      "@typescript-eslint/parser",
+      "eslint",
+      "eslint-config-prettier",
+      "jest",
+      "prisma-dbml-generator",
+      "prisma-nestjs-graphql",
+      "ts-jest",
+      "ts-node",
+      "typescript"
+    ]
+  }
 }
