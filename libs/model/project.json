@@ -3,6 +3,12 @@
   "sourceRoot": "libs/model/src",
   "projectType": "library",
   "targets": {
+    "deploy": {
+      "executor": "@nx-tools/nx-prisma:deploy",
+      "options": {
+        "schema": "libs/model/prisma/schema.prisma"
+      }
+    },
     "generate": {
       "executor": "@nx-tools/nx-prisma:generate",
       "options": {
@@ -12,28 +18,16 @@
     "migrate": {
       "executor": "@nx-tools/nx-prisma:migrate",
       "options": {
-        "schema": "libs/model/prisma/schema.prisma",
         "create-only": true,
-        "skip-seed": true,
-        "skip-generate": true
-      }
-    },
-    "deploy": {
-      "executor": "@nx-tools/nx-prisma:deploy",
-      "options": {
-        "schema": "libs/model/prisma/schema.prisma"
+        "schema": "libs/model/prisma/schema.prisma",
+        "skip-generate": true,
+        "skip-seed": true
       }
     },
     "reset": {
       "executor": "@nx-tools/nx-prisma:reset",
       "options": {
-        "schema": "libs/model/prisma/schema.prisma",
-        "force": true
-      }
-    },
-    "status": {
-      "executor": "@nx-tools/nx-prisma:status",
-      "options": {
+        "force": true,
         "schema": "libs/model/prisma/schema.prisma"
       }
     },
@@ -45,6 +39,12 @@
         "tsConfig": "libs/model/tsconfig.json"
       }
     },
+    "status": {
+      "executor": "@nx-tools/nx-prisma:status",
+      "options": {
+        "schema": "libs/model/prisma/schema.prisma"
+      }
+    },
     "studio": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
@@ -53,5 +53,9 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "dependencies": {
+    "development": [],
+    "required": []
+  }
 }

@@ -6,18 +6,22 @@
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui"],
       "options": {
         "jestConfig": "libs/ui/jest.config.js",
         "passWithNoTests": true
-      }
+      },
+      "outputs": ["coverage/libs/ui"]
     }
+  },
+  "dependencies": {
+    "development": [],
+    "required": []
   }
 }
