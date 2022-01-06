@@ -10,19 +10,17 @@ RUN yarn global add pnpm && \
 
 # Rebuild the source code only when needed
 FROM node:alpine AS builder
-WORKDIR /app
-COPY . .
-COPY --from=deps /app/node_modules ./node_modules
 ARG NEXT_PUBLIC_GRAPHQL_API
 ARG NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY
 ARG NEXT_SERVER_GRAPHQL_API
-RUN echo "\
-# start config
-NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API} \n \
-NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API} \n \
-NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY} \n \
-# end config
-    " > .env
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./
+COPY --from=deps /app/pnpm-lock.yaml ./
+RUN echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}" >> .env && \
+    echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}" >> .env && \
+    echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" >> .env
 RUN yarn global add nx pnpm && \
     pnpm nx build site --prod && \
     pnpm install --production --ignore-scripts --prefer-offline
