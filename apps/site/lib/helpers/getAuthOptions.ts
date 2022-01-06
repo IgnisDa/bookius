@@ -1,4 +1,3 @@
-import { HttpStatus } from '@nestjs/common';
 import { IncomingMessage } from 'http';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import { AUTH_TOKEN_KEY } from '../constants';
@@ -10,18 +9,16 @@ export const hasRequiredRequestCookies = (req: RequestWithCookies) =>
 
 export const getRedirectUnauthenticatedRequests = (
   options: {
-    statusCode?: HttpStatus;
     destination?: string;
     errorMessage?: string;
   } = {
-    statusCode: HttpStatus.FOUND,
     destination: '/',
   }
 ) => ({
   props: {},
   redirect: {
     destination: options.destination,
-    statusCode: options.statusCode,
+    statusCode: 307,
   },
 });
 

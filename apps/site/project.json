@@ -4,29 +4,16 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/next:build",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "root": "apps/site",
-        "outputPath": "dist/apps/site"
-      },
       "configurations": {
         "production": {}
-      }
-    },
-    "serve": {
-      "executor": "@nrwl/next:server",
-      "options": {
-        "buildTarget": "site:build",
-        "dev": true
       },
-      "configurations": {
-        "production": {
-          "buildTarget": "site:build:production",
-          "dev": false
-        }
-      }
+      "defaultConfiguration": "production",
+      "executor": "@nrwl/next:build",
+      "options": {
+        "outputPath": "dist/apps/site",
+        "root": "apps/site"
+      },
+      "outputs": ["{options.outputPath}"]
     },
     "export": {
       "executor": "@nrwl/next:export",
@@ -34,57 +21,37 @@
         "buildTarget": "site:build:production"
       }
     },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/site/**/*.{ts,tsx,js,jsx}"]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "serve": {
+      "configurations": {
+        "production": {
+          "buildTarget": "site:build:production",
+          "dev": false
+        }
+      },
+      "executor": "@nrwl/next:server",
+      "options": {
+        "buildTarget": "site:build",
+        "dev": true
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/site"],
       "options": {
         "jestConfig": "apps/site/jest.config.js",
         "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/site/**/*.{ts,tsx,js,jsx}"]
-      }
+      },
+      "outputs": ["coverage/apps/site"]
     }
   },
   "tags": [],
   "dependencies": {
-    "required": [
-      "@fontsource/neucha",
-      "@nrwl/next",
-      "@nrwl/tao",
-      "@radix-ui/colors",
-      "@radix-ui/react-accessible-icon",
-      "@radix-ui/react-avatar",
-      "@radix-ui/react-dialog",
-      "@radix-ui/react-icons",
-      "@radix-ui/react-label",
-      "@radix-ui/react-progress",
-      "@radix-ui/react-separator",
-      "@stitches/react",
-      "@urql/devtools",
-      "@urql/exchange-auth",
-      "graphql",
-      "js-cookie",
-      "lodash",
-      "luxon",
-      "next",
-      "next-seo",
-      "next-urql",
-      "nextjs-progressbar",
-      "normalize.css",
-      "preact",
-      "react",
-      "react-dom",
-      "react-icons",
-      "react-is",
-      "react-toastify",
-      "urql",
-      "urql-custom-scalars-exchange"
-    ],
     "development": [
       "@graphql-codegen/add",
       "@graphql-codegen/cli",
@@ -119,9 +86,45 @@
       "eslint-plugin-react-hooks",
       "react-test-renderer",
       "sass",
-      "sharp",
       "ts-jest",
-      "typescript"
+      "typescript",
+      "tslib"
+    ],
+    "required": [
+      "@fontsource/neucha",
+      "@nrwl/next",
+      "@nrwl/tao",
+      "@radix-ui/colors",
+      "@radix-ui/react-accessible-icon",
+      "@radix-ui/react-avatar",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-icons",
+      "@radix-ui/react-label",
+      "@radix-ui/react-progress",
+      "@radix-ui/react-separator",
+      "@stitches/react",
+      "@urql/devtools",
+      "@urql/exchange-auth",
+      "graphql",
+      "js-cookie",
+      "lodash",
+      "luxon",
+      "next",
+      "next-seo",
+      "next-urql",
+      "nextjs-progressbar",
+      "normalize.css",
+      "preact",
+      "react",
+      "react-dom",
+      "react-icons",
+      "react-is",
+      "react-toastify",
+      "urql",
+      "urql-custom-scalars-exchange",
+      "magic-sdk",
+      "framer-motion",
+      "sharp"
     ]
   }
 }

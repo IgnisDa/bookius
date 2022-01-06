@@ -1,6 +1,12 @@
-# syntax = edrevo/dockerfile-plus
-
-INCLUDE+ deployment/common.Dockerfile
+FROM node:alpine AS deps
+RUN apk add --no-cache libc6-compat curl
+WORKDIR /app
+COPY package.json pnpm-lock.yaml workspace.json ./
+COPY apps/site/project.json ./apps/site/project.json
+RUN yarn global add pnpm && \
+    curl https://raw.githubusercontent.com/IgnisDa/esteem/main/install.sh | sh -s -- --yes && \
+    esteem install-isolated site && \
+    pnpm install
 
 # Rebuild the source code only when needed
 FROM node:alpine AS builder
