@@ -1,0 +1,44 @@
+# syntax = edrevo/dockerfile-plus
+
+INCLUDE+ deployment/common.Dockerfile
+
+# Rebuild the source code only when needed
+FROM node:alpine AS builder
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+ARG NEXT_PUBLIC_GRAPHQL_API
+ARG NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY
+ARG NEXT_SERVER_GRAPHQL_API
+RUN echo "\
+# start config
+NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API} \n \
+NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API} \n \
+NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY} \n \
+# end config
+    " > .env
+RUN yarn global add nx pnpm && \
+    pnpm nx build site --prod && \
+    pnpm install --production --ignore-scripts --prefer-offline
+
+# Production image, copy all the files and run next
+FROM node:alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production \
+    PORT=3000 \
+    NEXT_TELEMETRY_DISABLED=1
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+
+COPY --from=builder /app/.env ./
+COPY --from=builder /app/dist/apps/site/next.config.js ./
+COPY --from=builder /app/dist/apps/site/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/dist/apps/site/.next ./.next
+COPY --from=builder /app/dist/apps/site/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+
+USER nextjs
+
+EXPOSE 3000
+
+CMD ["node_modules/.bin/next", "start"]

@@ -2,12 +2,7 @@
   "name": "bookius",
   "dockerComposeFile": "docker-compose.yml",
   "service": "development-machine",
-  "forwardPorts": [
-    3000,
-    8000,
-    8533,
-    8534
-  ],
+  "forwardPorts": [4200, 8000, 8533, 8534],
   "workspaceFolder": "/workspace/bookius",
   "postCreateCommand": ". ${containerWorkspaceFolder}/.devcontainer/scripts/post-create.sh",
   "postStartCommand": ". ${containerWorkspaceFolder}/.devcontainer/scripts/post-start.sh",

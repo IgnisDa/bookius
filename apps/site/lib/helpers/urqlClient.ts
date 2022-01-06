@@ -26,7 +26,9 @@ const isServerSide = typeof window === 'undefined';
 export const ssrCache = ssrExchange({ isClient: !isServerSide });
 
 export const client = createClient({
-  url: process.env.NEXT_PUBLIC_GRAPHQL_API as string,
+  url: isServerSide
+    ? process.env.NEXT_SERVER_GRAPHQL_API!
+    : process.env.NEXT_PUBLIC_GRAPHQL_API!,
   exchanges: [
     dedupExchange,
     scalarsExchange,
