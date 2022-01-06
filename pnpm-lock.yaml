@@ -119,7 +119,7 @@ specifiers:
   regenerator-runtime: 0.13.9
   rxjs: 7.5.1
   sass: 1.45.2
-  sharp: 0.29.3
+  sharp: ^0.29.3
   ts-jest: 27.1.2
   ts-node: 10.4.0
   tslib: 2.3.1
@@ -194,7 +194,7 @@ dependencies:
   reflect-metadata: 0.1.13
   regenerator-runtime: 0.13.9
   rxjs: 7.5.1
-  tslib: 2.3.1
+  sharp: 0.29.3
   tslog: 3.3.1
   unique-names-generator: 4.6.0
   urql: 2.0.6_graphql@15.8.0+react@17.0.2
@@ -255,9 +255,9 @@ devDependencies:
   prisma-nestjs-graphql: 14.6.1
   react-test-renderer: 17.0.2_react@17.0.2
   sass: 1.45.2
-  sharp: 0.29.3
   ts-jest: 27.1.2_506bef076eca86e54bd20f3cd934c4cf
   ts-node: 10.4.0_00264fd83560919cd06c986889baae0a
+  tslib: 2.3.1
   typescript: 4.5.4
 
 packages:
@@ -8670,7 +8670,6 @@ packages:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.0
-    dev: true
 
   /blakejs/1.1.1:
     resolution:
@@ -9325,7 +9324,7 @@ packages:
       {
         integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==,
       }
-    dev: true
+    dev: false
 
   /chownr/2.0.0:
     resolution:
@@ -9587,7 +9586,7 @@ packages:
     dependencies:
       color-name: 1.1.4
       simple-swizzle: 0.2.2
-    dev: true
+    dev: false
 
   /color/4.1.0:
     resolution:
@@ -9597,7 +9596,7 @@ packages:
     dependencies:
       color-convert: 2.0.1
       color-string: 1.9.0
-    dev: true
+    dev: false
 
   /colord/2.9.2:
     resolution:
@@ -10776,7 +10775,7 @@ packages:
     engines: { node: '>=10' }
     dependencies:
       mimic-response: 3.1.0
-    dev: true
+    dev: false
 
   /dedent/0.7.0:
     resolution: { integrity: sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw= }
@@ -10800,7 +10799,6 @@ packages:
         integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==,
       }
     engines: { node: '>=4.0.0' }
-    dev: true
 
   /deep-is/0.1.4:
     resolution:
@@ -10933,7 +10931,7 @@ packages:
     resolution: { integrity: sha1-+hN8S9aY7fVc1c0CrFWfkaTEups= }
     engines: { node: '>=0.10' }
     hasBin: true
-    dev: true
+    dev: false
 
   /detect-newline/3.1.0:
     resolution:
@@ -11311,7 +11309,6 @@ packages:
       }
     dependencies:
       once: 1.4.0
-    dev: true
 
   /enhanced-resolve/5.8.3:
     resolution:
@@ -12181,7 +12178,7 @@ packages:
         integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==,
       }
     engines: { node: '>=6' }
-    dev: true
+    dev: false
 
   /expect/27.4.2:
     resolution:
@@ -12782,7 +12779,6 @@ packages:
       {
         integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==,
       }
-    dev: true
 
   /fs-extra/10.0.0:
     resolution:
@@ -13020,7 +13016,7 @@ packages:
 
   /github-from-package/0.0.0:
     resolution: { integrity: sha1-l/tdlr/eiXMxPyDoKI75oWf6ZM4= }
-    dev: true
+    dev: false
 
   /glob-parent/5.1.2:
     resolution:
@@ -13962,7 +13958,6 @@ packages:
       {
         integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==,
       }
-    dev: true
 
   /ini/2.0.0:
     resolution:
@@ -14100,7 +14095,7 @@ packages:
       {
         integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==,
       }
-    dev: true
+    dev: false
 
   /is-bigint/1.0.4:
     resolution:
@@ -16421,7 +16416,7 @@ packages:
         integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==,
       }
     engines: { node: '>=10' }
-    dev: true
+    dev: false
 
   /min-document/2.19.0:
     resolution: { integrity: sha1-e9KC4/WELtKVu3SM3Z8f+iyCRoU= }
@@ -16506,7 +16501,7 @@ packages:
       {
         integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==,
       }
-    dev: true
+    dev: false
 
   /mkdirp/0.5.5:
     resolution:
@@ -16641,7 +16636,7 @@ packages:
       {
         integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==,
       }
-    dev: true
+    dev: false
 
   /native-request/1.1.0:
     resolution:
@@ -16889,7 +16884,7 @@ packages:
     engines: { node: '>=10' }
     dependencies:
       semver: 7.3.5
-    dev: true
+    dev: false
 
   /node-addon-api/2.0.2:
     resolution:
@@ -16909,7 +16904,7 @@ packages:
       {
         integrity: sha512-eazsqzwG2lskuzBqCGPi7Ac2UgOoMz8JVOXVhTvvPDYhthvNpefx8jWD8Np7Gv+2Sz0FlPWZk0nJV0z598Wn8Q==,
       }
-    dev: true
+    dev: false
 
   /node-domexception/1.0.0:
     resolution:
@@ -18884,7 +18879,7 @@ packages:
       simple-get: 4.0.0
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
-    dev: true
+    dev: false
 
   /prelude-ls/1.1.2:
     resolution: { integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ= }
@@ -19296,7 +19291,6 @@ packages:
     dependencies:
       end-of-stream: 1.4.4
       once: 1.4.0
-    dev: true
 
   /punycode/2.1.1:
     resolution:
@@ -19473,7 +19467,6 @@ packages:
       ini: 1.3.8
       minimist: 1.2.5
       strip-json-comments: 2.0.1
-    dev: true
 
   /react-dom/17.0.2_react@17.0.2:
     resolution:
@@ -20654,7 +20647,7 @@ packages:
       simple-get: 4.0.0
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
-    dev: true
+    dev: false
 
   /shebang-command/1.2.0:
     resolution: { integrity: sha1-RKrGW2lbAzmJaMOfNj/uXer98eo= }
@@ -20720,6 +20713,7 @@ packages:
       {
         integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==,
       }
+    dev: false
 
   /simple-get/2.8.1:
     resolution:
@@ -20741,13 +20735,13 @@ packages:
       decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
-    dev: true
+    dev: false
 
   /simple-swizzle/0.2.2:
     resolution: { integrity: sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo= }
     dependencies:
       is-arrayish: 0.3.2
-    dev: true
+    dev: false
 
   /sisteransi/1.0.5:
     resolution:
@@ -21302,7 +21296,6 @@ packages:
   /strip-json-comments/2.0.1:
     resolution: { integrity: sha1-PFMZQukIwml8DsNEhYwobHygpgo= }
     engines: { node: '>=0.10.0' }
-    dev: true
 
   /strip-json-comments/3.1.1:
     resolution:
@@ -21636,7 +21629,7 @@ packages:
       mkdirp-classic: 0.5.3
       pump: 3.0.0
       tar-stream: 2.2.0
-    dev: true
+    dev: false
 
   /tar-stream/2.2.0:
     resolution:
@@ -21650,7 +21643,6 @@ packages:
       fs-constants: 1.0.0
       inherits: 2.0.4
       readable-stream: 3.6.0
-    dev: true
 
   /tar/6.1.11:
     resolution:
@@ -22227,7 +22219,7 @@ packages:
     resolution: { integrity: sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0= }
     dependencies:
       safe-buffer: 5.2.1
-    dev: true
+    dev: false
 
   /tweetnacl-util/0.15.1:
     resolution:
