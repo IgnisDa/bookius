@@ -4,47 +4,47 @@
   "projectType": "application",
   "targets": {
     "build": {
+      "configurations": {
+        "production": {
+          "extractLicenses": true,
+          "inspect": false,
+          "optimization": false,
+          "verbose": true
+        }
+      },
       "executor": "@nrwl/node:build",
-      "outputs": ["{options.outputPath}"],
       "options": {
         "assets": [],
-        "outputPath": "dist/apps/server",
         "main": "apps/server/src/main.ts",
+        "outputPath": "dist/apps/server",
         "tsConfig": "apps/server/tsconfig.app.json",
         "tsPlugins": [
           {
             "name": "@nestjs/graphql/plugin",
             "options": {
+              "introspectComments": true,
               "typeFileNameSuffix": [
                 ".input.ts",
                 ".dto.ts",
                 ".result.ts",
                 ".interface.ts"
-              ],
-              "introspectComments": true
+              ]
             }
           }
         ]
       },
-      "configurations": {
-        "production": {
-          "optimization": false,
-          "extractLicenses": true,
-          "inspect": false,
-          "verbose": true
-        }
+      "outputs": ["{options.outputPath}"]
+    },
+    "build-prod": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx run model:generate", "nx run server:build:production"]
       }
     },
     "serve": {
       "executor": "@nrwl/node:execute",
       "options": {
         "buildTarget": "server:build"
-      }
-    },
-    "build-prod": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": ["nx run model:generate", "nx run server:build:production"]
       }
     },
     "start-prod": {
@@ -60,6 +60,37 @@
   },
   "tags": [],
   "dependencies": {
+    "development": [
+      "@nestjs/schematics",
+      "@nestjs/testing",
+      "@nrwl/cli",
+      "@nrwl/eslint-plugin-nx",
+      "@nrwl/jest",
+      "@nrwl/linter",
+      "@nrwl/nest",
+      "@nrwl/node",
+      "@nrwl/workspace",
+      "@nx-tools/nx-prisma",
+      "@types/bull",
+      "@types/cron",
+      "@types/faker",
+      "@types/jest",
+      "@types/lodash",
+      "@types/luxon",
+      "@types/node",
+      "@types/nodemailer",
+      "@types/passport",
+      "@typescript-eslint/eslint-plugin",
+      "@typescript-eslint/parser",
+      "eslint",
+      "eslint-config-prettier",
+      "jest",
+      "prisma-dbml-generator",
+      "prisma-nestjs-graphql",
+      "ts-jest",
+      "ts-node",
+      "typescript"
+    ],
     "required": [
       "@magic-sdk/admin",
       "@nestjs-modules/mailer",
@@ -98,38 +129,8 @@
       "rxjs",
       "tslib",
       "tslog",
-      "unique-names-generator"
-    ],
-    "development": [
-      "@nestjs/schematics",
-      "@nestjs/testing",
-      "@nrwl/cli",
-      "@nrwl/eslint-plugin-nx",
-      "@nrwl/jest",
-      "@nrwl/linter",
-      "@nrwl/nest",
-      "@nrwl/node",
-      "@nrwl/workspace",
-      "@nx-tools/nx-prisma",
-      "@types/bull",
-      "@types/cron",
-      "@types/faker",
-      "@types/jest",
-      "@types/lodash",
-      "@types/luxon",
-      "@types/node",
-      "@types/nodemailer",
-      "@types/passport",
-      "@typescript-eslint/eslint-plugin",
-      "@typescript-eslint/parser",
-      "eslint",
-      "eslint-config-prettier",
-      "jest",
-      "prisma-dbml-generator",
-      "prisma-nestjs-graphql",
-      "ts-jest",
-      "ts-node",
-      "typescript"
+      "unique-names-generator",
+      "@nrwl/tao"
     ]
   }
 }

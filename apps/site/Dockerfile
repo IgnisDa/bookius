@@ -43,6 +43,6 @@ COPY --from=builder /app/node_modules ./node_modules
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 CMD ["node_modules/.bin/next", "start"]
