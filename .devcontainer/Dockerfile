@@ -9,4 +9,4 @@ RUN sudo apt-get update && sudo apt-get upgrade -y ;\
 RUN sudo yarn global add nx @nestjs/cli@latest ts-node
 
 # install the esteem cli to make it easier to manage nx monorepos
-RUN curl https://raw.githubusercontent.com/IgnisDa/esteem/main/install.sh | sh -s -- --yes
+RUN curl https://raw.githubusercontent.com/IgnisDa/developrs/main/packages/esteem/install.sh | sh -s -- --yes

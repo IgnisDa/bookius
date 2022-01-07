@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml workspace.json ./
 COPY apps/server/project.json ./apps/server/project.json
 RUN yarn global add pnpm && \
-    curl https://raw.githubusercontent.com/IgnisDa/esteem/main/install.sh | sh -s -- --yes && \
+    curl https://raw.githubusercontent.com/IgnisDa/developrs/main/packages/esteem/install.sh | sh -s -- --yes && \
     esteem install-isolated server && \
     pnpm install
 
