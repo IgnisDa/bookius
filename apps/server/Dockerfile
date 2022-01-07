@@ -31,7 +31,7 @@ RUN yarn global add nx pnpm && \
 FROM node:alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production \
-    PORT=3000
+    PORT=8000
 # RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001
 
 COPY --from=builder /app/.env ./

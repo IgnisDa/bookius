@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 /**
  * The minimal configuration definition of the application. It defines the various
@@ -7,9 +7,11 @@ import { IsString } from 'class-validator';
 export class RootConfig {
   /** The connection string to the postgres database */
   @IsString()
+  @IsNotEmpty()
   public readonly DATABASE_URL: string;
 
   /** The connection string to the redis key-value store */
   @IsString()
+  @IsNotEmpty()
   public readonly REDIS_URL: string;
 }

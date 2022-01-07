@@ -1,5 +1,5 @@
 import { RootConfig } from '@bookius/config';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 /**
  * The configuration of this particular application. Some common configuration properties
@@ -10,5 +10,6 @@ export class ApplicationConfig extends RootConfig {
    * The application secret key from the magic dashboard
    */
   @IsString()
+  @IsNotEmpty()
   MAGIC_SECRET_KEY: string;
 }
