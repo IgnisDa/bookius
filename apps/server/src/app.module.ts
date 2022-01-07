@@ -3,7 +3,6 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
-import { ConnectionStringParser } from 'connection-string-parser';
 import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
 import { join } from 'path';
 import { ApplicationConfig } from './config';
@@ -20,17 +19,13 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
     BullModule.forRootAsync({
       imports: [ApplicationConfig],
       useFactory: async (configService: ApplicationConfig) => {
-        const connectionObject = new ConnectionStringParser({
-          scheme: 'redis',
-          hosts: [],
-        }).parse(configService.REDIS_URL);
-        const connDetails = connectionObject.hosts[0];
+        const connection = new URL(configService.REDIS_URL);
         return {
           redis: {
-            username: connectionObject.username,
-            password: connectionObject.password,
-            host: connDetails.host,
-            port: connDetails.port,
+            username: connection.username,
+            password: connection.password,
+            host: connection.host,
+            port: Number(connection.port),
           },
         };
       },

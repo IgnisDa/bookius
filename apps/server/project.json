@@ -109,7 +109,6 @@
       "bull",
       "class-transformer",
       "class-validator",
-      "connection-string-parser",
       "graphql",
       "graphql-scalars",
       "graphql-type-json",

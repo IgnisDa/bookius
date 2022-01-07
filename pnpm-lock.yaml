@@ -69,7 +69,6 @@ specifiers:
   change-case: 4.1.2
   class-transformer: 0.5.1
   class-validator: 0.13.2
-  connection-string-parser: 1.0.4
   core-js: 3.20.2
   cspell: 5.14.0
   csvtojson: 2.0.10
@@ -162,7 +161,6 @@ dependencies:
   change-case: 4.1.2
   class-transformer: 0.5.1
   class-validator: 0.13.2
-  connection-string-parser: 1.0.4
   core-js: 3.20.2
   framer-motion: 5.5.5_react-dom@17.0.2+react@17.0.2
   graphql: 15.8.0
@@ -9780,15 +9778,6 @@ packages:
         integrity: sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==,
       }
     engines: { node: '>=0.8' }
-
-  /connection-string-parser/1.0.4:
-    resolution:
-      {
-        integrity: sha512-grmrIHzrZRjn53dwRqJTmtTRVc+gUiIk/tzjUrteN6aLN4l9DR6KE/IsGtjndyAlHhkmKjAHB9p7PJ0cFgO94w==,
-      }
-    dependencies:
-      tslib: 2.3.1
-    dev: false
 
   /consola/2.15.3:
     resolution:
