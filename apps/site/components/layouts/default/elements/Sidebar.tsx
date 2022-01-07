@@ -19,7 +19,6 @@ import { HiOutlineCalendar, HiOutlineCollection } from 'react-icons/hi';
 import { RiSettings3Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import logo from '../../../../public/logo.png';
-import { LoginDialog } from './LoginDialog';
 
 const LINKS = [
   { name: 'Dashboard', href: '/dashboard', icon: FiPieChart },
@@ -66,7 +65,6 @@ const BottomButton = styled(Icon, {
 export const Sidebar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
-  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       if (Cookies.get(AUTH_TOKEN_KEY)) setIsLoggedIn(true);
@@ -91,11 +89,6 @@ export const Sidebar = () => {
 
   return (
     <aside>
-      <LoginDialog
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        setIsLoggedIn={setIsLoggedIn}
-      />
       <SidebarContainer
         direction={{ '@initial': 'row', '@lg': 'column' }}
         justify={'between'}
@@ -138,12 +131,12 @@ export const Sidebar = () => {
           <Button
             onClick={() => {
               if (typeof isLoggedIn === 'undefined') return;
-              else if (!isLoggedIn) setIsOpen(true);
+              else if (!isLoggedIn) router.push('/enlist');
               else if (isLoggedIn) {
                 Cookies.remove(AUTH_TOKEN_KEY);
                 setIsLoggedIn(false);
                 toast.info('You have been logged out!');
-                router.push('/');
+                router.push('/enlist');
               }
             }}
             variant={'black'}
