@@ -19,7 +19,7 @@ type YourAuthorsComponentProps = {
   authors: GetUserRelatedAuthorsQuery;
 };
 
-const ContainerBox = styled(Box, {
+const ContainerBox = styled(Flex, {
   background: 'White',
   shadow: 'md',
   borderRadius: t.space[5],
@@ -94,8 +94,6 @@ const NoDataAvatar = styled(AvatarPrimitive.Root, {
   userSelect: 'none',
   width: '100%',
   height: '100%',
-  borderWidth: 3,
-  marginRight: t.space[4],
   flex: 'none',
 });
 
@@ -109,7 +107,7 @@ export const YourAuthorsComponent: FunctionComponent<
   YourAuthorsComponentProps
 > = ({ authors }) => {
   return (
-    <ContainerBox>
+    <ContainerBox direction={'column'}>
       <PaddedBox justify={'between'} align={'center'}>
         <Heading>Your Authors</Heading>
         <MoreButton href="/authors" />
@@ -142,12 +140,12 @@ export const YourAuthorsComponent: FunctionComponent<
           ))}
         </Box>
       ) : (
-        <FlexGrow
-          css={{ paddingX: t.space[5], spaceY: t.space[5] }}
-          direction={'column'}
-        >
+        <FlexGrow direction={'column'} className="pb-20">
           <NoDataAvatar>
-            <NoDataAuthorAvatarImage src={`/images/no-data.svg`} />
+            <NoDataAuthorAvatarImage
+              src={`/images/no-data.svg`}
+              className="object-contain"
+            />
           </NoDataAvatar>
           <Text className="text-center">
             You have not looked up any authors yet.

@@ -10,7 +10,6 @@ import {
   theme as t,
 } from '@bookius/ui';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import * as ProgressPrimitive from '@radix-ui/react-progress';
 import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 import { MoreButton } from '../../miscellaneous/MoreButton';
@@ -67,9 +66,6 @@ const AuthorAvatarFallback = styled(AvatarPrimitive.Fallback, {
   color: 'black',
 });
 
-const BookName = styled(Text, {
-  fontSize: t.fontSizes.lg,
-});
 const AuthorName = styled(Text, {
   fontSize: t.fontSizes.sm,
   color: t.colors.gray10,
@@ -84,8 +80,6 @@ const NoDataAvatar = styled(AvatarPrimitive.Root, {
   userSelect: 'none',
   width: '100%',
   height: '100%',
-  borderWidth: 3,
-  marginRight: t.space[4],
   flex: 'none',
 });
 
@@ -153,6 +147,7 @@ export const KeepReadingComponent: FunctionComponent<
         <FlexGrow
           css={{ paddingX: t.space[5], spaceY: t.space[5] }}
           direction={'column'}
+          align={'center'}
         >
           <NoDataAvatar>
             <NoDataAuthorAvatarImage src={`/images/no-data.svg`} />
