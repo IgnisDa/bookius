@@ -10,6 +10,9 @@
     "graphql.vscode-graphql",
     "willstakayama.vscode-nextjs-snippets",
     "mtxr.sqltools",
-    "mtxr.sqltools-driver-pg"
+    "mtxr.sqltools-driver-pg",
+    "bradlc.vscode-tailwindcss",
+    "pulkitgangwar.nextjs-snippets",
+    "heybourn.headwind"
   ]
 }

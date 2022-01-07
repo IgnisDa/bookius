@@ -1,7 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import '@fontsource/neucha/400.css';
 @import 'react-toastify/dist/ReactToastify.min.css';
-@import 'normalize.css';
 
-: root {
+:root {
   --toastify-toast-width: 400px;
 }

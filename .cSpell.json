@@ -12,14 +12,19 @@
     "Buildable",
     "cacheable",
     "Citext",
+    "tailwindcss",
+    "semibold",
+    "clsx",
     "codegen",
     "createdb",
     "cuid",
+    "daisyui",
     "datasource",
     "dbml",
     "dedup",
     "devcontainer",
     "developr",
+    "dockerignore",
     "dokku",
     "fontsource",
     "GraphQLUUID",
@@ -46,8 +51,7 @@
     "tslog",
     "upsert",
     "urql",
-    "webfont",
-    "dockerignore"
+    "webfont"
   ],
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
