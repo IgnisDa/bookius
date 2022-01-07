@@ -13,6 +13,7 @@ FROM node:alpine AS builder
 ARG NEXT_PUBLIC_GRAPHQL_API
 ARG NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY
 ARG NEXT_SERVER_GRAPHQL_API
+ENV NODE_OPTIONS="--max-old-space-size=1024"
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
@@ -32,17 +33,15 @@ WORKDIR /app
 ENV NODE_ENV=production \
     PORT=3000 \
     NEXT_TELEMETRY_DISABLED=1
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
 COPY --from=builder /app/.env ./
 COPY --from=builder /app/dist/apps/site/next.config.js ./
 COPY --from=builder /app/dist/apps/site/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/dist/apps/site/.next ./.next
+COPY --from=builder /app/dist/apps/site/.next ./.next
+COPY --from=builder /app/apps/site/deploy.sh ./
 COPY --from=builder /app/dist/apps/site/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
-USER nextjs
-
 EXPOSE ${PORT}
 
-CMD ["node_modules/.bin/next", "start"]
+CMD ["/app/deploy.sh"]
