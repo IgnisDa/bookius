@@ -2,6 +2,7 @@ import { GetUserRelatedAuthorsQuery } from '@bookius/generated';
 import {
   Box,
   Flex,
+  FlexGrow,
   Heading,
   Icon,
   styled,
@@ -14,9 +15,9 @@ import { FunctionComponent } from 'react';
 import { VscNotebook } from 'react-icons/vsc';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 
-interface PopularAuthorsComponentProps {
+type YourAuthorsComponentProps = {
   authors: GetUserRelatedAuthorsQuery;
-}
+};
 
 const ContainerBox = styled(Box, {
   background: 'White',
@@ -84,39 +85,75 @@ const AuthorIcon = styled(VscNotebook, {
   strokeWidth: 0.3,
 });
 
-export const PopularAuthorsComponent: FunctionComponent<
-  PopularAuthorsComponentProps
+const NoDataAvatar = styled(AvatarPrimitive.Root, {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  verticalAlign: 'middle',
+  overflow: 'hidden',
+  userSelect: 'none',
+  width: '100%',
+  height: '100%',
+  borderWidth: 3,
+  marginRight: t.space[4],
+  flex: 'none',
+});
+
+const NoDataAuthorAvatarImage = styled(AvatarPrimitive.Image, {
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+});
+
+export const YourAuthorsComponent: FunctionComponent<
+  YourAuthorsComponentProps
 > = ({ authors }) => {
   return (
     <ContainerBox>
       <PaddedBox justify={'between'} align={'center'}>
-        <Heading>Popular Authors</Heading>
+        <Heading>Your Authors</Heading>
         <MoreButton href="/authors" />
       </PaddedBox>
-      {authors.userRelatedAuthors.map((author) => (
-        <Box key={author.id}>
-          <StyledSeparator />
-          <PaddedBox align={'center'}>
-            <Avatar>
-              <AuthorAvatarImage
-                src={`https://picsum.photos/seed/${author.id}/200/300`}
-              />
-              <AuthorAvatarFallback delayMs={600}>
-                {author.name
-                  .split(' ')
-                  .map((tk) => tk[0])
-                  .join('')}
-              </AuthorAvatarFallback>
-            </Avatar>
-            <AuthorName>
-              <Text className="text-lg">{author.name}</Text>
-            </AuthorName>
-            <Icon label={`Icon for ${author.name}`}>
-              <AuthorIcon />
-            </Icon>
-          </PaddedBox>
+      {authors.userRelatedAuthors.length > 0 ? (
+        <Box>
+          {authors.userRelatedAuthors.map((author) => (
+            <Box key={author.id}>
+              <StyledSeparator />
+              <PaddedBox align={'center'}>
+                <Avatar>
+                  <AuthorAvatarImage
+                    src={`https://picsum.photos/seed/${author.id}/200/300`}
+                  />
+                  <AuthorAvatarFallback delayMs={600}>
+                    {author.name
+                      .split(' ')
+                      .map((tk) => tk[0])
+                      .join('')}
+                  </AuthorAvatarFallback>
+                </Avatar>
+                <AuthorName>
+                  <Text className="text-lg">{author.name}</Text>
+                </AuthorName>
+                <Icon label={`Icon for ${author.name}`}>
+                  <AuthorIcon />
+                </Icon>
+              </PaddedBox>
+            </Box>
+          ))}
         </Box>
-      ))}
+      ) : (
+        <FlexGrow
+          css={{ paddingX: t.space[5], spaceY: t.space[5] }}
+          direction={'column'}
+        >
+          <NoDataAvatar>
+            <NoDataAuthorAvatarImage src={`/images/no-data.svg`} />
+          </NoDataAvatar>
+          <Text className="text-center">
+            You have not looked up any authors yet.
+          </Text>
+        </FlexGrow>
+      )}
     </ContainerBox>
   );
 };

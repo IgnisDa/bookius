@@ -7,7 +7,7 @@ import { Flex, styled, theme as t } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
-import { PopularAuthorsComponent } from '../components/pages/dashboard/PopularAuthors';
+import { YourAuthorsComponent } from '../components/pages/dashboard/YourAuthors';
 import {
   GET_USER_BOOKS_PROGRESS_LOGS,
   GET_USER_RELATED_AUTHORS,
@@ -49,7 +49,7 @@ const Dashboard = (
             '@lg': { spaceX: t.space[5], spaceY: t.space[0] },
           }}
         >
-          <PopularAuthorsComponent authors={userRelatedAuthorsData!} />
+          <YourAuthorsComponent authors={userRelatedAuthorsData!} />
           <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
         </Flex>
       </VerticalStack>

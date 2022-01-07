@@ -11,9 +11,7 @@ const Index = (
   return (
     <div>
       {data?.filterBooks.map((book, index) => (
-        <Text as="pre" key={index}>
-          {JSON.stringify(book, null, 4)}
-        </Text>
+        <Text key={index}>{JSON.stringify(book, null, 4)}</Text>
       ))}
     </div>
   );
