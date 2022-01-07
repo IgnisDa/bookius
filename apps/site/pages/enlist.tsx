@@ -84,7 +84,7 @@ export const EnlistPage = () => {
       direction={{ '@initial': 'column', '@lg': 'row' }}
       justify={'around'}
       align={'center'}
-      className="m-auto h-full w-full lg:w-4/5 xl:w-[70%] 2xl:w-[65%] space-y-20 lg:space-y-0"
+      className="m-auto h-full w-full lg:w-4/5 xl:w-[70%] 2xl:w-[65%] space-y-32 lg:space-y-0"
     >
       <FlexGrow align={'end'}>
         <DictionaryDefinition
@@ -99,23 +99,23 @@ export const EnlistPage = () => {
       <div className="hidden lg:block">
         <Separator.Root
           orientation={'vertical'}
-          className="h-[300px] w-2 rounded-full bg-gray-300"
+          className="h-[300px] w-2 rounded-full bg-warning"
         />
       </div>
       <div className="block lg:hidden">
         <Separator.Root
           orientation={'horizontal'}
-          className="w-[300px] h-2 rounded-full bg-gray-300"
+          className="w-[300px] h-2 rounded-full  bg-warning"
         />
       </div>
-      <FlexGrow justify={'end'} className="mx-14">
+      <FlexGrow justify={'end'} className="mx-8">
         <Flex
           as="form"
           onSubmit={onSubmit}
           direction={'column'}
           className="items-center space-y-4 form-control lg:text-right lg:items-end"
         >
-          <Heading className="text-xl font-bold xl:text-2xl font-heading dark:text-gray-300">
+          <Heading className="text-lg font-bold md:text-xl xl:text-2xl font-heading dark:text-gray-300">
             We need your email to{' '}
             <span className="underline text-secondary">enlist</span> you into
             our cult
@@ -153,9 +153,9 @@ export const EnlistPage = () => {
             </AnimatePresence>
           </motion.div>
           <div>
-            <Text className="text-sm leading-1 lg:pl-4 lg:text-base">
-              Already a part of our cult? We still need it (in case you get any
-              funny ideas) and we have to hunt you down.
+            <Text className="text-xs text-gray-500 md:text-sm leading-1 lg:pl-4 lg:text-base">
+              Already a part of our cult? We still need it in case you get any
+              funny ideas and we have to hunt you down.
             </Text>
           </div>
         </Flex>
@@ -164,21 +164,19 @@ export const EnlistPage = () => {
   );
 };
 
-EnlistPage.getLayout = (page: ReactElement) => {
-  return (
-    <Flex
-      as="main"
-      isCentered
-      css={{
-        height: '100vh',
-        width: '100%',
-        backgroundColor: 'rgb(249, 251, 255)',
-      }}
-      className="dark:bg-base-300"
-    >
-      {page}
-    </Flex>
-  );
-};
+EnlistPage.getLayout = (page: ReactElement) => (
+  <Flex
+    as="main"
+    isCentered
+    css={{
+      height: '100vh',
+      width: '100%',
+      backgroundColor: 'rgb(249, 251, 255)',
+    }}
+    className="dark:bg-base-300"
+  >
+    {page}
+  </Flex>
+);
 
 export default EnlistPage;

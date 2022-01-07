@@ -25,7 +25,7 @@ const DictionaryDefinition: FC<DictionaryDefinitionProps> = ({
       </div>
       <div className="lg:text-xl">
         <div className="italic">{type ? type : 'noun'}</div>
-        <div>{meaning}</div>
+        <div className="text-accent">{meaning}</div>
         <div className="font-semibold">"{example}"</div>
       </div>
     </div>
