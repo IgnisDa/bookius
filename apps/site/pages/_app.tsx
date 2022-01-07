@@ -5,7 +5,7 @@ import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import NextNprogress from 'nextjs-progressbar';
-import { ReactElement, ReactNode } from 'react';
+import { Fragment, ReactElement, ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'urql';
 import { defaultLayout } from '../components/layouts/default';
@@ -25,6 +25,9 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? defaultLayout;
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
   globalStyles();
+
+  const MotionedComponent = motion(Fragment);
+
   return (
     <>
       <Head>
@@ -38,10 +41,12 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
         {getLayout(
           <AnimatePresence exitBeforeEnter>
             <motion.div
+              style={{ height: '100%', width: '100%' }}
               exit={{ opacity: 0 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               key={router.pathname}
+              className="debug-screens"
             >
               <Component {...pageProps} />
             </motion.div>

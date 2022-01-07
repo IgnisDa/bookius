@@ -12,7 +12,7 @@ export const getRedirectUnauthenticatedRequests = (
     destination?: string;
     errorMessage?: string;
   } = {
-    destination: '/',
+    destination: '/enlist',
   }
 ) => ({
   props: {},
