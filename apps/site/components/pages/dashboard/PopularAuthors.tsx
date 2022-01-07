@@ -1,5 +1,13 @@
 import { GetUserRelatedAuthorsQuery } from '@bookius/generated';
-import { Box, Flex, Heading, Icon, styled, theme as t } from '@bookius/ui';
+import {
+  Box,
+  Flex,
+  Heading,
+  Icon,
+  styled,
+  Text,
+  theme as t,
+} from '@bookius/ui';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as Separator from '@radix-ui/react-separator';
 import { FunctionComponent } from 'react';
@@ -20,7 +28,7 @@ const ContainerBox = styled(Box, {
 
 const StyledSeparator = styled(Separator.Root, {
   backgroundColor: t.colors.gray8,
-  '&[data-orientation=horizontal]': { height: '0.6px', width: '100%' },
+  '&[data-orientation=horizontal]': { height: '0.5px', width: '100%' },
 });
 
 const PaddedBox = styled(Flex, {
@@ -100,7 +108,9 @@ export const PopularAuthorsComponent: FunctionComponent<
                   .join('')}
               </AuthorAvatarFallback>
             </Avatar>
-            <AuthorName>{author.name}</AuthorName>
+            <AuthorName>
+              <Text className="text-lg">{author.name}</Text>
+            </AuthorName>
             <Icon label={`Icon for ${author.name}`}>
               <AuthorIcon />
             </Icon>

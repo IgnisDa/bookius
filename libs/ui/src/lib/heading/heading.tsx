@@ -1,19 +1,17 @@
-import { styled, theme as t } from '../../stitches.config';
+import { FC, HTMLAttributes } from 'react';
+import clsx from 'clsx';
 
-export const Heading = styled('h1', {
-  fontFamily: t.fonts.heading,
-  fontWeight: 'bold',
-  margin: t.space[0],
-  variants: {
-    size: {
-      lg: { fontSize: t.space[8] },
-    },
-    color: {
-      darkGray: { color: t.colors.gray11 },
-    },
-  },
-  defaultVariants: {
-    size: 'lg',
-    color: 'darkGray',
-  },
-});
+type HeadingProps = HTMLAttributes<HTMLHeadingElement>;
+
+export const Heading: FC<HeadingProps> = ({ children, className }) => {
+  return (
+    <h1
+      className={clsx(
+        'text-4xl font-bold text-gray-600 font-heading',
+        className
+      )}
+    >
+      {children}
+    </h1>
+  );
+};

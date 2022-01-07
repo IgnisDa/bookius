@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Cookies from 'js-cookie';
 import { Magic } from 'magic-sdk';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
 import { toast } from 'react-toastify';
 import DictionaryDefinition from '../components/miscellaneous/DictionaryDefinition';
@@ -34,6 +34,8 @@ export const EnlistPage = () => {
 
   const [, executeLoginUserMutation] = useLoginUserMutation();
   const [, executeCreateUserMutation] = useCreateUserMutation();
+
+  const router = useRouter();
 
   const onSubmit = async (e: FormEvent) => {
     setIsLoading(true);
@@ -70,7 +72,7 @@ export const EnlistPage = () => {
       });
       setIsLoading(false);
       setEmail('');
-      Router.push('/dashboard');
+      router.push('/dashboard');
     } catch (error) {
       console.error('An unexpected error happened occurred:', error);
       setIsLoading(false);
@@ -113,11 +115,11 @@ export const EnlistPage = () => {
           direction={'column'}
           className="items-center space-y-4 form-control lg:text-right lg:items-end"
         >
-          <h1 className="text-xl font-bold lg:text-2xl font-heading">
+          <Heading className="text-xl font-bold xl:text-2xl font-heading dark:text-gray-300">
             We need your email to{' '}
             <span className="underline text-secondary">enlist</span> you into
             our cult
-          </h1>
+          </Heading>
           <Label htmlFor="email" hidden>
             Email
           </Label>

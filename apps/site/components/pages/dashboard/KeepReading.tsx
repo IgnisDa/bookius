@@ -11,6 +11,7 @@ import {
 } from '@bookius/ui';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
+import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 import { ReadingProgress } from './ReadingProgress';
@@ -74,21 +75,6 @@ const AuthorName = styled(Text, {
   color: t.colors.gray10,
 });
 
-const ProgressRoot = styled(ProgressPrimitive.Root, {
-  position: 'relative',
-  overflow: 'hidden',
-  background: t.colors.gray8,
-  borderRadius: '99999px',
-  width: '100%',
-  height: 5,
-});
-
-const ProgressIndicator = styled(ProgressPrimitive.Indicator, {
-  backgroundColor: t.colors.accentPurple,
-  height: '100%',
-  transition: 'width 660ms cubic-bezier(0.65, 0, 0.35, 1)',
-});
-
 const NoDataAvatar = styled(AvatarPrimitive.Root, {
   display: 'inline-flex',
   alignItems: 'center',
@@ -137,17 +123,24 @@ export const KeepReadingComponent: FunctionComponent<
                 </Avatar>
                 <FlexGrow direction={'column'} css={{ spaceY: t.space[2] }}>
                   <Flex>
-                    <Box css={{ spaceY: t.space[2], marginRight: t.space[2] }}>
-                      <BookName className={clampNumberOfLines(1)}>
+                    <Box css={{ spaceY: t.space[2], marginRight: t.space[4] }}>
+                      <Text
+                        className={clsx(
+                          clampNumberOfLines(1).className,
+                          'text-lg'
+                        )}
+                      >
                         {log.book.title}
-                      </BookName>
+                      </Text>
                       <AuthorName>
                         {log?.book?.architects?.at(0)?.author.name || 'Unknown'}
                       </AuthorName>
                     </Box>
                     <Box css={{ marginLeft: 'auto' }}>
-                      {Math.round((log.percentage * log.numPages) / 100)}/
-                      {log.numPages}
+                      <Text className="text-sm">
+                        {Math.round((log.percentage * log.numPages) / 100)}/
+                        {log.numPages}
+                      </Text>
                     </Box>
                   </Flex>
                   <ReadingProgress index={index} progress={log.percentage} />
@@ -164,7 +157,7 @@ export const KeepReadingComponent: FunctionComponent<
           <NoDataAvatar>
             <NoDataAuthorAvatarImage src={`/images/no-data.svg`} />
           </NoDataAvatar>
-          <Text css={{ textAlign: 'center' }}>
+          <Text className="text-center">
             You have not started logging your progress. Add a book to the
             `Currently Reading` shelf to add books here.
           </Text>

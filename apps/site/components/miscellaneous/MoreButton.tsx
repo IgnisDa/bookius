@@ -29,7 +29,7 @@ export const MoreButton: FunctionComponent<MoreButtonProps> = ({ href }) => {
       <Flex as="a" align={'center'}>
         <ButtonText>More</ButtonText>
         <Icon label="Right Arrow">
-          <RightArrow />
+          <RightArrow className="text-gray-800 fill-current" />
         </Icon>
       </Flex>
     </NextLink>

@@ -11,6 +11,7 @@ import {
   Text,
   theme as t,
 } from '@bookius/ui';
+import clsx from 'clsx';
 import { zip } from 'lodash';
 import { FunctionComponent } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
@@ -52,17 +53,6 @@ const BookImage = styled('img', {
   borderRadius: t.space[3],
 });
 
-const TitleText = styled(Text, {
-  textTransform: 'capitalize',
-  fontWeight: 500,
-  fontSize: t.fontSizes.xl,
-});
-
-const NameText = styled(Text, {
-  color: t.colors.gray12,
-  fontSize: t.fontSizes.base,
-});
-
 const iconCss = css({ color: 'white' });
 
 export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
@@ -87,12 +77,17 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
               justify={'around'}
               css={{ marginY: t.space[4] }}
             >
-              <TitleText className={clampNumberOfLines(2)}>
+              <Heading
+                className={clsx(
+                  clampNumberOfLines(2).className,
+                  'font-sans text-lg text-gray-900'
+                )}
+              >
                 {book?.title!}
-              </TitleText>
-              <NameText>
+              </Heading>
+              <Text className="text-gray-800">
                 {book?.architects?.at(0)?.author.name || 'Author Name'}
-              </NameText>
+              </Text>
               <Flex css={{ spaceX: t.space[1] }}>
                 {[...Array(5)].map((_, index) => (
                   <Icon label={index < 4 ? 'filled' : 'unfilled'} key={index}>
