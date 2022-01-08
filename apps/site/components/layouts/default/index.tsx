@@ -1,33 +1,13 @@
-import { Flex, FlexGrow, styled, theme as t } from '@bookius/ui';
 import { ReactElement } from 'react';
 import { Sidebar } from './elements/Sidebar';
 
-const MainContainer = styled(FlexGrow, {
-  '@lg': {
-    padding: t.space[4],
-    paddingLeft: 0,
-    marginLeft: t.space[32],
-  },
-});
-
 export const defaultLayout = (page: ReactElement) => {
   return (
-    <Flex>
+    <div className="flex">
       <Sidebar />
-      <FlexGrow
-        direction={'column'}
-        css={{
-          minHeight: '100vh',
-          backgroundColor: t.colors.creamWhite,
-          padding: t.space[3],
-          paddingBottom: t.space[24],
-          '@lg': {
-            padding: 0,
-          },
-        }}
-      >
-        <MainContainer as={'main'}>{page}</MainContainer>
-      </FlexGrow>
-    </Flex>
+      <div className="flex-1 min-h-screen p-3 pb-24 bg-cream-white lg:p-0">
+        <main className="flex-1 p-4 pl-0 lg:ml-32">{page}</main>
+      </div>
+    </div>
   );
 };

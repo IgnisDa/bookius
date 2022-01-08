@@ -10,6 +10,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'accent-purple': '#b994ff',
+        'accent-light-blue': '#a0d9fa',
+        'accent-lime-green': '#a8edd8',
+        'cream-white': '#f9f9f9',
+      },
       fontFamily: {
         sans: ['Biotif', ...defaultTheme.fontFamily.sans],
         heading: ['Neucha'],

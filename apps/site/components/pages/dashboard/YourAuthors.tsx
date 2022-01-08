@@ -1,16 +1,8 @@
 import { GetUserRelatedAuthorsQuery } from '@bookius/generated';
-import {
-  Box,
-  Flex,
-  FlexGrow,
-  Heading,
-  Icon,
-  styled,
-  Text,
-  theme as t,
-} from '@bookius/ui';
-import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import { Icon, styled, theme as t } from '@bookius/ui';
+import { Root, Image, Fallback } from '@radix-ui/react-avatar';
 import * as Separator from '@radix-ui/react-separator';
+import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { VscNotebook } from 'react-icons/vsc';
 import { MoreButton } from '../../miscellaneous/MoreButton';
@@ -19,139 +11,67 @@ type YourAuthorsComponentProps = {
   authors: GetUserRelatedAuthorsQuery;
 };
 
-const ContainerBox = styled(Flex, {
-  background: 'White',
-  shadow: 'md',
-  borderRadius: t.space[5],
-  paddingY: t.space[3],
-  '@lg': { width: '40%' },
-});
-
 const StyledSeparator = styled(Separator.Root, {
   backgroundColor: t.colors.gray8,
   '&[data-orientation=horizontal]': { height: '0.5px', width: '100%' },
-});
-
-const PaddedBox = styled(Flex, {
-  paddingX: t.space[6],
-  paddingY: t.space[4],
-});
-
-const Avatar = styled(AvatarPrimitive.Root, {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  verticalAlign: 'middle',
-  overflow: 'hidden',
-  userSelect: 'none',
-  width: 45,
-  height: 45,
-  borderRadius: '20%',
-  borderWidth: 3,
-  borderColor: 'WhiteSmoke',
-  backgroundColor: 'Black',
-  marginRight: t.space[4],
-});
-
-const AuthorAvatarImage = styled(AvatarPrimitive.Image, {
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  borderRadius: 'inherit',
-});
-
-const AuthorAvatarFallback = styled(AvatarPrimitive.Fallback, {
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'white',
-  color: 'black',
-  fontSize: 15,
-  lineHeight: 1,
-  fontWeight: 500,
-});
-
-const AuthorName = styled(Box, {
-  fontSize: t.fontSizes.base,
-});
-
-const AuthorIcon = styled(VscNotebook, {
-  marginLeft: t.space.auto,
-  marginRight: t.space[2],
-  color: t.colors.accentPurple,
-  size: t.space[6],
-  strokeWidth: 0.3,
-});
-
-const NoDataAvatar = styled(AvatarPrimitive.Root, {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  verticalAlign: 'middle',
-  overflow: 'hidden',
-  userSelect: 'none',
-  width: '100%',
-  height: '100%',
-  flex: 'none',
-});
-
-const NoDataAuthorAvatarImage = styled(AvatarPrimitive.Image, {
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
 });
 
 export const YourAuthorsComponent: FunctionComponent<
   YourAuthorsComponentProps
 > = ({ authors }) => {
   return (
-    <ContainerBox direction={'column'}>
-      <PaddedBox justify={'between'} align={'center'}>
-        <Heading>Your Authors</Heading>
+    <div className="py-3 bg-white shadow-md rounded-2xl lg:w-2/5">
+      <div className="flex items-center justify-between px-4 py-5 lg:px-6">
+        <h1 className="text-4xl font-bold dark:text-gray-700 font-heading">
+          Your Authors
+        </h1>
         <MoreButton href="/authors" />
-      </PaddedBox>
+      </div>
       {authors.userRelatedAuthors.length > 0 ? (
-        <Box>
+        <div>
           {authors.userRelatedAuthors.map((author) => (
-            <Box key={author.id}>
+            <div key={author.id}>
               <StyledSeparator />
-              <PaddedBox align={'center'}>
-                <Avatar>
-                  <AuthorAvatarImage
-                    src={`https://picsum.photos/seed/${author.id}/200/300`}
+              <div className="flex items-center px-6 py-4">
+                <Root className="inline-flex items-center justify-center mr-4 overflow-hidden align-middle bg-black rounded-lg select-none w-11 h-11">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={`https://picsum.photos/seed/${author.id}/200`}
                   />
-                  <AuthorAvatarFallback delayMs={600}>
+                  <Fallback
+                    delayMs={600}
+                    className="flex items-center justify-center w-full h-full font-semibold text-black bg-white"
+                  >
                     {author.name
                       .split(' ')
                       .map((tk) => tk[0])
+                      .slice(0, 3)
                       .join('')}
-                  </AuthorAvatarFallback>
-                </Avatar>
-                <AuthorName>
-                  <Text className="text-lg">{author.name}</Text>
-                </AuthorName>
+                  </Fallback>
+                </Root>
+                <div>
+                  <p className="text-lg dark:text-gray-600">{author.name}</p>
+                </div>
                 <Icon label={`Icon for ${author.name}`}>
-                  <AuthorIcon />
+                  <VscNotebook className="w-6 h-6 ml-auto mr-2 text-primary" />
                 </Icon>
-              </PaddedBox>
-            </Box>
+              </div>
+            </div>
           ))}
-        </Box>
+        </div>
       ) : (
-        <FlexGrow direction={'column'} className="pb-20">
-          <NoDataAvatar>
-            <NoDataAuthorAvatarImage
-              src={`/images/no-data.svg`}
-              className="object-contain"
-            />
-          </NoDataAvatar>
-          <Text className="text-center">
+        <div className="flex flex-col items-center p-4 space-y-5">
+          <NextImage
+            src={`/images/no-data.svg`}
+            height={'300px'}
+            width={'500px'}
+            className="object-contain"
+          />
+          <p className="leading-none text-center dark:text-gray-600">
             You have not looked up any authors yet.
-          </Text>
-        </FlexGrow>
+          </p>
+        </div>
       )}
-    </ContainerBox>
+    </div>
   );
 };

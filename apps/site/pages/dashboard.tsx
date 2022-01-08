@@ -3,7 +3,6 @@ import {
   useGetUserRelatedAuthorsQuery,
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
-import { Flex, styled, theme as t } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
@@ -20,13 +19,6 @@ import {
 } from '../lib/helpers/getAuthOptions';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 
-const VerticalStack = styled(Flex, {
-  width: '100%',
-  spaceY: t.space[8],
-  '@xl': { width: '90%' },
-  '@2xl': { width: '75%' },
-});
-
 const Dashboard = (
   _props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
@@ -37,22 +29,13 @@ const Dashboard = (
 
   return (
     <>
-      <VerticalStack direction={'column'}>
+      <div className="flex flex-col w-full space-y-8 xl:w-[90%] 2xl:[w-75%]">
         <MyBooksComponent books={userRelatedBooksData!} />
-        <Flex
-          direction={{
-            '@initial': 'column',
-            '@lg': 'row',
-          }}
-          css={{
-            spaceY: t.space[8],
-            '@lg': { spaceX: t.space[5], spaceY: t.space[0] },
-          }}
-        >
+        <div className="flex flex-col space-y-8 lg:space-x-5 lg:flex-row lg: lg:space-y-0">
           <YourAuthorsComponent authors={userRelatedAuthorsData!} />
           <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
-        </Flex>
-      </VerticalStack>
+        </div>
+      </div>
     </>
   );
 };

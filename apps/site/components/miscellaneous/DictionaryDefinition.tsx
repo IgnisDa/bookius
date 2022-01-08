@@ -8,7 +8,7 @@ type DictionaryDefinitionProps = {
   example: string;
 };
 
-const DictionaryDefinition: FC<DictionaryDefinitionProps> = ({
+export const DictionaryDefinition: FC<DictionaryDefinitionProps> = ({
   word,
   pronunciation,
   type,
@@ -17,7 +17,7 @@ const DictionaryDefinition: FC<DictionaryDefinitionProps> = ({
 }) => {
   return (
     <div className="space-y-3 lg:space-y-8">
-      <div>
+      <div className="space-y-3">
         <div className="text-4xl font-semibold underline lg:text-6xl">
           {word}
         </div>
@@ -31,5 +31,3 @@ const DictionaryDefinition: FC<DictionaryDefinitionProps> = ({
     </div>
   );
 };
-
-export default DictionaryDefinition;

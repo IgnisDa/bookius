@@ -1,26 +1,11 @@
+import { Root, Indicator } from '@radix-ui/react-progress';
+import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
-import * as ProgressPrimitive from '@radix-ui/react-progress';
-import { styled, theme as t } from '@bookius/ui';
 
 type ReadingProgressProps = {
   progress: number;
   index: number;
 };
-
-const ProgressRoot = styled(ProgressPrimitive.Root, {
-  overflow: 'hidden',
-  background: t.colors.gray8,
-  borderRadius: '99999px',
-  height: 5,
-});
-
-const ProgressIndicator = styled(ProgressPrimitive.Indicator, {
-  backgroundColor: t.colors.accentPurple,
-  height: '100%',
-  transitionProperty: 'width',
-  transitionTimingFunction: 'cubic-bezier(0.65, 0, 0.35, 1)',
-  transitionDuration: '660ms',
-});
 
 export const ReadingProgress: FC<ReadingProgressProps> = ({
   progress,
@@ -32,11 +17,17 @@ export const ReadingProgress: FC<ReadingProgressProps> = ({
   }, []);
 
   return (
-    <ProgressRoot value={progress}>
-      <ProgressIndicator
+    <Root
+      value={progress}
+      className="h-1 overflow-hidden bg-gray-300 rounded-full"
+    >
+      <Indicator
+        className={clsx(
+          'bg-accent-purple h-full transition-[width] duration-700 ease-in-out',
+          progress >= 100 && 'bg-green-500'
+        )}
         style={{ width: `${displayProgress}%` }}
-        css={progress >= 100 ? { backgroundColor: t.colors.green8 } : {}}
       />
-    </ProgressRoot>
+    </Root>
   );
 };

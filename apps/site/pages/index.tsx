@@ -1,5 +1,4 @@
 import { useGetAllBooksQuery } from '@bookius/generated';
-import { Text } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { GET_ALL_BOOKS } from '../graphql/queries';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
@@ -11,7 +10,7 @@ const Index = (
   return (
     <div>
       {data?.filterBooks.map((book, index) => (
-        <Text key={index}>{JSON.stringify(book, null, 4)}</Text>
+        <p key={index}>{JSON.stringify(book, null, 4)}</p>
       ))}
     </div>
   );

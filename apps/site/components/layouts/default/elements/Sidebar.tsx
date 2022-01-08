@@ -1,13 +1,6 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  loader,
-  styled,
-  theme as t,
-} from '@bookius/ui';
+import { Icon } from '@bookius/ui';
 import { AUTH_TOKEN_KEY } from 'apps/site/lib/constants';
+import clsx from 'clsx';
 import Cookies from 'js-cookie';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
@@ -20,47 +13,36 @@ import { RiSettings3Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import logo from '../../../../public/logo.png';
 
+const linkClasses =
+  'transition-transform duration-200 transform h-7 w-7 hover:scale-125';
+
 const LINKS = [
-  { name: 'Dashboard', href: '/dashboard', icon: FiPieChart },
-  { name: 'Favorite', href: '/favorites', icon: FiHeart },
-  { name: 'Shelves', href: '/shelves', icon: HiOutlineCollection },
-  { name: 'Bookmarks', href: '/bookmarks', icon: FiBookmark },
-  { name: 'Calendar', href: '/calendar', icon: HiOutlineCalendar },
+  {
+    name: 'Dashboard',
+    href: '/dashboard',
+    icon: <FiPieChart className={linkClasses} />,
+  },
+  {
+    name: 'Favorite',
+    href: '/favorites',
+    icon: <FiHeart className={linkClasses} />,
+  },
+  {
+    name: 'Shelves',
+    href: '/shelves',
+    icon: <HiOutlineCollection className={linkClasses} />,
+  },
+  {
+    name: 'Bookmarks',
+    href: '/bookmarks',
+    icon: <FiBookmark className={linkClasses} />,
+  },
+  {
+    name: 'Calendar',
+    href: '/calendar',
+    icon: <HiOutlineCalendar className={linkClasses} />,
+  },
 ];
-
-const SidebarContainer = styled(Flex, {
-  position: 'fixed',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: t.colors.accentPurple,
-  '@lg': {
-    width: t.space[20],
-    top: 0,
-    bottom: 0,
-    paddingY: t.space[10],
-    marginY: t.space[2],
-    paddingX: t.space[2],
-    borderTopRightRadius: t.space[8],
-    borderBottomRightRadius: t.space[8],
-  },
-});
-
-const LogoBox = styled(Box, {
-  size: t.space[16],
-  transitionProperty: 'transform',
-  transitionDuration: '200ms',
-  '&:hover': {
-    transform: 'scale(1.05)',
-  },
-});
-
-const BottomButton = styled(Icon, {
-  size: t.space[9],
-  transitionProperty: 'transform',
-  transitionDuration: '0.2s',
-  '&:hover': { transform: 'scale(1.2)' },
-});
 
 export const Sidebar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
@@ -77,58 +59,41 @@ export const Sidebar = () => {
   let accountButton;
 
   if (typeof isLoggedIn === 'undefined')
-    accountButton = (
-      <BottomButton
-        as={CgSpinnerTwoAlt}
-        css={{ animation: `${loader} 1s ease-in-out infinite` }}
-      />
-    );
+    accountButton = <CgSpinnerTwoAlt className="h-9 w-9 animate-spin" />;
   else if (isLoggedIn === true)
-    accountButton = <BottomButton as={RiSettings3Line} />;
-  else accountButton = <BottomButton as={FiLogIn} />;
+    accountButton = (
+      <RiSettings3Line className="transition-transform transform h-9 w-9 hover:scale-125" />
+    );
+  else
+    accountButton = (
+      <FiLogIn className="transition-transform transform h-9 w-9 hover:scale-125" />
+    );
 
   return (
     <aside>
-      <SidebarContainer
-        direction={{ '@initial': 'row', '@lg': 'column' }}
-        justify={'between'}
-      >
+      <div className="fixed bottom-0 left-0 right-0 flex justify-between py-0 bg-accent-purple lg:my-2 lg:rounded-r-3xl lg:py-20 lg:flex-col lg:w-20 lg:top-0 lg:bottom-0">
         <NextLink href="/" passHref>
-          <LogoBox as="a">
+          <a className="w-16 h-16 transition-transform duration-200 transform hover:scale-105">
             <NextImage src={logo} alt="Bookius Logo Image" priority />
-          </LogoBox>
+          </a>
         </NextLink>
-        <Flex
-          direction={{ '@initial': 'row', '@lg': 'column' }}
-          css={{ spaceX: t.space[6], '@lg': { spaceX: t.space[0] } }}
-        >
+        <div className="flex space-x-6 lg:flex-col lg:space-x-0">
           {LINKS.map((link, index) => (
             <NextLink href={link.href} passHref={true} key={index}>
-              <Flex
-                justify={'center'}
-                align={'center'}
-                as="a"
-                css={{
-                  borderRadius: t.space[2],
-                  color: router.pathname === link.href ? 'black' : 'white',
-                  paddingY: t.space[4],
-                }}
+              <a
+                className={clsx(
+                  'flex justify-center items-center rounded-lg py-4',
+                  router.pathname === link.href ? 'text-black' : 'text-white'
+                )}
               >
-                <Box
-                  as={link.icon}
-                  css={{
-                    size: t.space[7],
-                    '&:hover': { transform: 'scale(1.2)' },
-                    transitionProperty: 'transform',
-                    transitionDuration: '0.2s',
-                  }}
-                />
-              </Flex>
+                {link.icon}
+              </a>
             </NextLink>
           ))}
-        </Flex>
-        <Flex isCentered>
-          <Button
+        </div>
+        <div className="flex items-center justify-center">
+          <button
+            className="text-black"
             onClick={() => {
               if (typeof isLoggedIn === 'undefined') return;
               else if (!isLoggedIn) router.push('/enlist');
@@ -139,13 +104,11 @@ export const Sidebar = () => {
                 router.push('/enlist');
               }
             }}
-            variant={'black'}
-            ghost
           >
             <Icon label="Login">{accountButton}</Icon>
-          </Button>
-        </Flex>
-      </SidebarContainer>
+          </button>
+        </div>
+      </div>
     </aside>
   );
 };

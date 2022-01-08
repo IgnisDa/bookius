@@ -5,7 +5,7 @@ import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import NextNprogress from 'nextjs-progressbar';
-import { Fragment, ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'urql';
 import { defaultLayout } from '../components/layouts/default';
@@ -25,8 +25,6 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? defaultLayout;
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
   globalStyles();
-
-  const MotionedComponent = motion(Fragment);
 
   return (
     <>

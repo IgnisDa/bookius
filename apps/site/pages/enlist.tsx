@@ -4,7 +4,6 @@ import {
   useCreateUserMutation,
   useLoginUserMutation,
 } from '@bookius/generated';
-import { Flex, FlexGrow, Heading, styled, Text, theme as t } from '@bookius/ui';
 import * as Separator from '@radix-ui/react-separator';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -13,17 +12,10 @@ import { Magic } from 'magic-sdk';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
 import { toast } from 'react-toastify';
-import DictionaryDefinition from '../components/miscellaneous/DictionaryDefinition';
+import { DictionaryDefinition } from '../components/miscellaneous/DictionaryDefinition';
 import { CHECK_USER_BY_ISSUER } from '../graphql/queries';
 import { AUTH_TOKEN_KEY } from '../lib/constants';
 import { client } from '../lib/helpers/urqlClient';
-
-const Label = styled('label', {
-  fontSize: 15,
-  color: t.colors.accentPurple,
-  width: 90,
-  textAlign: 'right',
-});
 
 export const EnlistPage = () => {
   const [email, setEmail] = useState('');
@@ -37,15 +29,15 @@ export const EnlistPage = () => {
 
   const router = useRouter();
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = async (evt: FormEvent) => {
+    evt.preventDefault();
     setIsLoading(true);
-    e.preventDefault();
     try {
       const magic = new Magic(
         process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
       );
       const DIDToken = await magic.auth.loginWithMagicLink({ email: email });
-      const issuer = (await magic.user.getMetadata()).issuer as string;
+      const issuer = (await magic.user.getMetadata()).issuer!;
       const { data: checkUserByIssuerData } = await client
         .query<CheckUserByIssuerQuery, CheckUserByIssuerQueryVariables>(
           CHECK_USER_BY_ISSUER,
@@ -55,38 +47,32 @@ export const EnlistPage = () => {
       if (!checkUserByIssuerData?.checkUserByIssuer) {
         // the user does not exist, we have to create it first
         const { data } = await executeCreateUserMutation({ issuer });
-        if (data?.createUser.__typename === 'UserDto') {
-          toast.success('Your account was created successfully!', {});
-        }
+        if (data?.createUser.__typename === 'UserDto')
+          toast.success('Your account was created successfully!');
       }
-      // login the user
+      // the user exists now, login the user
       const { data } = await executeLoginUserMutation({ issuer });
       if (data?.loginUser.__typename === 'LoginError')
-        toast.error(data.loginUser.message, { delay: 3000 });
-      else {
-        toast.success('You were logged in successfully!', {});
-      }
+        toast.error(data.loginUser.message);
+      else toast.success('You were logged in successfully!');
       Cookies.set(AUTH_TOKEN_KEY, DIDToken as string, {
         expires: 7,
         secure: true,
+        sameSite: 'Lax',
       });
       setIsLoading(false);
       setEmail('');
       router.push('/dashboard');
     } catch (error) {
-      console.error('An unexpected error happened occurred:', error);
+      console.error(error);
+      toast.error('An unexpected error happened occurred, please try again.');
       setIsLoading(false);
     }
   };
 
   return (
-    <Flex
-      direction={{ '@initial': 'column', '@lg': 'row' }}
-      justify={'around'}
-      align={'center'}
-      className="m-auto h-full w-full lg:w-4/5 xl:w-[70%] 2xl:w-[65%] space-y-32 lg:space-y-0"
-    >
-      <FlexGrow align={'end'}>
+    <div className="flex flex-col-reverse lg:flex-row items-center m-auto space-y-reverse h-full w-full lg:w-4/5 xl:w-[70%] 2xl:w-[65%] space-y-32 lg:space-y-0">
+      <div className="flex items-start justify-end flex-1 lg:pr-8 xl:pr-10">
         <DictionaryDefinition
           word="enlist"
           // cSpell:disable-next-line
@@ -95,7 +81,7 @@ export const EnlistPage = () => {
           meaning="enrol or be enrolled in the armed services."
           example="He enlisted in the Royal Naval Air Service."
         />
-      </FlexGrow>
+      </div>
       <div className="hidden lg:block">
         <Separator.Root
           orientation={'vertical'}
@@ -108,21 +94,19 @@ export const EnlistPage = () => {
           className="w-[300px] h-2 rounded-full  bg-warning"
         />
       </div>
-      <FlexGrow justify={'end'} className="mx-8">
-        <Flex
-          as="form"
+      <div className="flex items-end justify-end flex-1 mx-8">
+        <form
           onSubmit={onSubmit}
-          direction={'column'}
-          className="items-center space-y-4 form-control lg:text-right lg:items-end"
+          className="flex flex-col items-center space-y-4 form-control lg:text-right lg:items-end"
         >
-          <Heading className="text-lg font-bold md:text-xl xl:text-2xl font-heading dark:text-gray-300">
+          <h1 className="text-2xl font-bold md:text-xl xl:text-2xl font-heading dark:text-gray-300">
             We need your email to{' '}
             <span className="underline text-secondary">enlist</span> you into
             our cult
-          </Heading>
-          <Label htmlFor="email" hidden>
+          </h1>
+          <label htmlFor="email" hidden>
             Email
-          </Label>
+          </label>
           <motion.div
             className="relative w-full lg:w-10/12"
             initial={!isLoading ? 'loading' : 'initial'}
@@ -153,30 +137,19 @@ export const EnlistPage = () => {
             </AnimatePresence>
           </motion.div>
           <div>
-            <Text className="text-xs text-gray-500 md:text-sm leading-1 lg:pl-4 lg:text-base">
+            <p className="text-xs text-gray-500 md:text-sm leading-1 lg:pl-4 lg:text-base">
               Already a part of our cult? We still need it in case you get any
               funny ideas and we have to hunt you down.
-            </Text>
+            </p>
           </div>
-        </Flex>
-      </FlexGrow>
-    </Flex>
+        </form>
+      </div>
+    </div>
   );
 };
 
 EnlistPage.getLayout = (page: ReactElement) => (
-  <Flex
-    as="main"
-    isCentered
-    css={{
-      height: '100vh',
-      width: '100%',
-      backgroundColor: 'rgb(249, 251, 255)',
-    }}
-    className="dark:bg-base-300"
-  >
-    {page}
-  </Flex>
+  <main className="w-full h-screen dark:bg-base-300">{page}</main>
 );
 
 export default EnlistPage;

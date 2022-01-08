@@ -1,5 +1,4 @@
 import { useGetUserShelvesShortQuery } from '@bookius/generated';
-import { Box } from '@bookius/ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { GET_USER_SHELVES_SHORT } from '../../graphql/queries';
 import {
@@ -21,7 +20,7 @@ const ShelvesIndex = (
   return (
     <>
       {/* <CreateShelfButton refreshShelves={refreshShelves} /> */}
-      <Box>{/* <pre>{JSON.stringify(data, null, 4)}</pre> */}</Box>
+      <div>{/* <pre>{JSON.stringify(data, null, 4)}</pre> */}</div>
     </>
   );
 };
