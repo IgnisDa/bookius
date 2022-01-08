@@ -29,7 +29,7 @@ const Dashboard = (
 
   return (
     <>
-      <div className="flex flex-col w-full space-y-8 xl:w-[90%] 2xl:[w-75%]">
+      <div className="flex flex-col w-full space-y-8 xl:w-[90%] 2xl:w-[75%] 3xl:w-[70%]">
         <MyBooksComponent books={userRelatedBooksData!} />
         <div className="flex flex-col space-y-8 lg:space-x-5 lg:flex-row lg: lg:space-y-0">
           <YourAuthorsComponent authors={userRelatedAuthorsData!} />

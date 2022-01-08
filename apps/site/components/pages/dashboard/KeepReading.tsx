@@ -3,7 +3,6 @@ import { clampNumberOfLines } from '@bookius/ui';
 import { Fallback, Image, Root } from '@radix-ui/react-avatar';
 import clsx from 'clsx';
 import NextImage from 'next/image';
-import { type } from 'os';
 import { FunctionComponent } from 'react';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 import { ReadingProgress } from './ReadingProgress';
@@ -72,7 +71,7 @@ export const KeepReadingComponent: FunctionComponent<
         <div className="flex flex-col items-center p-4 space-y-5">
           <NextImage
             src={`/images/no-data.svg`}
-            height={'240px'}
+            height={'210px'}
             width={'500px'}
             className="object-contain"
           />

@@ -20,6 +20,9 @@ module.exports = {
         sans: ['Biotif', ...defaultTheme.fontFamily.sans],
         heading: ['Neucha'],
       },
+      screens: {
+        '3xl': '1600px',
+      },
     },
   },
   plugins: [

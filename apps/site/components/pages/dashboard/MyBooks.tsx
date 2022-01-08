@@ -72,7 +72,7 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
           <NextImage
             src={`/images/no-data.svg`}
             height={'240px'}
-            width={'100%'}
+            width={'300px'}
             className="object-contain"
           />
           <p className="text-center dark:text-gray-700">

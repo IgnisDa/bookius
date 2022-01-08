@@ -60,7 +60,7 @@ export const YourAuthorsComponent: FunctionComponent<
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center p-4 space-y-5">
+        <div className="flex flex-col items-center p-4">
           <NextImage
             src={`/images/no-data.svg`}
             height={'300px'}
