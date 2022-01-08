@@ -10,7 +10,13 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Cookies from 'js-cookie';
 import { Magic } from 'magic-sdk';
 import { useRouter } from 'next/router';
-import { ChangeEvent, FormEvent, ReactElement, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  ReactElement,
+  useEffect,
+  useState,
+} from 'react';
 import { toast } from 'react-toastify';
 import { DictionaryDefinition } from '../components/miscellaneous/DictionaryDefinition';
 import { CHECK_USER_BY_ISSUER } from '../graphql/queries';
@@ -18,6 +24,8 @@ import { AUTH_TOKEN_KEY } from '../lib/constants';
 import { client } from '../lib/helpers/urqlClient';
 
 export const EnlistPage = () => {
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,7 +35,17 @@ export const EnlistPage = () => {
   const [, executeLoginUserMutation] = useLoginUserMutation();
   const [, executeCreateUserMutation] = useCreateUserMutation();
 
-  const router = useRouter();
+  const destination = router.query.from
+    ? (router.query.from as string)
+    : '/dashboard';
+
+  useEffect(() => {
+    router.query.errorMessage &&
+      toast.warning(router.query.errorMessage, {
+        delay: 100,
+        toastId: 'errorMessage',
+      });
+  }, [router.query]);
 
   const onSubmit = async (evt: FormEvent) => {
     evt.preventDefault();
@@ -62,7 +80,8 @@ export const EnlistPage = () => {
       });
       setIsLoading(false);
       setEmail('');
-      router.push('/dashboard');
+
+      router.push(destination);
     } catch (error) {
       console.error(error);
       toast.error('An unexpected error happened occurred, please try again.');

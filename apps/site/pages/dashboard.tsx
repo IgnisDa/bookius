@@ -40,9 +40,12 @@ const Dashboard = (
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  resolvedUrl,
+}) => {
   if (!hasRequiredRequestCookies(req))
-    return getRedirectUnauthenticatedRequests();
+    return getRedirectUnauthenticatedRequests({ from: resolvedUrl });
   await client
     .query(GET_USER_RELATED_BOOKS, undefined, getFetchOptions(req))
     .toPromise();
