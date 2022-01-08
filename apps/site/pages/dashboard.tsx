@@ -6,6 +6,7 @@ import {
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
+import { SearchComponent } from '../components/pages/dashboard/Search';
 import { YourAuthorsComponent } from '../components/pages/dashboard/YourAuthors';
 import {
   GET_USER_BOOKS_PROGRESS_LOGS,
@@ -29,8 +30,13 @@ const Dashboard = (
 
   return (
     <>
-      <div className="flex flex-col w-full space-y-8 xl:w-[90%] 2xl:w-[75%] 3xl:w-[70%]">
-        <MyBooksComponent books={userRelatedBooksData!} />
+      <div className="flex flex-col lg:flex-col w-full space-y-8 xl:w-[90%] 2xl:w-[75%] 3xl:w-[70%]">
+        <div>
+          <SearchComponent />
+        </div>
+        <div>
+          <MyBooksComponent books={userRelatedBooksData!} />
+        </div>
         <div className="flex flex-col space-y-8 lg:space-x-5 lg:flex-row lg: lg:space-y-0">
           <YourAuthorsComponent authors={userRelatedAuthorsData!} />
           <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />

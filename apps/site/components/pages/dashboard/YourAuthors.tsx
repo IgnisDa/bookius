@@ -20,9 +20,9 @@ export const YourAuthorsComponent: FunctionComponent<
   YourAuthorsComponentProps
 > = ({ authors }) => {
   return (
-    <div className="py-3 bg-white shadow-md rounded-2xl lg:w-2/5">
+    <div className="py-3 bg-white shadow-md dark:bg-base-200 rounded-2xl lg:w-2/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
-        <h1 className="text-4xl font-bold dark:text-gray-700 font-heading">
+        <h1 className="text-4xl font-bold text-gray-700 font-heading dark:text-accent">
           Your Authors
         </h1>
         <MoreButton href="/authors" />
@@ -50,7 +50,9 @@ export const YourAuthorsComponent: FunctionComponent<
                   </Fallback>
                 </Root>
                 <div>
-                  <p className="text-lg dark:text-gray-600">{author.name}</p>
+                  <p className="text-lg text-gray-600 dark:text-secondary-content">
+                    {author.name}
+                  </p>
                 </div>
                 <Icon label={`Icon for ${author.name}`}>
                   <VscNotebook className="w-6 h-6 ml-auto mr-2 text-primary" />

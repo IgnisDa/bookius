@@ -134,6 +134,7 @@ specifiers:
   unique-names-generator: 4.6.0
   urql: 2.0.6
   urql-custom-scalars-exchange: 0.1.5
+  use-dark-mode: ^2.3.1
 
 dependencies:
   '@fontsource/neucha': 4.5.0
@@ -205,6 +206,7 @@ dependencies:
   unique-names-generator: 4.6.0
   urql: 2.0.6_graphql@15.8.0+react@17.0.2
   urql-custom-scalars-exchange: 0.1.5
+  use-dark-mode: 2.3.1_react@17.0.2
 
 devDependencies:
   '@graphql-codegen/add': 3.1.1_graphql@15.8.0
@@ -7361,6 +7363,17 @@ packages:
       '@urql/core': 2.3.6_graphql@15.8.0
       graphql: 15.8.0
       wonka: 4.0.15
+    dev: false
+
+  /@use-it/event-listener/0.1.7_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-hgfExDzUU9uTRTPDCpw2s9jWTxcxmpJya3fK5ADpf5VDpSy8WYwY/kh28XE0tUcbsljeP8wfan48QvAQTSSa3Q==,
+      }
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 17.0.2
     dev: false
 
   /@webassemblyjs/ast/1.11.1:
@@ -22827,6 +22840,31 @@ packages:
         optional: true
     dependencies:
       '@types/react': 17.0.38
+      react: 17.0.2
+    dev: false
+
+  /use-dark-mode/2.3.1_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-hmcdJR96tTustRQdaQwe6jMrZHnmPqXBxgy4jaQ4gsfhwajsCpjECuq9prgDe9XxMx/f9r96o2/md6O4Lwhwjg==,
+      }
+    peerDependencies:
+      react: ^16.8.0
+    dependencies:
+      '@use-it/event-listener': 0.1.7_react@17.0.2
+      react: 17.0.2
+      use-persisted-state: 0.3.3_react@17.0.2
+    dev: false
+
+  /use-persisted-state/0.3.3_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-pCNlvYC8+XjRxwnIut4teGC9f2p9aD88R8OGseQGZa2dvqG/h1vEGk1vRE1IZG0Vf161UDpn+NlW4+UGubQflQ==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0
+    dependencies:
+      '@use-it/event-listener': 0.1.7_react@17.0.2
       react: 17.0.2
     dev: false
 

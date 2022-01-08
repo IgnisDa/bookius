@@ -15,9 +15,9 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   books,
 }) => {
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold font-heading dark:text-gray-700">
+        <h1 className="text-4xl font-bold text-gray-700 font-heading dark:text-accent">
           My Books
         </h1>
         <MoreButton href="/books" />
@@ -25,13 +25,13 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
       {books.userRelatedBooks.length > 0 ? (
         <div className="flex flex-col mt-4 space-y-6 lg:flex-row lg:space-x-5 lg:space-y-0">
           {zip(books.userRelatedBooks.slice(0, 3), [
-            'bg-accent-light-blue',
-            'bg-accent-purple',
-            'bg-accent-lime-green',
+            'bg-accent-light-blue dark:bg-blue-500',
+            'bg-accent-purple dark:bg-purple-600',
+            'bg-accent-lime-green dark:bg-green-600',
           ]).map(([book, color]) => (
             <div
               className={clsx(
-                'flex items-center justify-center flex-1 p-3 space-x-5 shadow-sm rounded-xl',
+                'flex items-center  flex-1 p-3 space-x-5 shadow-sm rounded-xl',
                 color
               )}
               key={book?.id}
@@ -80,6 +80,6 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 };

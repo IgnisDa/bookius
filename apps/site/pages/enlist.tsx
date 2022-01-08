@@ -118,7 +118,7 @@ export const EnlistPage = () => {
           onSubmit={onSubmit}
           className="flex flex-col items-center space-y-4 form-control lg:text-right lg:items-end"
         >
-          <h1 className="text-2xl font-bold md:text-xl xl:text-2xl font-heading dark:text-gray-300">
+          <h1 className="text-2xl font-bold text-gray-800 md:text-xl xl:text-2xl font-heading dark:text-gray-300">
             We need your email to{' '}
             <span className="underline text-secondary">enlist</span> you into
             our cult
@@ -132,7 +132,7 @@ export const EnlistPage = () => {
             animate={isLoading ? 'loading' : 'initial'}
           >
             <motion.input
-              className="w-full input-bordered input"
+              className="w-full input-bordered input input-ghost"
               id="email"
               value={email}
               onChange={handleChange}
@@ -156,7 +156,7 @@ export const EnlistPage = () => {
             </AnimatePresence>
           </motion.div>
           <div>
-            <p className="text-xs text-gray-500 md:text-sm leading-1 lg:pl-4 lg:text-base">
+            <p className="text-xs text-gray-800 md:text-sm leading-1 lg:pl-4 lg:text-base dark:text-gray-400">
               Already a part of our cult? We still need it in case you get any
               funny ideas and we have to hunt you down.
             </p>
@@ -168,7 +168,7 @@ export const EnlistPage = () => {
 };
 
 EnlistPage.getLayout = (page: ReactElement) => (
-  <main className="w-full h-screen dark:bg-base-300">{page}</main>
+  <main className="w-full h-screen bg-slate-100 dark:bg-base-300">{page}</main>
 );
 
 export default EnlistPage;

@@ -131,7 +131,8 @@
       "framer-motion",
       "sharp",
       "clsx",
-      "ufo"
+      "ufo",
+      "use-dark-mode"
     ]
   }
 }

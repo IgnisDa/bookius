@@ -15,9 +15,9 @@ export const KeepReadingComponent: FunctionComponent<
   PopularAuthorsComponentProps
 > = ({ logs }) => {
   return (
-    <div className="py-3 bg-white shadow-md rounded-2xl lg:w-3/5">
+    <div className="py-3 bg-white shadow-md dark:bg-base-200 rounded-2xl lg:w-3/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
-        <h1 className="text-4xl font-bold dark:text-gray-700 font-heading">
+        <h1 className="text-4xl font-bold text-gray-700 dark:text-accent font-heading">
           Keep Reading
         </h1>
         <MoreButton href="/shelves/reading" />
@@ -45,12 +45,12 @@ export const KeepReadingComponent: FunctionComponent<
                       <p
                         className={clsx(
                           clampNumberOfLines(1).className,
-                          'text-lg dark:text-gray-700'
+                          'text-lg dark:text-secondary-content text-gray-700'
                         )}
                       >
                         {log.book.title}
                       </p>
-                      <p className="text-sm dark:text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-accent-content">
                         {log?.book?.architects?.at(0)?.author.name || 'Unknown'}
                       </p>
                     </div>

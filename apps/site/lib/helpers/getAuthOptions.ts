@@ -8,11 +8,13 @@ type RequestWithCookies = IncomingMessage & { cookies: NextApiRequestCookies };
 export const hasRequiredRequestCookies = (req: RequestWithCookies) =>
   !!req.cookies[AUTH_TOKEN_KEY];
 
-export const getRedirectUnauthenticatedRequests = (options: {
-  destination?: string;
-  errorMessage?: string;
-  from?: string;
-}) => {
+export const getRedirectUnauthenticatedRequests = (
+  options: {
+    destination?: string;
+    errorMessage?: string;
+    from?: string;
+  } = {}
+) => {
   const destinationUrl = options?.destination ? options.destination : '/enlist';
   const queryOptions: Record<string, string> = {
     errorMessage: options?.errorMessage

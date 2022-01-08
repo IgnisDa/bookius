@@ -8,6 +8,7 @@ import NextNprogress from 'nextjs-progressbar';
 import { ReactElement, ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'urql';
+import useDarkMode from 'use-dark-mode';
 import { defaultLayout } from '../components/layouts/default';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 import './styles.css';
@@ -26,6 +27,11 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
   globalStyles();
 
+  const darkMode = useDarkMode(false, {
+    classNameDark: 'dark',
+    classNameLight: 'light',
+  });
+
   return (
     <>
       <Head>
@@ -35,6 +41,14 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
       <DefaultSeo />
       <NextNprogress />
       <Provider value={client}>
+        {process.env.NODE_ENV === 'development' && (
+          <button
+            className="absolute px-4 py-2 bg-blue-400 btn rounded-2xl"
+            onClick={darkMode.toggle}
+          >
+            Theme
+          </button>
+        )}
         <ToastContainer position="bottom-center" />
         {getLayout(
           <AnimatePresence exitBeforeEnter>
