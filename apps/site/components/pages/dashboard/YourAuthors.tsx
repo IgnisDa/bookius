@@ -6,8 +6,8 @@ import zip from 'lodash/zip';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { VscNotebook } from 'react-icons/vsc';
-import useDarkMode from 'use-dark-mode';
 import { MoreButton } from '../../miscellaneous/MoreButton';
+import noData from '../../../public/images/no-data-1.svg';
 
 type YourAuthorsComponentProps = {
   authors: GetUserRelatedAuthorsQuery;
@@ -16,8 +16,6 @@ type YourAuthorsComponentProps = {
 export const YourAuthorsComponent: FunctionComponent<
   YourAuthorsComponentProps
 > = ({ authors }) => {
-  const darkMode = useDarkMode();
-
   return (
     <div className="pt-3 bg-white rounded-bl-none shadow-md dark:bg-base-200 rounded-2xl lg:w-2/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
@@ -68,11 +66,7 @@ export const YourAuthorsComponent: FunctionComponent<
       ) : (
         <div className="flex flex-col items-center p-4 space-y-5">
           <NextImage
-            src={
-              darkMode.value
-                ? `/images/no-data-dark.svg`
-                : `/images/no-data.svg`
-            }
+            src={noData}
             height={'280px'}
             width={'500px'}
             className="object-contain"

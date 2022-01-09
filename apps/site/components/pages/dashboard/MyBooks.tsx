@@ -5,8 +5,8 @@ import zip from 'lodash/zip';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
-import useDarkMode from 'use-dark-mode';
 import { MoreButton } from '../../miscellaneous/MoreButton';
+import noData from '../../../public/images/no-data-2.svg';
 
 type MyBooksComponentProps = {
   books: GetUserRelatedBooksQuery;
@@ -15,8 +15,6 @@ type MyBooksComponentProps = {
 export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   books,
 }) => {
-  const darkMode = useDarkMode();
-
   return (
     <>
       <div className="flex items-center justify-between">
@@ -73,11 +71,7 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
       ) : (
         <div className="flex flex-col space-y-1 md:space-y-5">
           <NextImage
-            src={
-              darkMode.value
-                ? `/images/no-data-dark.svg`
-                : `/images/no-data.svg`
-            }
+            src={noData}
             height={'240px'}
             width={'300px'}
             className="object-contain"

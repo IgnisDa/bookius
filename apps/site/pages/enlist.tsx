@@ -66,7 +66,7 @@ export const EnlistPage = () => {
         // the user does not exist, we have to create it first
         const { data } = await executeCreateUserMutation({ issuer });
         if (data?.createUser.__typename === 'UserDto')
-          toast.success('Your account was created successfully!');
+          toast.info('We created a new account for you');
       }
       // the user exists now, login the user
       const { data } = await executeLoginUserMutation({ issuer });

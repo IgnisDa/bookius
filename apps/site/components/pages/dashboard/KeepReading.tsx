@@ -4,9 +4,9 @@ import { Fallback, Image, Root } from '@radix-ui/react-avatar';
 import clsx from 'clsx';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
-import useDarkMode from 'use-dark-mode';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 import { ReadingProgress } from './ReadingProgress';
+import noData from '../../../public/images/no-data-3.svg';
 
 type PopularAuthorsComponentProps = {
   logs: GetUserBooksProgressLogsQuery;
@@ -15,8 +15,6 @@ type PopularAuthorsComponentProps = {
 export const KeepReadingComponent: FunctionComponent<
   PopularAuthorsComponentProps
 > = ({ logs }) => {
-  const darkMode = useDarkMode();
-
   return (
     <div className="py-3 bg-white shadow-md dark:bg-base-200 rounded-2xl lg:w-3/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
@@ -73,18 +71,17 @@ export const KeepReadingComponent: FunctionComponent<
       ) : (
         <div className="flex flex-col items-center p-4 space-y-5">
           <NextImage
-            src={
-              darkMode.value
-                ? `/images/no-data-dark.svg`
-                : `/images/no-data.svg`
-            }
+            src={noData}
             height={'210px'}
             width={'500px'}
             className="object-contain"
           />
-          <p className="leading-none text-center dark:text-gray-400 text-base-100">
-            You have not started logging your progress. Add a book to the
-            `Currently Reading` shelf to add books here.
+          <p className="text-center dark:text-gray-400 text-base-100">
+            You have not started logging your progress. Add a book to the{' '}
+            <span className="text-primary dark:text-warning">
+              Currently Reading
+            </span>{' '}
+            shelf to add books here.
           </p>
         </div>
       )}
