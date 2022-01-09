@@ -1,5 +1,5 @@
-import { GetUserRelatedAuthorsQuery } from '@bookius/generated';
-import { Icon, styled, theme as t } from '@bookius/ui';
+import { GetUserRelatedAuthorsQuery } from 'generated';
+import { Icon, styled, theme as t } from 'ui';
 import { Root, Image, Fallback } from '@radix-ui/react-avatar';
 import * as Separator from '@radix-ui/react-separator';
 import NextImage from 'next/image';

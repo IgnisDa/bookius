@@ -8,7 +8,7 @@ import {
 } from 'urql';
 import { AUTH_TOKEN_KEY } from '../constants';
 import customScalarsExchange from 'urql-custom-scalars-exchange';
-import schema from '@bookius/generated/graphql.schema.json';
+import schema from 'generated/src/lib/graphql.schema.json';
 import { DateTime } from 'luxon';
 
 const scalarsExchange = customScalarsExchange({

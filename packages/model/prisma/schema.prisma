@@ -1,0 +1,133 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
+}
+
+generator dbml {
+  provider            = "prisma-dbml-generator"
+  output              = "./dist"
+  outputName          = "schema.dbml"
+  projectName         = "Bookius Main Schema"
+  projectDatabaseType = "PostgreSQL"
+  projectNote         = "The database schema of the main bookius server"
+}
+
+generator prismaNestjsGraphql {
+  provider              = "prisma-nestjs-graphql"
+  output                = "../../../packages/generated/src/lib/prisma-nestjs-graphql"
+  noAtomicOperations    = true
+  emitSingle            = true
+  purgeOutput           = true
+  fields_Scalars_from   = "graphql-scalars"
+  fields_Scalars_output = true
+}
+
+/// This model will represent a user of the service.
+model User {
+  id              String            @id @default(cuid())
+  // the cryptographic address issued by magic
+  issuer          String            @unique
+  createdAt       DateTime          @default(now())
+  profile         UserProfile?
+  shelves         Shelf[]
+  BookProgressLog BookProgressLog[]
+}
+
+/// This model will track profile information about the user
+model UserProfile {
+  /// @FieldType('Scalars.GraphQLUUID')
+  id        String   @id @default(uuid()) @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  bio       String?
+  age       Int?     @db.SmallInt
+  username  String   @unique @db.Citext
+  /// @FieldType('Scalars.GraphQLEmailAddress')
+  email     String   @unique @db.Citext
+  updatedAt DateTime @updatedAt
+  // the country as represented in the country service file
+  countryId Int?
+}
+
+/// This model will keep track of books that will be made available to the users
+model Book {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  id               BigInt              @id @default(autoincrement())
+  title            String
+  description      String?
+  isbn             String
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  architects       ArchitectsOnBooks[]
+  shelves          Shelf[]
+  bookProgressLogs BookProgressLog[]
+}
+
+/// The role of a person in the complete production of a book
+enum ArchitectRole {
+  AUTHOR
+  ILLUSTRATOR
+}
+
+/// The people who have worked on a book
+model ArchitectsOnBooks {
+  book     Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  author   Author        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  /// @FieldType('Scalars.GraphQLBigInt')
+  bookId   BigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  authorId BigInt
+  role     ArchitectRole
+
+  @@id([bookId, authorId])
+  @@unique([bookId, authorId, role])
+}
+
+/// This model will keep track of authors that will be made available to the users
+model Author {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  id             BigInt              @id @default(autoincrement())
+  name           String
+  bio            String?
+  openLibraryKey String
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  books          ArchitectsOnBooks[]
+}
+
+/// A shelf is created by users to collect a number of books together
+model Shelf {
+  id          String   @id @default(cuid())
+  name        String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  description String?
+  isPublic    Boolean  @default(false) // if true, this will be visible to other users
+  books       Book[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Model to track a user's reading progress with a particular book
+model BookProgressLog {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  id         BigInt   @id @default(autoincrement())
+  book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  /// @FieldType('Scalars.GraphQLBigInt')
+  bookId     BigInt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  /// @PropertyType({ name: 'Prisma.Decimal', from: '@prisma/client', namedImport: true })
+  /// Face value, so if a book is 82% complete, this value will be `82.00`
+  percentage Decimal  @default(0.00) @db.Decimal(5, 2)
+  numPages   Int      @db.SmallInt
+  startedOn  DateTime @default(now())
+  updatedOn  DateTime @updatedAt
+
+  @@unique([bookId, userId])
+}

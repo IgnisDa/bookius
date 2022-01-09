@@ -3,7 +3,7 @@ import {
   CheckUserByIssuerQueryVariables,
   useCreateUserMutation,
   useLoginUserMutation,
-} from '@bookius/generated';
+} from 'generated';
 import * as Separator from '@radix-ui/react-separator';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';

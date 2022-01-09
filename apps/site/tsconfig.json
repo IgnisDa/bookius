@@ -1,29 +1,10 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../packages/tsconfig/nextjs.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "types": [
-      "node",
-      "jest"
-    ],
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
     "noEmit": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "incremental": true
+    "paths": {}
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "next-env.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", ".next", ".turbo", "coverage"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

@@ -1,0 +1,11 @@
+{
+  "name": "generated",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@nestjs/graphql": "9.1.2",
+    "@prisma/client": "^3.7.0",
+    "graphql-scalars": "1.14.1",
+    "prisma-graphql-type-decimal": "1.0.0"
+  }
+}

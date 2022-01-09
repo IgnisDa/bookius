@@ -1,4 +1,4 @@
-import { useGetAllBooksQuery } from '@bookius/generated';
+import { useGetAllBooksQuery } from 'generated';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { GET_ALL_BOOKS } from '../graphql/queries';
 import { client, ssrCache } from '../lib/helpers/urqlClient';

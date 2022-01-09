@@ -1,4 +1,4 @@
-import { PrismaService } from '@bookius/model';
+import { PrismaService } from 'model';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { sampleSize } from 'lodash';

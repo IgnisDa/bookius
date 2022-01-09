@@ -1,5 +1,5 @@
-import { GetUserBooksProgressLogsQuery } from '@bookius/generated';
-import { clampNumberOfLines } from '@bookius/ui';
+import { GetUserBooksProgressLogsQuery } from 'generated';
+import { clampNumberOfLines } from 'ui';
 import { Fallback, Image, Root } from '@radix-ui/react-avatar';
 import clsx from 'clsx';
 import NextImage from 'next/image';

@@ -1,4 +1,4 @@
-import { User as GeneratedUser } from '@bookius/generated/prisma-nestjs-graphql';
+import { User as GeneratedUser } from 'generated/src/lib/prisma-nestjs-graphql';
 import { ObjectType, PickType } from '@nestjs/graphql';
 
 @ObjectType({

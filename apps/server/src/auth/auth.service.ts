@@ -1,4 +1,4 @@
-import { PrismaService } from '@bookius/model';
+import { PrismaService } from 'model';
 import { Magic } from '@magic-sdk/admin';
 import { Injectable } from '@nestjs/common';
 import { names, uniqueNamesGenerator } from 'unique-names-generator';

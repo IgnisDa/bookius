@@ -1,4 +1,4 @@
-import { globalStyles } from '@bookius/ui';
+import { globalStyles } from 'ui';
 import { AnimatePresence, motion } from 'framer-motion';
 import { NextPage } from 'next';
 import { DefaultSeo } from 'next-seo';

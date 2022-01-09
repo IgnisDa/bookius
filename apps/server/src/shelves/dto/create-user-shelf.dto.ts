@@ -1,4 +1,4 @@
-import { ShelfCreateInput as GeneratedShelfCreateInput } from '@bookius/generated/prisma-nestjs-graphql';
+import { ShelfCreateInput as GeneratedShelfCreateInput } from 'generated/src/lib/prisma-nestjs-graphql';
 import { InputType, PickType } from '@nestjs/graphql';
 
 @InputType()

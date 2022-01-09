@@ -1,4 +1,4 @@
-import { FindManyBookProgressLogArgs } from '@bookius/generated/prisma-nestjs-graphql';
+import { FindManyBookProgressLogArgs } from 'generated/src/lib/prisma-nestjs-graphql';
 import { ArgsType, PickType } from '@nestjs/graphql';
 
 @ArgsType()

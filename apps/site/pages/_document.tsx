@@ -1,4 +1,4 @@
-import { getCssText } from '@bookius/ui';
+import { getCssText } from 'ui';
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 

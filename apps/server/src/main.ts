@@ -1,4 +1,4 @@
-import { BenchmarkInterceptor, logger } from '@bookius/general';
+import { BenchmarkInterceptor, logger } from 'general';
 import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
 import { AppModule } from './app.module';

@@ -1,4 +1,4 @@
-import { Icon } from '@bookius/ui';
+import { Icon } from 'ui';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import NextLink from 'next/link';
 import { FunctionComponent } from 'react';

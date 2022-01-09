@@ -2,7 +2,7 @@ import {
   useGetUserBooksProgressLogsQuery,
   useGetUserRelatedAuthorsQuery,
   useGetUserRelatedBooksQuery,
-} from '@bookius/generated';
+} from 'generated';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';

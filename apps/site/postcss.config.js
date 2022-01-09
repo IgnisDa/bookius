@@ -1,6 +1,6 @@
 const { resolve } = require('path');
 
-const tailwindConfigPath = resolve(__dirname, '..', '..', 'tailwind.config.js');
+const tailwindConfigPath = resolve(__dirname, 'tailwind.config.js');
 
 module.exports = {
   plugins: {

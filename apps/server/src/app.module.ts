@@ -1,4 +1,4 @@
-import { PrismaModule } from '@bookius/model';
+import { PrismaModule } from 'model';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';

@@ -1,4 +1,4 @@
-import { APIError } from '@bookius/general';
+import { APIError } from 'general';
 import { createUnionType, Field, ObjectType } from '@nestjs/graphql';
 import { UserDto } from './user.dto';
 

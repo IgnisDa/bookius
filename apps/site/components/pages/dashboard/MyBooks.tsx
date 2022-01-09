@@ -1,5 +1,5 @@
-import { GetUserRelatedBooksQuery } from '@bookius/generated';
-import { clampNumberOfLines, Icon } from '@bookius/ui';
+import { GetUserRelatedBooksQuery } from 'generated';
+import { clampNumberOfLines, Icon } from 'ui';
 import clsx from 'clsx';
 import { zip } from 'lodash';
 import NextImage from 'next/image';

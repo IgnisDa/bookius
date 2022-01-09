@@ -1,5 +1,5 @@
-import { Icon } from '@bookius/ui';
-import { AUTH_TOKEN_KEY } from 'apps/site/lib/constants';
+import { Icon } from 'ui';
+import { AUTH_TOKEN_KEY } from '../../../../lib/constants';
 import clsx from 'clsx';
 import Cookies from 'js-cookie';
 import NextImage from 'next/image';

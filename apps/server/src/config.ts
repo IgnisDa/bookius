@@ -1,4 +1,4 @@
-import { RootConfig } from '@bookius/config';
+import { RootConfig } from 'general';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 /**

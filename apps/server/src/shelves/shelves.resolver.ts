@@ -1,4 +1,4 @@
-import { Shelf } from '@bookius/generated/prisma-nestjs-graphql';
+import { Shelf } from 'generated/src/lib/prisma-nestjs-graphql';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Query } from '@nestjs/graphql';

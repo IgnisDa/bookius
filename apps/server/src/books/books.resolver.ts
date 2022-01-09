@@ -2,7 +2,7 @@ import {
   Author,
   Book,
   BookProgressLog,
-} from '@bookius/generated/prisma-nestjs-graphql';
+} from 'generated/src/lib/prisma-nestjs-graphql';
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
