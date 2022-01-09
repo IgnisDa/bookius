@@ -1,10 +1,11 @@
 import { GetUserRelatedBooksQuery } from '@bookius/generated';
 import { clampNumberOfLines, Icon } from '@bookius/ui';
 import clsx from 'clsx';
-import { zip } from 'lodash';
+import zip from 'lodash/zip';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
+import useDarkMode from 'use-dark-mode';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 
 type MyBooksComponentProps = {
@@ -14,6 +15,8 @@ type MyBooksComponentProps = {
 export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   books,
 }) => {
+  const darkMode = useDarkMode();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -70,12 +73,16 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
       ) : (
         <div className="flex flex-col space-y-1 md:space-y-5">
           <NextImage
-            src={`/images/no-data.svg`}
+            src={
+              darkMode.value
+                ? `/images/no-data-dark.svg`
+                : `/images/no-data.svg`
+            }
             height={'240px'}
             width={'300px'}
             className="object-contain"
           />
-          <p className="text-center dark:text-gray-700">
+          <p className="text-center dark:text-gray-400 text-base-100">
             You have not started reading any books yet.
           </p>
         </div>

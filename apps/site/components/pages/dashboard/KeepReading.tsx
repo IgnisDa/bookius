@@ -4,6 +4,7 @@ import { Fallback, Image, Root } from '@radix-ui/react-avatar';
 import clsx from 'clsx';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
+import useDarkMode from 'use-dark-mode';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 import { ReadingProgress } from './ReadingProgress';
 
@@ -14,6 +15,8 @@ type PopularAuthorsComponentProps = {
 export const KeepReadingComponent: FunctionComponent<
   PopularAuthorsComponentProps
 > = ({ logs }) => {
+  const darkMode = useDarkMode();
+
   return (
     <div className="py-3 bg-white shadow-md dark:bg-base-200 rounded-2xl lg:w-3/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
@@ -55,7 +58,7 @@ export const KeepReadingComponent: FunctionComponent<
                       </p>
                     </div>
                     <div className="ml-auto">
-                      <p className="text-sm dark:text-gray-500">
+                      <p className="text-sm font-semibold font-heading dark:text-gray-400 text-base-100">
                         {Math.round((log.percentage * log.numPages) / 100)}/
                         {log.numPages}
                       </p>
@@ -70,12 +73,16 @@ export const KeepReadingComponent: FunctionComponent<
       ) : (
         <div className="flex flex-col items-center p-4 space-y-5">
           <NextImage
-            src={`/images/no-data.svg`}
+            src={
+              darkMode.value
+                ? `/images/no-data-dark.svg`
+                : `/images/no-data.svg`
+            }
             height={'210px'}
             width={'500px'}
             className="object-contain"
           />
-          <p className="leading-none text-center dark:text-gray-600">
+          <p className="leading-none text-center dark:text-gray-400 text-base-100">
             You have not started logging your progress. Add a book to the
             `Currently Reading` shelf to add books here.
           </p>
