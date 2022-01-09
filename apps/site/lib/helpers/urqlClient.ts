@@ -21,7 +21,7 @@ const scalarsExchange = customScalarsExchange({
   },
 });
 
-const isServerSide = typeof window === 'undefined';
+export const isServerSide = typeof window === 'undefined';
 
 export const ssrCache = ssrExchange({ isClient: !isServerSide });
 

@@ -4,9 +4,10 @@ import {
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { ChangeEvent, useState } from 'react';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
-import { SearchComponent } from '../components/pages/dashboard/Search';
+import { SearchInputComponent } from '../components/pages/dashboard/SearchInput';
 import { YourAuthorsComponent } from '../components/pages/dashboard/YourAuthors';
 import {
   GET_USER_BOOKS_PROGRESS_LOGS,
@@ -28,21 +29,30 @@ const Dashboard = (
   const [{ data: useGetUserBooksProgressLogsData }] =
     useGetUserBooksProgressLogsQuery({ variables: { take: 5 } });
 
+  const [search, setSearch] = useState('');
+
+  const updateSearch = (e: ChangeEvent<HTMLInputElement>) =>
+    setSearch(e?.target?.value);
+
   return (
-    <>
-      <div className="flex flex-col lg:flex-col w-full space-y-8 xl:w-[90%] 2xl:w-[75%] 3xl:w-[70%]">
-        <div>
-          <SearchComponent />
-        </div>
-        <div>
-          <MyBooksComponent books={userRelatedBooksData!} />
-        </div>
-        <div className="flex flex-col space-y-8 lg:space-x-5 lg:flex-row lg: lg:space-y-0">
-          <YourAuthorsComponent authors={userRelatedAuthorsData!} />
-          <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
-        </div>
+    <div className="flex flex-col flex-none w-full max-w-5xl space-y-8 lg:flex-col">
+      <div>
+        <SearchInputComponent search={search} updateSearch={updateSearch} />
       </div>
-    </>
+      <div>
+        <MyBooksComponent books={userRelatedBooksData!} />
+      </div>
+      <div className="flex flex-col space-y-8 lg:space-x-5 lg:flex-row lg: lg:space-y-0">
+        <YourAuthorsComponent authors={userRelatedAuthorsData!} />
+        <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
+      </div>
+    </div>
+    // <>
+    //   {/* we only render this component on the client side */}
+    //   {/* <div className="flex-col justify-center flex-1 hidden 2xl:flex">
+    //     <SearchResultComponent search={search} />
+    //   </div> */}
+    // </>
   );
 };
 

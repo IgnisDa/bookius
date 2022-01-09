@@ -58,7 +58,7 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               key={router.pathname}
-              className="debug-screens"
+              className="flex items-center justify-center debug-screens"
             >
               <Component {...pageProps} />
             </motion.div>
