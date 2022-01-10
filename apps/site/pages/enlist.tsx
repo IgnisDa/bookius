@@ -132,7 +132,7 @@ export const EnlistPage = () => {
             animate={isLoading ? 'loading' : 'initial'}
           >
             <motion.input
-              className="w-full input-bordered input input-ghost"
+              className="w-full text-gray-800 input-bordered input input-ghost dark:text-primary-content"
               id="email"
               value={email}
               onChange={handleChange}
