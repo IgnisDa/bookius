@@ -102,10 +102,12 @@
       "@nestjs/passport",
       "@nestjs/platform-express",
       "@nestjs/schedule",
+      "@nrwl/tao",
       "@prisma/client",
       "apollo-server-core",
       "apollo-server-errors",
       "apollo-server-express",
+      "axios",
       "bull",
       "class-transformer",
       "class-validator",
@@ -128,8 +130,8 @@
       "rxjs",
       "tslib",
       "tslog",
-      "unique-names-generator",
-      "@nrwl/tao"
+      "ufo",
+      "unique-names-generator"
     ]
   }
 }
