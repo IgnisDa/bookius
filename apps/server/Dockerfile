@@ -5,7 +5,7 @@ COPY package.json pnpm-lock.yaml workspace.json ./
 COPY apps/server/project.json ./apps/server/project.json
 RUN yarn global add pnpm && \
     curl https://raw.githubusercontent.com/IgnisDa/developrs/main/packages/esteem/install.sh | sh -s -- --yes && \
-    esteem install-isolated server && \
+    esteem --version && esteem install-isolated server && \
     pnpm install
 
 # Rebuild the source code only when needed
@@ -13,32 +13,28 @@ FROM node:alpine AS builder
 ARG REDIS_URL
 ARG DATABASE_URL
 ARG MAGIC_SECRET_KEY
+ARG GOOGLE_BOOKS_API_URL
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/package.json ./
-COPY --from=deps /app/pnpm-lock.yaml ./
-RUN echo "REDIS_URL=${REDIS_URL}" >> .env && \
+COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
+RUN echo "PORT=80" >> .env && \
+    echo "REDIS_URL=${REDIS_URL}" >> .env && \
     echo "DATABASE_URL=${DATABASE_URL}"  >> .env && \
+    echo "GOOGLE_BOOKS_API_URL=${GOOGLE_BOOKS_API_URL}"  >> .env && \
     echo "MAGIC_SECRET_KEY=${MAGIC_SECRET_KEY}" >> .env
-
 RUN yarn global add nx pnpm && \
-    nx run model:generate && \
-    pnpm nx build server --prod && \
+    pnpx nx run model:generate && \
+    pnpx nx build server --prod && \
     pnpm install --production --ignore-scripts --prefer-offline
 
 # Production image, copy all the files and run next
 FROM node:alpine AS runner
 WORKDIR /app
-ENV NODE_ENV=production \
-    PORT=8000
-# RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001
-
-COPY --from=builder /app/.env ./
-COPY --from=builder /app/dist/apps/server/main.js ./
+ENV NODE_ENV=production
+COPY --from=builder /app/dist/apps/server/main.js /app/.env ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY apps/server/deploy.sh libs/model/prisma ./
-# USER nestjs
-EXPOSE ${PORT}
+COPY apps/server/deployment/deploy.sh apps/server/deployment/CHECKS libs/model/prisma ./
+EXPOSE 80
 
 CMD ["/app/deploy.sh"]

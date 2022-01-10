@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalInterceptors(new BenchmarkInterceptor());
-  const PORT = Number(process.env.PORT) || 8000;
+  const PORT = Number(process.env.PORT);
   app.use(helmet());
   await app.listen(PORT, () => logger.silly(`Listening on port ${PORT}`));
 }

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CoreResolver } from './core.resolver';
 import { CoreService } from './core.service';
+import { CoreController } from './core.controller';
 
 @Module({
-  providers: [CoreResolver, CoreService],
+  providers: [CoreService],
+  controllers: [CoreController],
 })
 export class CoreModule {}
