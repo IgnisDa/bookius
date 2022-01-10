@@ -5,7 +5,7 @@ COPY package.json pnpm-lock.yaml workspace.json ./
 COPY apps/site/project.json ./apps/site/project.json
 RUN yarn global add pnpm && \
     curl https://raw.githubusercontent.com/IgnisDa/developrs/main/packages/esteem/install.sh | sh -s -- --yes && \
-    esteem install-isolated site && \
+    esteem --version && esteem install-isolated site && \
     pnpm install
 
 # Rebuild the source code only when needed
@@ -17,13 +17,12 @@ ENV NODE_OPTIONS="--max-old-space-size=1024"
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/package.json ./
-COPY --from=deps /app/pnpm-lock.yaml ./
+COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
 RUN echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}" >> .env && \
     echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}" >> .env && \
     echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" >> .env
 RUN yarn global add nx pnpm && \
-    pnpm nx build site --prod && \
+    pnpx nx build site --prod && \
     pnpm install --production --ignore-scripts --prefer-offline
 
 # Production image, copy all the files and run next
@@ -31,17 +30,13 @@ FROM node:alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production \
-    PORT=3000 \
     NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/.env ./
-COPY --from=builder /app/dist/apps/site/next.config.js ./
+COPY --from=builder /app/.env /app/dist/apps/site/next.config.js /app/apps/site/deployment/deploy.sh /app/dist/apps/site/package.json /app/apps/site/deployment/CHECKS ./
 COPY --from=builder /app/dist/apps/site/public ./public
 COPY --from=builder /app/dist/apps/site/.next ./.next
-COPY --from=builder /app/apps/site/deploy.sh ./
-COPY --from=builder /app/dist/apps/site/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
-EXPOSE ${PORT}
+EXPOSE 80
 
 CMD ["/app/deploy.sh"]

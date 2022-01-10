@@ -19,4 +19,4 @@ if [ -z "${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" ]; then
     exit 1
 fi
 
-/app/node_modules/.bin/next start
+/app/node_modules/.bin/next start --port 80
