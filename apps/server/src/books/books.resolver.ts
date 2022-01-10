@@ -9,8 +9,10 @@ import { User } from '@prisma/client';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { BooksService } from './books.service';
+import { BooksSearchInput } from './dto/books-search.input';
 import { FilterBooksArgs } from './dto/filter-books.dto';
 import { UserBookProgressLogsInput } from './dto/user-book-progress-logs.dto';
+import { GoogleBooksVolumeDto } from './dto/google-books.dto';
 
 @Resolver()
 export class BooksResolver {
@@ -50,5 +52,12 @@ export class BooksResolver {
     @CurrentUser() currentUser: User
   ) {
     return await this.booksService.userBookProgressLogs(currentUser, take);
+  }
+
+  @Query(() => [GoogleBooksVolumeDto], {
+    description: 'Get a list of books related to a search query.',
+  })
+  async booksSearch(@Args('input') input: BooksSearchInput) {
+    return await this.booksService.booksSearch(input);
   }
 }

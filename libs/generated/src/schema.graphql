@@ -361,6 +361,15 @@ input BookWhereUniqueInput {
   id: String
 }
 
+"""The input type used to search for books"""
+input BooksSearchInput {
+  """Full-text query string"""
+  query: String!
+
+  """The position in the collection at which to start the list of results"""
+  startIndex: Int = 0
+}
+
 input BoolFilter {
   equals: Boolean
   not: NestedBoolFilter
@@ -421,6 +430,62 @@ input EnumArchitectRoleFilter {
   in: [ArchitectRole!]
   not: NestedEnumArchitectRoleFilter
   notIn: [ArchitectRole!]
+}
+
+"""Global identifiers of this book, like ISBN numbers"""
+type GoogleBooksIndustryIdentifiersDto {
+  """Value of the identifier"""
+  identifier: String!
+
+  """Type of identifier (ISBN 10 or 13)"""
+  type: String!
+}
+
+"""A volume from the google books API"""
+type GoogleBooksVolumeDto {
+  """The google books unique ID"""
+  id: String!
+
+  """Information about this particular book"""
+  volumeInfo: GoogleBooksVolumeInfoDto!
+}
+
+"""Images related to a specific volume"""
+type GoogleBooksVolumeImageLinksDto {
+  """A small thumbnail image"""
+  smallThumbnail: String!
+
+  """A large thumbnail image"""
+  thumbnail: String!
+}
+
+"""Description about a specific volume"""
+type GoogleBooksVolumeInfoDto {
+  """A list of people who have worked on this book"""
+  authors: [String!]!
+
+  """A small description of the book"""
+  description: String
+
+  """Links to images of the book"""
+  imageLinks: GoogleBooksVolumeImageLinksDto
+
+  """Global identifiers of this book, like ISBN numbers"""
+  industryIdentifiers: [GoogleBooksIndustryIdentifiersDto!]!
+
+  """
+  A two-letter ISO-639-1 code, such as "en" or "fr"
+  """
+  language: String!
+
+  """Number of pages in the book"""
+  pageCount: Int!
+
+  """The publisher of this particular edition"""
+  publisher: String
+
+  """The name of the book"""
+  title: String!
 }
 
 input IntFilter {
@@ -570,6 +635,9 @@ input NestedStringNullableFilter {
 }
 
 type Query {
+  """Get a list of books related to a search query."""
+  booksSearch(input: BooksSearchInput!): [GoogleBooksVolumeDto!]!
+
   """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
 

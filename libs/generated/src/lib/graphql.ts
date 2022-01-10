@@ -405,6 +405,14 @@ export type BookWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** The input type used to search for books */
+export type BooksSearchInput = {
+  /** Full-text query string */
+  query: Scalars['String'];
+  /** The position in the collection at which to start the list of results */
+  startIndex?: InputMaybe<Scalars['Int']>;
+};
+
 export type BoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']>;
   not?: InputMaybe<NestedBoolFilter>;
@@ -453,6 +461,54 @@ export type EnumArchitectRoleFilter = {
   in?: InputMaybe<Array<ArchitectRole>>;
   not?: InputMaybe<NestedEnumArchitectRoleFilter>;
   notIn?: InputMaybe<Array<ArchitectRole>>;
+};
+
+/** Global identifiers of this book, like ISBN numbers */
+export type GoogleBooksIndustryIdentifiersDto = {
+  __typename: 'GoogleBooksIndustryIdentifiersDto';
+  /** Value of the identifier */
+  identifier: Scalars['String'];
+  /** Type of identifier (ISBN 10 or 13) */
+  type: Scalars['String'];
+};
+
+/** A volume from the google books API */
+export type GoogleBooksVolumeDto = {
+  __typename: 'GoogleBooksVolumeDto';
+  /** The google books unique ID */
+  id: Scalars['String'];
+  /** Information about this particular book */
+  volumeInfo: GoogleBooksVolumeInfoDto;
+};
+
+/** Images related to a specific volume */
+export type GoogleBooksVolumeImageLinksDto = {
+  __typename: 'GoogleBooksVolumeImageLinksDto';
+  /** A small thumbnail image */
+  smallThumbnail: Scalars['String'];
+  /** A large thumbnail image */
+  thumbnail: Scalars['String'];
+};
+
+/** Description about a specific volume */
+export type GoogleBooksVolumeInfoDto = {
+  __typename: 'GoogleBooksVolumeInfoDto';
+  /** A list of people who have worked on this book */
+  authors: Array<Scalars['String']>;
+  /** A small description of the book */
+  description?: Maybe<Scalars['String']>;
+  /** Links to images of the book */
+  imageLinks: GoogleBooksVolumeImageLinksDto;
+  /** Global identifiers of this book, like ISBN numbers */
+  industryIdentifiers: Array<GoogleBooksIndustryIdentifiersDto>;
+  /** A two-letter ISO-639-1 code, such as "en" or "fr" */
+  language: Scalars['String'];
+  /** Number of pages in the book */
+  pageCount: Scalars['Int'];
+  /** The publisher of this particular edition */
+  publisher?: Maybe<Scalars['String']>;
+  /** The name of the book */
+  title: Scalars['String'];
 };
 
 export type IntFilter = {
@@ -615,6 +671,8 @@ export type NestedStringNullableFilter = {
 
 export type Query = {
   __typename: 'Query';
+  /** Get a list of books related to a search query. */
+  booksSearch: Array<GoogleBooksVolumeDto>;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
   /** Get a filtered list of all books in the service. */
@@ -629,6 +687,10 @@ export type Query = {
   userRelatedAuthors: Array<Author>;
   /** Get a small list of books that are related to the user. */
   userRelatedBooks: Array<Book>;
+};
+
+export type QueryBooksSearchArgs = {
+  input: BooksSearchInput;
 };
 
 export type QueryCheckUserByIssuerArgs = {
@@ -1074,7 +1136,7 @@ export type GetUserRelatedAuthorsQuery = {
 };
 
 export type GetUserBooksProgressLogsQueryVariables = Exact<{
-  take?: Maybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type GetUserBooksProgressLogsQuery = {
@@ -1097,6 +1159,33 @@ export type GetUserBooksProgressLogsQuery = {
           }>
         | null
         | undefined;
+    };
+  }>;
+};
+
+export type GetBooksForSearchPageQueryVariables = Exact<{
+  input: BooksSearchInput;
+}>;
+
+export type GetBooksForSearchPageQuery = {
+  __typename: 'Query';
+  booksSearch: Array<{
+    __typename: 'GoogleBooksVolumeDto';
+    id: string;
+    volumeInfo: {
+      __typename: 'GoogleBooksVolumeInfoDto';
+      language: string;
+      authors: Array<string>;
+      title: string;
+      industryIdentifiers: Array<{
+        __typename: 'GoogleBooksIndustryIdentifiersDto';
+        type: string;
+        identifier: string;
+      }>;
+      imageLinks: {
+        __typename: 'GoogleBooksVolumeImageLinksDto';
+        thumbnail: string;
+      };
     };
   }>;
 };
@@ -1304,6 +1393,37 @@ export function useGetUserBooksProgressLogsQuery(
 ) {
   return Urql.useQuery<GetUserBooksProgressLogsQuery>({
     query: GetUserBooksProgressLogsDocument,
+    ...options,
+  });
+}
+export const GetBooksForSearchPageDocument = gql`
+  query getBooksForSearchPage($input: BooksSearchInput!) {
+    booksSearch(input: $input) {
+      id
+      volumeInfo {
+        language
+        authors
+        title
+        industryIdentifiers {
+          type
+          identifier
+        }
+        imageLinks {
+          thumbnail
+        }
+      }
+    }
+  }
+`;
+
+export function useGetBooksForSearchPageQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetBooksForSearchPageQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetBooksForSearchPageQuery>({
+    query: GetBooksForSearchPageDocument,
     ...options,
   });
 }
