@@ -13,7 +13,7 @@ export const SearchPageInputComponent: FC<
   const [toggled, setToggled] = useState(false);
 
   return (
-    <form className="form-control">
+    <div className="form-control">
       <label htmlFor="isbn" className="label">
         <span className="label-text text-base-100 dark:text-primary-content">
           {toggled
@@ -60,6 +60,6 @@ export const SearchPageInputComponent: FC<
         <div>(click to change)</div>
         <div>(very obvious)</div>
       </div>
-    </form>
+    </div>
   );
 };
