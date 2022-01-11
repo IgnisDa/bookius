@@ -459,7 +459,7 @@ type GoogleBooksVolumeImageLinksDto {
 """Description about a specific volume"""
 type GoogleBooksVolumeInfoDto {
   """A list of people who have worked on this book"""
-  authors: [String!]!
+  authors: [String!]
 
   """A small description of the book"""
   description: String

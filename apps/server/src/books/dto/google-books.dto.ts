@@ -30,7 +30,7 @@ class GoogleBooksVolumeInfoDto {
   /**
    * A list of people who have worked on this book
    */
-  authors: string[];
+  authors?: string[];
 
   /**
    * The publisher of this particular edition

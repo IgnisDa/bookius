@@ -31,9 +31,11 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
               })}
             </span>{' '}
             <span className="text-base-100 dark:text-primary-content">by</span>{' '}
-            <span className="text-lg text-secondary dark:text-warning">
-              {book.volumeInfo.authors.at(0)}
-            </span>
+            {book.volumeInfo.authors && (
+              <span className="text-lg text-secondary dark:text-warning">
+                {book.volumeInfo.authors.at(0)}
+              </span>
+            )}
           </p>
         </div>
         <div>

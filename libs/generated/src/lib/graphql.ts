@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
-import * as Urql from 'urql';
 import { gql } from 'urql';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -492,7 +492,7 @@ export type GoogleBooksVolumeImageLinksDto = {
 export type GoogleBooksVolumeInfoDto = {
   __typename: 'GoogleBooksVolumeInfoDto';
   /** A list of people who have worked on this book */
-  authors: Array<Scalars['String']>;
+  authors?: Maybe<Array<Scalars['String']>>;
   /** A small description of the book */
   description?: Maybe<Scalars['String']>;
   /** Links to images of the book */
@@ -1167,7 +1167,7 @@ export type GetBooksForSearchPageQuery = {
     volumeInfo: {
       __typename: 'GoogleBooksVolumeInfoDto';
       language: string;
-      authors: Array<string>;
+      authors?: Array<string> | null | undefined;
       title: string;
       industryIdentifiers: Array<{
         __typename: 'GoogleBooksIndustryIdentifiersDto';
