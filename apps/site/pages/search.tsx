@@ -3,13 +3,6 @@ import {
   GetBooksForSearchPageQueryVariables,
   useGetBooksForSearchPageQuery,
 } from '@bookius/generated';
-import {
-  Root as ScrollAreaRoot,
-  ScrollAreaCorner,
-  ScrollAreaScrollbar,
-  ScrollAreaThumb,
-  ScrollAreaViewport,
-} from '@radix-ui/react-scroll-area';
 import clsx from 'clsx';
 import truncate from 'lodash/truncate';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -55,25 +48,35 @@ const Search = (
           </span>
         </h1>
       </div>
-      {getBooksForSearchPageQueryData?.booksSearch?.length! > 0 ? (
-        <ScrollAreaRoot className="flex w-full mx-5 md:w-11/12 lg:w-9/12 xl:w-10/12 2xl:w-9/12 3xl:w-4/5 md:justify-center md:items-center">
-          <ScrollAreaViewport className="w-full h-[600px] md:h-[500px] mr-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10">
-              {getBooksForSearchPageQueryData?.booksSearch.map(
-                (book, index) => (
-                  <BookItemComponent book={book} key={index} />
-                )
-              )}
-            </div>
-          </ScrollAreaViewport>
-          <ScrollAreaScrollbar
-            orientation="vertical"
-            className="flex w-2 transition-colors bg-gray-200 rounded-lg hover:bg-gray-400 "
-          >
-            <ScrollAreaThumb className="flex-1 bg-purple-500 rounded-lg" />
-          </ScrollAreaScrollbar>
-          <ScrollAreaCorner />
-        </ScrollAreaRoot>
+      {getBooksForSearchPageQueryData?.booksSearch &&
+      getBooksForSearchPageQueryData?.booksSearch?.length > 0 ? (
+        // FIXME: This causes some error only in production mode wherein the page does not render
+        // <ScrollArea.Root
+        //   type="auto"
+        //   className="flex w-full mx-5 md:w-11/12 lg:w-9/12 xl:w-10/12 2xl:w-9/12 3xl:w-4/5 md:justify-center md:items-center"
+        // >
+        //   <ScrollArea.Viewport className="w-full h-[600px] md:h-[500px] mr-4">
+        //     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10">
+        //       {getBooksForSearchPageQueryData?.booksSearch.map(
+        //         (book, index) => (
+        //           <BookItemComponent book={book} key={index} />
+        //         )
+        //       )}
+        //     </div>
+        //   </ScrollArea.Viewport>
+        //   <ScrollArea.Scrollbar
+        //     orientation="vertical"
+        //     className="flex w-2 transition-colors bg-gray-200 rounded-lg hover:bg-gray-400 "
+        //   >
+        //     <ScrollArea.Thumb className="flex-1 bg-purple-500 rounded-lg" />
+        //   </ScrollArea.Scrollbar>
+        //   <ScrollArea.Corner />
+        // </ScrollArea.Root>
+        <div className="grid w-full grid-cols-1 mx-5 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10 md:w-11/12 lg:w-9/12 xl:w-10/12 2xl:w-9/12 3xl:w-4/5 md:justify-center md:items-center">
+          {getBooksForSearchPageQueryData?.booksSearch.map((book, index) => (
+            <BookItemComponent book={book} key={index} />
+          ))}
+        </div>
       ) : (
         <div className="p-3 border border-gray-400 rounded-lg dark:border-base-200">
           <div>
@@ -143,12 +146,7 @@ export const getServerSideProps = async ({
   await client
     .query<GetBooksForSearchPageQuery, GetBooksForSearchPageQueryVariables>(
       GET_BOOKS_FOR_SEARCH_PAGE,
-      {
-        input: {
-          query: decodedQuery,
-          startIndex: startIndex,
-        },
-      }
+      { input: { query: decodedQuery, startIndex: startIndex } }
     )
     .toPromise();
 
