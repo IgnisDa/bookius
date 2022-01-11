@@ -1,22 +1,20 @@
 import { useGetAllBooksQuery } from '@bookius/generated';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { GET_ALL_BOOKS } from '../graphql/queries';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 
-const Index = (
+const IndexPage = (
   _props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const [{ data }] = useGetAllBooksQuery();
   return (
-    <div>
-      {data?.filterBooks.map((book, index) => (
-        <p key={index}>{JSON.stringify(book, null, 4)}</p>
-      ))}
+    <div className="text-black dark:text-white">
+      <div>{JSON.stringify(data, null, 4)}</div>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (_ctx) => {
+export const getServerSideProps = async (_ctx: GetServerSidePropsContext) => {
   // This query is used to populate the cache for the query used on this page.
   await client.query(GET_ALL_BOOKS).toPromise();
   return {
@@ -27,4 +25,4 @@ export const getServerSideProps: GetServerSideProps = async (_ctx) => {
   };
 };
 
-export default Index;
+export default IndexPage;

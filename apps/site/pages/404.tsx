@@ -4,7 +4,7 @@ import {
 } from '../components/pages/ErrorContainer';
 import Image404 from '../public/images/404-image.png';
 
-const ServerErrorPage = () => {
+const NotFoundErrorPage = () => {
   return (
     <ErrorComponentPage
       errorCode={404}
@@ -15,6 +15,6 @@ const ServerErrorPage = () => {
   );
 };
 
-ServerErrorPage.getLayout = getErrorLayout;
+NotFoundErrorPage.getLayout = getErrorLayout;
 
-export default ServerErrorPage;
+export default NotFoundErrorPage;

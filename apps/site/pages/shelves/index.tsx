@@ -1,5 +1,5 @@
 import { useGetUserShelvesShortQuery } from '@bookius/generated';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { GET_USER_SHELVES_SHORT } from '../../graphql/queries';
 import {
   getFetchOptions,
@@ -25,7 +25,9 @@ const ShelvesIndex = (
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({
+  req,
+}: GetServerSidePropsContext) => {
   if (!hasRequiredRequestCookies(req))
     return getRedirectUnauthenticatedRequests();
 

@@ -3,7 +3,7 @@ import {
   useGetUserRelatedAuthorsQuery,
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { ChangeEvent, useState } from 'react';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
@@ -56,10 +56,10 @@ const Dashboard = (
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
+export const getServerSideProps = async ({
   req,
   resolvedUrl,
-}) => {
+}: GetServerSidePropsContext) => {
   if (!hasRequiredRequestCookies(req))
     return getRedirectUnauthenticatedRequests({ from: resolvedUrl });
   await client
