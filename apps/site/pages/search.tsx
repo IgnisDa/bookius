@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { withQuery } from 'ufo';
 import { BookItemComponent } from '../components/pages/search/BookItem';
+import { JumpToBookComponent } from '../components/pages/search/JumpToBook';
 import { GET_BOOKS_FOR_SEARCH_PAGE } from '../graphql/queries';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 import voidImage from '../public/images/void.svg';
@@ -33,9 +34,12 @@ const Search = (
     });
 
   return (
-    <div className="flex flex-col items-center h-full space-y-10 md:py-10 lg:pt-32">
+    <div className="flex flex-col items-center h-full space-y-20 md:py-10 lg:pt-20">
+      <div className="w-full max-w-lg">
+        <JumpToBookComponent />
+      </div>
       <div>
-        <h1 className="text-3xl md:text-4xl">
+        <h1 className="text-3xl text-center md:text-4xl">
           <span className="text-base-100 dark:text-gray-300">
             Searching for
           </span>{' '}
