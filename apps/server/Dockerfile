@@ -34,7 +34,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/dist/apps/server/main.js /app/.env ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY apps/server/deployment/deploy.sh apps/server/deployment/CHECKS libs/model/prisma ./
+COPY apps/server/ci/start.sh apps/server/ci/CHECKS libs/model/prisma ./
 EXPOSE 80
 
-CMD ["/app/deploy.sh"]
+CMD ["/app/start.sh"]

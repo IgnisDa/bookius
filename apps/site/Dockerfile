@@ -32,11 +32,11 @@ WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/.env /app/dist/apps/site/next.config.js /app/apps/site/deployment/deploy.sh /app/dist/apps/site/package.json /app/apps/site/deployment/CHECKS ./
+COPY --from=builder /app/.env /app/dist/apps/site/next.config.js /app/apps/site/ci/start.sh /app/dist/apps/site/package.json /app/apps/site/ci/CHECKS ./
 COPY --from=builder /app/dist/apps/site/public ./public
 COPY --from=builder /app/dist/apps/site/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 80
 
-CMD ["/app/deploy.sh"]
+CMD ["/app/start.sh"]
