@@ -15,9 +15,11 @@ jobs:
         name: Checkout main
         with:
           fetch-depth: 0
+
       - uses: actions/setup-node@v1
         with:
           node-version: '16'
+
       - name: Setup global dependencies
         run: npm install --global pnpm ts-node
       - name: Cache node modules
@@ -31,8 +33,10 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Setup dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Get affected projects
         id: affected-projects
         run: |
@@ -40,23 +44,20 @@ jobs:
           echo ::set-output name=affected::${PROJECTS}
           echo Affected projects: $PROJECTS
 
-  deploy:
-    runs-on: ubuntu-latest
-    if: ${{ needs.main.outputs.affected != '[]' }}
-    needs:
-      - main
-    strategy:
-      matrix:
-        app: ${{ fromJSON(needs.main.outputs.affected) }}
-    steps:
-      - uses: actions/checkout@v2
-        name: Checkout main
-        with:
-          fetch-depth: 0
-      - name: Push to dokku-${{ matrix.app }}
+      - name: Deploy server app
+        if: contains(toJSON(steps.affected-projects.outputs.affected), 'server')
         uses: dokku/github-action@master
         with:
           branch: 'main'
           git_push_flags: '--force'
-          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/~/bookius-${{ matrix.app }}'
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/~/bookius-server'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy site app
+        if: contains(toJSON(steps.affected-projects.outputs.affected), 'site')
+        uses: dokku/github-action@master
+        with:
+          branch: 'main'
+          git_push_flags: '--force'
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/~/bookius-site'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
