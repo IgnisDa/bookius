@@ -61,20 +61,35 @@ export class BooksService {
         startIndex: input.startIndex ? input.startIndex.toString() : '0',
       }
     );
-    // logger.info(`Sending request to "${gBooksEndpoint}"`);
     try {
       const { data } = await axios.get<{
         kind: string;
-        items: GoogleBooksVolumeDto;
+        items: GoogleBooksVolumeDto[];
         totalItems: number;
       }>(gBooksEndpoint);
-      // logger.info(
-      //   `Total "${
-      //     data.totalItems
-      //   }" items present of which "${10}" will be returned`
-      // );
+      // This increases load times by 7 seconds. Is it worth it?
+
+      /*       for (const [index, info] of data.items.entries()) {
+        data.items[index] = {
+          ...info,
+          volumeInfo: {
+            ...info.volumeInfo,
+            imageLinks: {
+              ...info.volumeInfo.imageLinks,
+              blurDataUrl: info.volumeInfo.imageLinks?.thumbnail
+                ? (await getPlaiceholder(info.volumeInfo.imageLinks.thumbnail))
+                    .base64
+                : undefined,
+            },
+          },
+        };
+      }
+      */
+
+      // LOL probably not
       return data.items || []; // return an empty list if there are no books in the response
     } catch (e) {
+      console.log(e);
       logger.error(e.response.data);
       if (e.response.data.error.code == 400) {
         return [];
