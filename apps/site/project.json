@@ -109,6 +109,7 @@
       "@radix-ui/react-progress",
       "@radix-ui/react-scroll-area",
       "@radix-ui/react-separator",
+      "@radix-ui/react-toggle",
       "@stitches/react",
       "@urql/devtools",
       "@urql/exchange-auth",

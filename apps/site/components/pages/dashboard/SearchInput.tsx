@@ -34,7 +34,7 @@ export const SearchInputComponent: FC<SearchInputComponentProps> = ({
           onChange={updateSearch}
         />
         <motion.button
-          className="btn btn-secondary dark:btn-primary disabled:text-black"
+          className="btn btn-secondary dark:btn-primary disabled:!text-black"
           type="submit"
           disabled={!search}
         >

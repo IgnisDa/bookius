@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { withQuery } from 'ufo';
 import { BookItemComponent } from '../components/pages/search/BookItem';
-import { JumpToBookComponent } from '../components/pages/search/JumpToBook';
+import { SearchPageInputComponent } from '../components/pages/search/SearchPageInput';
 import { GET_BOOKS_FOR_SEARCH_PAGE } from '../graphql/queries';
 import { client, ssrCache } from '../lib/helpers/urqlClient';
 import voidImage from '../public/images/void.svg';
@@ -36,7 +36,7 @@ const Search = (
   return (
     <div className="flex flex-col items-center h-full space-y-20 md:py-10 lg:pt-20">
       <div className="w-full max-w-lg">
-        <JumpToBookComponent />
+        <SearchPageInputComponent />
       </div>
       <div>
         <h1 className="text-3xl text-center md:text-4xl">
@@ -102,7 +102,7 @@ const Search = (
       )}
       <div className="flex justify-around w-full pt-8 text-center sm:btn-group sm:block">
         <Link
-          href={withQuery('search', {
+          href={withQuery('/search', {
             q: q,
             startIndex: (startIndex - 10).toString(),
           })}
@@ -119,7 +119,7 @@ const Search = (
           </a>
         </Link>
         <Link
-          href={withQuery('search', {
+          href={withQuery('/search', {
             q: q,
             startIndex: (startIndex + 10).toString(),
           })}
