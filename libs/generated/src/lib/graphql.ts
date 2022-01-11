@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
-import { gql } from 'urql';
 import * as Urql from 'urql';
+import { gql } from 'urql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -484,8 +484,6 @@ export type GoogleBooksVolumeDto = {
 /** Images related to a specific volume */
 export type GoogleBooksVolumeImageLinksDto = {
   __typename: 'GoogleBooksVolumeImageLinksDto';
-  /** A small thumbnail image */
-  smallThumbnail: Scalars['String'];
   /** A large thumbnail image */
   thumbnail: Scalars['String'];
 };
@@ -498,7 +496,7 @@ export type GoogleBooksVolumeInfoDto = {
   /** A small description of the book */
   description?: Maybe<Scalars['String']>;
   /** Links to images of the book */
-  imageLinks: GoogleBooksVolumeImageLinksDto;
+  imageLinks?: Maybe<GoogleBooksVolumeImageLinksDto>;
   /** Global identifiers of this book, like ISBN numbers */
   industryIdentifiers: Array<GoogleBooksIndustryIdentifiersDto>;
   /** A two-letter ISO-639-1 code, such as "en" or "fr" */
@@ -679,8 +677,6 @@ export type Query = {
   filterBooks: Array<Book>;
   /** Get a list of all shelves created by this user. */
   filterUserShelves: Array<Shelf>;
-  /** Get status of the service. */
-  getStatus: Scalars['Boolean'];
   /** Get list of book progresses that are related to the user. */
   userBookProgressLogs: Array<BookProgressLog>;
   /** Get a small list of authors that are related to the user. */
@@ -1062,10 +1058,6 @@ export type CreateUserShelfMutation = {
   createUserShelf: { __typename: 'Shelf'; id: string };
 };
 
-export type GetStatusQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetStatusQuery = { __typename: 'Query'; getStatus: boolean };
-
 export type CheckUserByIssuerQueryVariables = Exact<{
   issuer: Scalars['String'];
 }>;
@@ -1182,10 +1174,10 @@ export type GetBooksForSearchPageQuery = {
         type: string;
         identifier: string;
       }>;
-      imageLinks: {
-        __typename: 'GoogleBooksVolumeImageLinksDto';
-        thumbnail: string;
-      };
+      imageLinks?:
+        | { __typename: 'GoogleBooksVolumeImageLinksDto'; thumbnail: string }
+        | null
+        | undefined;
     };
   }>;
 };
@@ -1238,20 +1230,6 @@ export function useCreateUserShelfMutation() {
     CreateUserShelfMutation,
     CreateUserShelfMutationVariables
   >(CreateUserShelfDocument);
-}
-export const GetStatusDocument = gql`
-  query GetStatus {
-    getStatus
-  }
-`;
-
-export function useGetStatusQuery(
-  options: Omit<Urql.UseQueryArgs<GetStatusQueryVariables>, 'query'> = {}
-) {
-  return Urql.useQuery<GetStatusQuery>({
-    query: GetStatusDocument,
-    ...options,
-  });
 }
 export const CheckUserByIssuerDocument = gql`
   query CheckUserByIssuer($issuer: String!) {

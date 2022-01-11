@@ -3948,22 +3948,6 @@
         "description": "Images related to a specific volume",
         "fields": [
           {
-            "name": "smallThumbnail",
-            "description": "A small thumbnail image",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "thumbnail",
             "description": "A large thumbnail image",
             "args": [],
@@ -4031,13 +4015,9 @@
             "description": "Links to images of the book",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "GoogleBooksVolumeImageLinksDto",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "GoogleBooksVolumeImageLinksDto",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5948,22 +5928,6 @@
                     "ofType": null
                   }
                 }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "getStatus",
-            "description": "Get status of the service.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
               }
             },
             "isDeprecated": false,

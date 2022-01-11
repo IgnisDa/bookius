@@ -1,11 +1,5 @@
 import { gql } from 'urql';
 
-export const GET_STATUS = gql`
-  query GetStatus {
-    getStatus
-  }
-`;
-
 export const CHECK_USER_BY_ISSUER = gql`
   query CheckUserByIssuer($issuer: String!) {
     checkUserByIssuer(issuer: $issuer)
@@ -80,6 +74,26 @@ export const GET_USER_BOOKS_PROGRESS_LOGS = gql`
           author {
             name
           }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_BOOKS_FOR_SEARCH_PAGE = gql`
+  query getBooksForSearchPage($input: BooksSearchInput!) {
+    booksSearch(input: $input) {
+      id
+      volumeInfo {
+        language
+        authors
+        title
+        industryIdentifiers {
+          type
+          identifier
+        }
+        imageLinks {
+          thumbnail
         }
       }
     }
