@@ -68,11 +68,6 @@ class GoogleBooksVolumeInfoDto {
 })
 class GoogleBooksVolumeImageLinksDto {
   /**
-   * A small thumbnail image
-   */
-  smallThumbnail: string;
-
-  /**
    * A large thumbnail image
    */
   thumbnail: string;

@@ -452,9 +452,6 @@ type GoogleBooksVolumeDto {
 
 """Images related to a specific volume"""
 type GoogleBooksVolumeImageLinksDto {
-  """A small thumbnail image"""
-  smallThumbnail: String!
-
   """A large thumbnail image"""
   thumbnail: String!
 }
