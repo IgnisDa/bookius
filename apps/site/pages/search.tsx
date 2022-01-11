@@ -120,7 +120,8 @@ const Search = (
           <a
             className={clsx(
               'btn sm:btn-wide btn-outline',
-              !getBooksForSearchPageQueryData
+              !getBooksForSearchPageQueryData ||
+                getBooksForSearchPageQueryData.booksSearch.length === 0
                 ? 'dark:btn-disabled btn-ghost text-base-200 pointer-events-none'
                 : 'bg-slate-700 dark:bg-opacity-0'
             )}
