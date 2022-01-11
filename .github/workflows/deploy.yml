@@ -50,5 +50,7 @@ jobs:
       - name: Push to dokku-${{ matrix.app }}
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/~/${{ matrix.app }}'
+          branch: 'main'
+          git_push_flags: '--force'
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/~/bookius-${{ matrix.app }}'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
