@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 
 const main = async () => {
   const affectedProjects = execSync(
-    `pnpx nx affected:apps --base=$(git log --format="%H" -n 1) --plain`
+    `pnpx nx affected:apps --base=main~1 --head=main --plain`
   )
     .toString()
     .trim()
