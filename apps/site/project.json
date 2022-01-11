@@ -107,6 +107,7 @@
       "@radix-ui/react-icons",
       "@radix-ui/react-label",
       "@radix-ui/react-progress",
+      "@radix-ui/react-scroll-area",
       "@radix-ui/react-separator",
       "@stitches/react",
       "@urql/devtools",
