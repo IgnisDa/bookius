@@ -1,4 +1,3 @@
-import { getCssText } from '@bookius/ui';
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 
@@ -6,13 +5,8 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html lang="en">
-        <Head>
-          <style
-            id="stitches-css"
-            dangerouslySetInnerHTML={{ __html: getCssText() }}
-          />
-        </Head>
-        <body>
+        <Head></Head>
+        <body className="debug-screens">
           <Main />
           <NextScript />
         </body>
