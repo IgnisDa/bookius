@@ -1,4 +1,4 @@
-import { logger } from '@bookius/general';
+import { camelCaseKeys } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -6,9 +6,8 @@ import axios from 'axios';
 import { sampleSize } from 'lodash';
 import { withQuery } from 'ufo';
 import { ApplicationConfig } from '../config';
-import { BooksSearchInput } from './dto/books-search.input';
+import { BooksSearchInput } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
-import { GoogleBooksVolumeDto } from './dto/google-books.dto';
 
 @Injectable()
 export class BooksService {
@@ -52,48 +51,31 @@ export class BooksService {
     return resp;
   }
 
-  async booksSearch(input: BooksSearchInput) {
-    const gBooksEndpoint = withQuery(
-      `${this.applicationConfig.GOOGLE_BOOKS_API_URL}/volumes`,
+  async openLibraryBooksSearch(input: BooksSearchInput) {
+    const openLibraryEndpoint = withQuery(
+      `${this.applicationConfig.OPEN_LIBRARY_API_URL}/search.json`,
       {
         q: decodeURIComponent(input.query as string),
-        maxResults: '10',
-        startIndex: input.startIndex ? input.startIndex.toString() : '0',
+        fields: [
+          'title',
+          'key',
+          'isbn',
+          'author_name',
+          'cover_i',
+          'language',
+        ].join(','),
+        offset: input.offset ? input.offset.toString() : '0',
+        limit: '10',
       }
     );
     try {
-      const { data } = await axios.get<{
-        kind: string;
-        items: GoogleBooksVolumeDto[];
-        totalItems: number;
-      }>(gBooksEndpoint);
-      // This increases load times by 7 seconds. Is it worth it?
-
-      /*       for (const [index, info] of data.items.entries()) {
-        data.items[index] = {
-          ...info,
-          volumeInfo: {
-            ...info.volumeInfo,
-            imageLinks: {
-              ...info.volumeInfo.imageLinks,
-              blurDataUrl: info.volumeInfo.imageLinks?.thumbnail
-                ? (await getPlaiceholder(info.volumeInfo.imageLinks.thumbnail))
-                    .base64
-                : undefined,
-            },
-          },
-        };
-      }
-      */
-
-      // LOL probably not
-      return data.items || []; // return an empty list if there are no books in the response
+      const { data } = await axios.get(openLibraryEndpoint);
+      return camelCaseKeys(data);
     } catch (e) {
-      console.log(e);
-      logger.error(e.response.data);
-      if (e.response.data.error.code == 400) {
-        return [];
-      }
+      console.error(e);
+      return Promise.reject({
+        message: 'The Open Library API did not respond as expected',
+      });
     }
   }
 }

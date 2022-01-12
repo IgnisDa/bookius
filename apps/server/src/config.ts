@@ -14,11 +14,11 @@ export class ApplicationConfig extends RootConfig {
   MAGIC_SECRET_KEY: string;
 
   /**
-   * URL endpoint of the google books API
+   * URL endpoint of the open Library API
    */
   @IsNotEmpty()
   @IsUrl()
-  GOOGLE_BOOKS_API_URL: string;
+  OPEN_LIBRARY_API_URL: string;
 
   /**
    * The git revision that deployed this application
