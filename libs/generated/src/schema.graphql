@@ -607,7 +607,7 @@ type OpenLibraryWorkDto {
   coverI: String
 
   """Unique Industry Identifiers for the book"""
-  isbn: [String!]!
+  isbn: [String!]
 
   """The open library unique ID"""
   key: String!

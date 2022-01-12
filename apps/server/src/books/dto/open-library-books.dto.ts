@@ -44,7 +44,7 @@ export class OpenLibraryWorkDto {
   /**
    * Unique Industry Identifiers for the book
    */
-  isbn: string[];
+  isbn?: string[];
 
   /**
    * The language the book is written in
