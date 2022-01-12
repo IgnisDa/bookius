@@ -15,10 +15,8 @@ dokku apps:create bookius-site
 dokku builder-dockerfile:set bookius-site dockerfile-path apps/site/Dockerfile
 dokku apps:create bookius-server
 dokku builder-dockerfile:set bookius-server dockerfile-path apps/server/Dockerfile
-dokku proxy:ports-add bookius-site http:80:3000
-dokku proxy:ports-add bookius-server http:80:3000
-dokku proxy:ports-remove bookius-site http:3000:3000
-dokku proxy:ports-remove bookius-server http:3000:3000
+dokku proxy:ports-add bookius-site http:80:80
+dokku proxy:ports-add bookius-server http:80:80
 dokku network:create bookius-network
 dokku network:set bookius-site attach-post-deploy bookius-network
 dokku network:set bookius-server attach-post-deploy bookius-network
@@ -31,8 +29,9 @@ dokku letsencrypt:enable bookius-server
 To test if the above worked, run the following:
 
 ```bash
-docker exec -it bookius-site.web.1 ash # drop into site's the container
-curl -v http://bookius-server.web:3000 # see if the server is accessible by its URL
+docker exec -it bookius-site.web.1 ash # drop into site's container
+curl -v http://bookius-server.web:80/status # see if the server is accessible internally
+# if the response is `true`, then it works
 ```
 
 ## Others
