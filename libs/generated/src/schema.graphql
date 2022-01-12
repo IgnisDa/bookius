@@ -361,14 +361,22 @@ input BookWhereUniqueInput {
   id: String
 }
 
+"""The object returned when there is an error while performing the search"""
+type BooksSearchError implements APIError {
+  """The error encountered while executing this query"""
+  message: String!
+}
+
 """The input type used to search for books"""
 input BooksSearchInput {
-  """Full-text query string"""
-  query: String!
-
   """The position in the collection at which to start the list of results"""
-  startIndex: Int = 0
+  offset: Int = 0
+
+  """Full-text query string, should be URI **decoded**"""
+  query: String!
 }
+
+union BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse
 
 input BoolFilter {
   equals: Boolean
@@ -430,59 +438,6 @@ input EnumArchitectRoleFilter {
   in: [ArchitectRole!]
   not: NestedEnumArchitectRoleFilter
   notIn: [ArchitectRole!]
-}
-
-"""Global identifiers of this book, like ISBN numbers"""
-type GoogleBooksIndustryIdentifiersDto {
-  """Value of the identifier"""
-  identifier: String!
-
-  """Type of identifier (ISBN 10 or 13)"""
-  type: String!
-}
-
-"""A volume from the google books API"""
-type GoogleBooksVolumeDto {
-  """The google books unique ID"""
-  id: String!
-
-  """Information about this particular book"""
-  volumeInfo: GoogleBooksVolumeInfoDto!
-}
-
-"""Images related to a specific volume"""
-type GoogleBooksVolumeImageLinksDto {
-  """A large thumbnail image"""
-  thumbnail: String!
-}
-
-"""Description about a specific volume"""
-type GoogleBooksVolumeInfoDto {
-  """A list of people who have worked on this book"""
-  authors: [String!]
-
-  """A small description of the book"""
-  description: String
-
-  """Links to images of the book"""
-  imageLinks: GoogleBooksVolumeImageLinksDto
-
-  """Global identifiers of this book, like ISBN numbers"""
-  industryIdentifiers: [GoogleBooksIndustryIdentifiersDto!]!
-
-  """
-  A two-letter ISO-639-1 code, such as "en" or "fr"
-  """
-  language: String!
-
-  """Number of pages in the book"""
-  pageCount: Int!
-
-  """The publisher of this particular edition"""
-  publisher: String
-
-  """The name of the book"""
-  title: String!
 }
 
 input IntFilter {
@@ -631,10 +586,40 @@ input NestedStringNullableFilter {
   startsWith: String
 }
 
-type Query {
-  """Get a list of books related to a search query."""
-  booksSearch(input: BooksSearchInput!): [GoogleBooksVolumeDto!]!
+"""The response object when communicating with the Open Library API"""
+type OpenLibraryResponse {
+  """The documents returned by the API"""
+  docs: [OpenLibraryWorkDto!]!
 
+  """Number of results found for the query"""
+  numFound: Int!
+
+  """The offset for the query"""
+  offset: Int!
+}
+
+"""A volume from the Open Library API"""
+type OpenLibraryWorkDto {
+  """Names of the author of the book"""
+  authorName: [String!]
+
+  """Cover image ID for the book"""
+  coverI: String
+
+  """Unique Industry Identifiers for the book"""
+  isbn: [String!]!
+
+  """The open library unique ID"""
+  key: String!
+
+  """The language the book is written in"""
+  language: [String!]
+
+  """Title of the book"""
+  title: String!
+}
+
+type Query {
   """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
 
@@ -643,6 +628,9 @@ type Query {
 
   """Get a list of all shelves created by this user."""
   filterUserShelves(cursor: ShelfWhereUniqueInput, distinct: [ShelfScalarFieldEnum!], orderBy: [ShelfOrderByWithRelationInput!], skip: Int, take: Int, where: ShelfWhereInput): [Shelf!]!
+
+  """Get a list of books related to a search query from Open Library API."""
+  openLibraryBooksSearch(input: BooksSearchInput!): BooksSearchResultUnion!
 
   """Get list of book progresses that are related to the user."""
   userBookProgressLogs(take: Int): [BookProgressLog!]!
