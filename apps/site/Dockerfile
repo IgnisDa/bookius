@@ -13,12 +13,14 @@ FROM node:alpine AS builder
 ARG NEXT_PUBLIC_GRAPHQL_API
 ARG NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY
 ARG NEXT_SERVER_GRAPHQL_API
+ARG GIT_REV
 ENV NODE_OPTIONS="--max-old-space-size=1024"
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
 RUN echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}" >> .env && \
+    echo "GIT_REV=${GIT_REV}" >> .env && \
     echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}" >> .env && \
     echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" >> .env
 RUN yarn global add nx pnpm && \

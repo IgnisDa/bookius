@@ -5,17 +5,22 @@ if [ -f .env ]; then
 fi
 
 if [ -z "${NEXT_SERVER_GRAPHQL_API}" ]; then
-    echo "NEXT_SERVER_GRAPHQL_API environment does not exist"
+    echo '"NEXT_SERVER_GRAPHQL_API" environment variable does not exist'
     exit 1
 fi
 
 if [ -z "${NEXT_PUBLIC_GRAPHQL_API}" ]; then
-    echo "NEXT_PUBLIC_GRAPHQL_API environment does not exist"
+    echo '"NEXT_PUBLIC_GRAPHQL_API" environment variable does not exist'
     exit 1
 fi
 
 if [ -z "${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" ]; then
-    echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY environment does not exist"
+    echo '"NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY" environment variable does not exist'
+    exit 1
+fi
+
+if [ -z "${GIT_REV}" ]; then
+    echo '"GIT_REV" environment variable does not exist'
     exit 1
 fi
 
