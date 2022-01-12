@@ -1,6 +1,7 @@
 import { OpenLibraryWorkDto } from '@bookius/generated';
 import truncate from 'lodash/truncate';
 import NextImage from 'next/image';
+import Link from 'next/link';
 import { FC, useState } from 'react';
 import noBookImage from '../../../public/images/no-book.png';
 
@@ -10,10 +11,13 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
   const [imageSize, setImageSize] = useState('L');
   const [isImageAvailable, setIsImageAvailable] = useState(true);
 
+  const trueKey = book.key.split('/').at(-1);
+
   return (
-    <div id={`book-id-${book.key}`} className="flex items-center space-x-5">
+    <div id={`book-id-${trueKey}`} className="flex items-center space-x-5">
       <div className="h-[200px] w-[130px] md:h-[250px] md:w-[150px] flex-none flex items-center justify-center">
         <NextImage
+          id={book.coverI ? `book-image-${book.coverI}` : undefined}
           src={
             book.coverI && isImageAvailable
               ? `https://covers.openlibrary.org/b/id/${book.coverI}-${imageSize}.jpg?default=false`
@@ -34,7 +38,7 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           }}
           alt={
             isImageAvailable
-              ? `${book.title} image`
+              ? `Image for '${book.title}'`
               : `No image for ${book.title}`
           }
           height={book.coverI ? 250 : 180}
@@ -45,36 +49,34 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
       </div>
       <div className="flex flex-col flex-1 space-y-5">
         <div>
-          <p>
-            <span className="text-2xl font-semibold text-primary dark:text-secondary">
+          <Link href={`/book/${trueKey}`}>
+            <a className="text-2xl font-semibold underline md:no-underline text-primary dark:text-secondary hover:underline decoration-dashed">
               {truncate(book.title, {
                 length: 30,
                 omission: '...',
-              })}
-            </span>{' '}
-            {book.authorName && book.authorName.length > 0 && (
-              <>
-                <span className="text-base-100 dark:text-primary-content">
-                  by
-                </span>{' '}
-                <span className="text-lg text-secondary dark:text-warning">
-                  {book.authorName!.at(0)}
-                </span>
-              </>
-            )}
-          </p>
+              })}{' '}
+            </a>
+          </Link>
+          {book.authorName && book.authorName.length > 0 && (
+            <div>
+              <span className="text-base-100 dark:text-primary-content">
+                by
+              </span>{' '}
+              <span className="text-lg text-secondary dark:text-warning">
+                {book.authorName.at(0)}
+              </span>
+            </div>
+          )}
         </div>
         {book.isbn && (
           <div>
             <span className="text-gray-600 dark:text-gray-400">ISBNs:</span>
             {book.isbn?.slice(0, 3).map((identifier, identifierIndex) => (
-              <>
-                <p key={identifierIndex} className="text-xs">
-                  <span className="font-semibold text-gray-900 dark:text-gray-200 dark:font-normal">
-                    {identifier}
-                  </span>
-                </p>
-              </>
+              <p key={identifierIndex} className="text-xs">
+                <span className="font-semibold text-gray-900 dark:text-gray-200">
+                  {identifier}
+                </span>
+              </p>
             ))}
           </div>
         )}

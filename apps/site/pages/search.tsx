@@ -75,11 +75,9 @@ const Search = (
         // >
         //   <ScrollArea.Viewport className="w-full h-[600px] md:h-[500px] mr-4">
         //     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10">
-        //       {getBooksForSearchPageQueryData?.booksSearch.map(
-        //         (book, index) => (
-        //           <BookItemComponent book={book} key={index} />
-        //         )
-        //       )}
+        //       {response.docs.map((book, index) => (
+        //         <BookItemComponent book={book} key={index} />
+        //       ))}
         //     </div>
         //   </ScrollArea.Viewport>
         //   <ScrollArea.Scrollbar
