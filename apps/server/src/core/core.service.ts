@@ -10,6 +10,6 @@ export class CoreService {
   ) {}
 
   async getGitRev() {
-    return this.applicationConfig.GIT_REV;
+    return { GIT_REV: this.applicationConfig.GIT_REV };
   }
 }
