@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Headers } from '@nestjs/common';
 import { CoreService } from './core.service';
 
 @Controller()
@@ -11,7 +11,11 @@ export class CoreController {
   }
 
   @Get('git-rev')
-  getGitRev() {
+  getGitRev(@Headers('user-agent') userAgent: string) {
+    if (userAgent !== 'gh-actions-automated-script')
+      throw new ForbiddenException(
+        `UA '${userAgent}' is not allowed to access this endpoint`
+      );
     return this.coreService.getGitRev();
   }
 }
