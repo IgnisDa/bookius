@@ -40,6 +40,7 @@ jobs:
       - name: Get affected projects
         id: affected-projects
         run: |
+          git  log --format="%H" -n 10
           PROJECTS="$(ts-node ci/affectedProjects.ts)"
           echo ::set-output name=affected::${PROJECTS}
           echo Affected projects: $PROJECTS
