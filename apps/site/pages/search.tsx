@@ -34,8 +34,11 @@ const Search = (
       },
     });
 
+  // FIXME: this is hardcoded here, **ideally** we should handle the case if the response
+  // was unsuccessful
   const response =
     getBooksForSearchPageQueryData?.openLibraryBooksSearch as OpenLibraryResponse;
+  // so we will never revisit this piece of code? yeah right
 
   return (
     <div className="flex flex-col items-center h-full space-y-20 md:py-10 lg:pt-20">
