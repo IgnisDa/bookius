@@ -1,4 +1,3 @@
-import { globalStyles } from '@bookius/ui';
 import { AnimatePresence, motion } from 'framer-motion';
 import { NextPage } from 'next';
 import { DefaultSeo } from 'next-seo';
@@ -25,7 +24,6 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? defaultLayout;
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
-  globalStyles();
 
   const darkMode = useDarkMode(false, {
     classNameDark: 'dark',
@@ -58,7 +56,7 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               key={router.pathname}
-              className="flex items-center justify-center debug-screens"
+              className="flex items-center justify-center"
             >
               <Component {...pageProps} />
             </motion.div>
