@@ -405,13 +405,22 @@ export type BookWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** The object returned when there is an error while performing the search */
+export type BooksSearchError = ApiError & {
+  __typename: 'BooksSearchError';
+  /** The error encountered while executing this query */
+  message: Scalars['String'];
+};
+
 /** The input type used to search for books */
 export type BooksSearchInput = {
-  /** Full-text query string */
-  query: Scalars['String'];
   /** The position in the collection at which to start the list of results */
-  startIndex?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  /** Full-text query string, should be URI **decoded** */
+  query: Scalars['String'];
 };
+
+export type BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse;
 
 export type BoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']>;
@@ -461,52 +470,6 @@ export type EnumArchitectRoleFilter = {
   in?: InputMaybe<Array<ArchitectRole>>;
   not?: InputMaybe<NestedEnumArchitectRoleFilter>;
   notIn?: InputMaybe<Array<ArchitectRole>>;
-};
-
-/** Global identifiers of this book, like ISBN numbers */
-export type GoogleBooksIndustryIdentifiersDto = {
-  __typename: 'GoogleBooksIndustryIdentifiersDto';
-  /** Value of the identifier */
-  identifier: Scalars['String'];
-  /** Type of identifier (ISBN 10 or 13) */
-  type: Scalars['String'];
-};
-
-/** A volume from the google books API */
-export type GoogleBooksVolumeDto = {
-  __typename: 'GoogleBooksVolumeDto';
-  /** The google books unique ID */
-  id: Scalars['String'];
-  /** Information about this particular book */
-  volumeInfo: GoogleBooksVolumeInfoDto;
-};
-
-/** Images related to a specific volume */
-export type GoogleBooksVolumeImageLinksDto = {
-  __typename: 'GoogleBooksVolumeImageLinksDto';
-  /** A large thumbnail image */
-  thumbnail: Scalars['String'];
-};
-
-/** Description about a specific volume */
-export type GoogleBooksVolumeInfoDto = {
-  __typename: 'GoogleBooksVolumeInfoDto';
-  /** A list of people who have worked on this book */
-  authors?: Maybe<Array<Scalars['String']>>;
-  /** A small description of the book */
-  description?: Maybe<Scalars['String']>;
-  /** Links to images of the book */
-  imageLinks?: Maybe<GoogleBooksVolumeImageLinksDto>;
-  /** Global identifiers of this book, like ISBN numbers */
-  industryIdentifiers: Array<GoogleBooksIndustryIdentifiersDto>;
-  /** A two-letter ISO-639-1 code, such as "en" or "fr" */
-  language: Scalars['String'];
-  /** Number of pages in the book */
-  pageCount: Scalars['Int'];
-  /** The publisher of this particular edition */
-  publisher?: Maybe<Scalars['String']>;
-  /** The name of the book */
-  title: Scalars['String'];
 };
 
 export type IntFilter = {
@@ -667,26 +630,50 @@ export type NestedStringNullableFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
+/** The response object when communicating with the Open Library API */
+export type OpenLibraryResponse = {
+  __typename: 'OpenLibraryResponse';
+  /** The documents returned by the API */
+  docs: Array<OpenLibraryWorkDto>;
+  /** Number of results found for the query */
+  numFound: Scalars['Int'];
+  /** The offset for the query */
+  offset: Scalars['Int'];
+};
+
+/** A volume from the Open Library API */
+export type OpenLibraryWorkDto = {
+  __typename: 'OpenLibraryWorkDto';
+  /** Names of the author of the book */
+  authorName?: Maybe<Array<Scalars['String']>>;
+  /** Cover image ID for the book */
+  coverI?: Maybe<Scalars['String']>;
+  /** Unique Industry Identifiers for the book */
+  isbn?: Maybe<Array<Scalars['String']>>;
+  /** The open library unique ID */
+  key: Scalars['String'];
+  /** The language the book is written in */
+  language?: Maybe<Array<Scalars['String']>>;
+  /** Title of the book */
+  title: Scalars['String'];
+};
+
 export type Query = {
   __typename: 'Query';
-  /** Get a list of books related to a search query. */
-  booksSearch: Array<GoogleBooksVolumeDto>;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
   /** Get a filtered list of all books in the service. */
   filterBooks: Array<Book>;
   /** Get a list of all shelves created by this user. */
   filterUserShelves: Array<Shelf>;
+  /** Get a list of books related to a search query from Open Library API. */
+  openLibraryBooksSearch: BooksSearchResultUnion;
   /** Get list of book progresses that are related to the user. */
   userBookProgressLogs: Array<BookProgressLog>;
   /** Get a small list of authors that are related to the user. */
   userRelatedAuthors: Array<Author>;
   /** Get a small list of books that are related to the user. */
   userRelatedBooks: Array<Book>;
-};
-
-export type QueryBooksSearchArgs = {
-  input: BooksSearchInput;
 };
 
 export type QueryCheckUserByIssuerArgs = {
@@ -709,6 +696,10 @@ export type QueryFilterUserShelvesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ShelfWhereInput>;
+};
+
+export type QueryOpenLibraryBooksSearchArgs = {
+  input: BooksSearchInput;
 };
 
 export type QueryUserBookProgressLogsArgs = {
@@ -1161,25 +1152,22 @@ export type GetBooksForSearchPageQueryVariables = Exact<{
 
 export type GetBooksForSearchPageQuery = {
   __typename: 'Query';
-  booksSearch: Array<{
-    __typename: 'GoogleBooksVolumeDto';
-    id: string;
-    volumeInfo: {
-      __typename: 'GoogleBooksVolumeInfoDto';
-      language: string;
-      authors?: Array<string> | null | undefined;
-      title: string;
-      industryIdentifiers: Array<{
-        __typename: 'GoogleBooksIndustryIdentifiersDto';
-        type: string;
-        identifier: string;
-      }>;
-      imageLinks?:
-        | { __typename: 'GoogleBooksVolumeImageLinksDto'; thumbnail: string }
-        | null
-        | undefined;
-    };
-  }>;
+  openLibraryBooksSearch:
+    | { __typename: 'BooksSearchError'; message: string }
+    | {
+        __typename: 'OpenLibraryResponse';
+        numFound: number;
+        offset: number;
+        docs: Array<{
+          __typename: 'OpenLibraryWorkDto';
+          authorName?: Array<string> | null | undefined;
+          isbn?: Array<string> | null | undefined;
+          key: string;
+          language?: Array<string> | null | undefined;
+          coverI?: string | null | undefined;
+          title: string;
+        }>;
+      };
 };
 
 export const LoginUserDocument = gql`
@@ -1376,18 +1364,21 @@ export function useGetUserBooksProgressLogsQuery(
 }
 export const GetBooksForSearchPageDocument = gql`
   query getBooksForSearchPage($input: BooksSearchInput!) {
-    booksSearch(input: $input) {
-      id
-      volumeInfo {
-        language
-        authors
-        title
-        industryIdentifiers {
-          type
-          identifier
-        }
-        imageLinks {
-          thumbnail
+    openLibraryBooksSearch(input: $input) {
+      __typename
+      ... on BooksSearchError {
+        message
+      }
+      ... on OpenLibraryResponse {
+        numFound
+        offset
+        docs {
+          authorName
+          isbn
+          key
+          language
+          coverI
+          title
         }
       }
     }

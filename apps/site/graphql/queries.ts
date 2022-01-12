@@ -82,18 +82,21 @@ export const GET_USER_BOOKS_PROGRESS_LOGS = gql`
 
 export const GET_BOOKS_FOR_SEARCH_PAGE = gql`
   query getBooksForSearchPage($input: BooksSearchInput!) {
-    booksSearch(input: $input) {
-      id
-      volumeInfo {
-        language
-        authors
-        title
-        industryIdentifiers {
-          type
-          identifier
-        }
-        imageLinks {
-          thumbnail
+    openLibraryBooksSearch(input: $input) {
+      __typename
+      ... on BooksSearchError {
+        message
+      }
+      ... on OpenLibraryResponse {
+        numFound
+        offset
+        docs {
+          authorName
+          isbn
+          key
+          language
+          coverI
+          title
         }
       }
     }

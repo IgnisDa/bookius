@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const withNx = require('@nrwl/next/plugins/with-nx');
 
 /**
@@ -23,7 +22,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['picsum.photos', 'books.google.com'],
+    domains: ['picsum.photos', 'covers.openlibrary.org'],
   },
 };
 

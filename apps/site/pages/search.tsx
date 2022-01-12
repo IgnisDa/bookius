@@ -1,6 +1,7 @@
 import {
   GetBooksForSearchPageQuery,
   GetBooksForSearchPageQueryVariables,
+  OpenLibraryResponse,
   useGetBooksForSearchPageQuery,
 } from '@bookius/generated';
 import clsx from 'clsx';
@@ -20,18 +21,21 @@ const Search = (
   _props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const router = useRouter();
-  const q = router.query.q;
-  const startIndex = parseInt((router.query.startIndex as string) || '0');
+  const q = router.query.q as string;
+  const offset = parseInt((router.query.offset as string) || '0');
 
   const [{ data: getBooksForSearchPageQueryData }] =
     useGetBooksForSearchPageQuery({
       variables: {
         input: {
-          query: decodeURIComponent(q as string) as string,
-          startIndex: startIndex,
+          query: decodeURIComponent(q) as string,
+          offset: offset,
         },
       },
     });
+
+  const response =
+    getBooksForSearchPageQueryData?.openLibraryBooksSearch as OpenLibraryResponse;
 
   return (
     <div className="flex flex-col items-center h-full space-y-20 md:py-10 lg:pt-20">
@@ -51,9 +55,16 @@ const Search = (
             })}
           </span>
         </h1>
+        <div className="text-center md:text-left">
+          <span className="text-gray-600 dark:text-gray-300">
+            Total results:
+          </span>{' '}
+          <span className="text-2xl text-black dark:text-success">
+            {response.numFound}
+          </span>
+        </div>
       </div>
-      {getBooksForSearchPageQueryData?.booksSearch &&
-      getBooksForSearchPageQueryData?.booksSearch?.length > 0 ? (
+      {response && response.docs.length > 0 ? (
         // FIXME: This causes some error only in production mode wherein the page does not render
         // <ScrollArea.Root
         //   type="auto"
@@ -77,7 +88,7 @@ const Search = (
         //   <ScrollArea.Corner />
         // </ScrollArea.Root>
         <div className="grid w-full grid-cols-1 mx-5 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10 md:w-11/12 lg:w-9/12 xl:w-10/12 2xl:w-9/12 3xl:w-4/5 md:justify-center md:items-center">
-          {getBooksForSearchPageQueryData?.booksSearch.map((book, index) => (
+          {response.docs.map((book, index) => (
             <BookItemComponent book={book} key={index} />
           ))}
         </div>
@@ -104,13 +115,13 @@ const Search = (
         <Link
           href={withQuery('/search', {
             q: q,
-            startIndex: (startIndex - 10).toString(),
+            offset: (offset - 10).toString(),
           })}
         >
           <a
             className={clsx(
               'btn sm:btn-wide btn-outline',
-              startIndex === 0
+              offset === 0
                 ? 'dark:btn-disabled btn-ghost text-base-200 pointer-events-none'
                 : 'bg-slate-700 dark:bg-opacity-0'
             )}
@@ -121,14 +132,13 @@ const Search = (
         <Link
           href={withQuery('/search', {
             q: q,
-            startIndex: (startIndex + 10).toString(),
+            offset: (offset + 10).toString(),
           })}
         >
           <a
             className={clsx(
               'btn sm:btn-wide btn-outline',
-              !getBooksForSearchPageQueryData ||
-                getBooksForSearchPageQueryData.booksSearch.length === 0
+              !getBooksForSearchPageQueryData || offset + 10 > response.numFound
                 ? 'dark:btn-disabled btn-ghost text-base-200 pointer-events-none'
                 : 'bg-slate-700 dark:bg-opacity-0'
             )}
@@ -145,12 +155,12 @@ export const getServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
   const decodedQuery = decodeURIComponent(query.q as string);
-  const startIndex = parseInt((query.startIndex as string) || '0');
+  const offset = parseInt((query.offset as string) || '0');
 
   await client
     .query<GetBooksForSearchPageQuery, GetBooksForSearchPageQueryVariables>(
       GET_BOOKS_FOR_SEARCH_PAGE,
-      { input: { query: decodedQuery, startIndex: startIndex } }
+      { input: { query: decodedQuery, offset: offset } }
     )
     .toPromise();
 
