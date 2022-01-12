@@ -18,7 +18,7 @@ export class ApplicationConfig extends RootConfig {
    */
   @IsNotEmpty()
   @IsUrl()
-  OPEN_LIBRARY_API_URL: string;
+  OPEN_LIBRARY_API_URL = 'https://openlibrary.org';
 
   /**
    * The git revision that deployed this application
