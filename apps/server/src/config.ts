@@ -19,4 +19,11 @@ export class ApplicationConfig extends RootConfig {
   @IsNotEmpty()
   @IsUrl()
   GOOGLE_BOOKS_API_URL: string;
+
+  /**
+   * The git revision that deployed this application
+   */
+  @IsNotEmpty()
+  @IsString()
+  GIT_REV: string;
 }

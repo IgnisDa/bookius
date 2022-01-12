@@ -14,12 +14,14 @@ ARG REDIS_URL
 ARG DATABASE_URL
 ARG MAGIC_SECRET_KEY
 ARG GOOGLE_BOOKS_API_URL
+ARG GIT_REV
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
 RUN echo "PORT=80" >> .env && \
     echo "REDIS_URL=${REDIS_URL}" >> .env && \
+    echo "GIT_REV=${GIT_REV}" >> .env && \
     echo "DATABASE_URL=${DATABASE_URL}"  >> .env && \
     echo "GOOGLE_BOOKS_API_URL=${GOOGLE_BOOKS_API_URL}"  >> .env && \
     echo "MAGIC_SECRET_KEY=${MAGIC_SECRET_KEY}" >> .env
