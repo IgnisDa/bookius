@@ -1,7 +1,6 @@
 import { IncomingMessage } from 'http';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import { AUTH_TOKEN_KEY } from '../constants';
-import { withQuery } from 'ufo';
 
 type RequestWithCookies = IncomingMessage & { cookies: NextApiRequestCookies };
 
@@ -22,7 +21,10 @@ export const getRedirectUnauthenticatedRequests = (
       : 'You need to be logged in to view that page',
   };
   if (options?.from) queryOptions.from = options.from;
-  const destination = withQuery(destinationUrl, queryOptions);
+  const destination = `${destinationUrl}?${new URLSearchParams(
+    queryOptions
+  ).toString()}`;
+
   return {
     props: {},
     redirect: {
