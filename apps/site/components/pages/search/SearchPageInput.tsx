@@ -1,8 +1,7 @@
 import * as Toggle from '@radix-ui/react-toggle';
 import clsx from 'clsx';
-import Link from 'next/link';
-import { FC, useState } from 'react';
-import { withQuery } from 'ufo';
+import { useRouter } from 'next/router';
+import { FC, FormEvent, useState } from 'react';
 
 type SearchPageInputComponentProps = {};
 
@@ -11,9 +10,17 @@ export const SearchPageInputComponent: FC<
 > = () => {
   const [userInput, setUserInput] = useState('');
   const [toggled, setToggled] = useState(false);
+  const router = useRouter();
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    toggled
+      ? router.push(`/book/${userInput}`)
+      : router.push({ pathname: '/search', query: { q: userInput } });
+  };
 
   return (
-    <div className="form-control">
+    <form onSubmit={onSubmit} className="form-control">
       <label htmlFor="isbn" className="label">
         <span className="label-text text-base-100 dark:text-primary-content">
           {toggled
@@ -39,27 +46,19 @@ export const SearchPageInputComponent: FC<
           onChange={(e) => setUserInput(e.target.value)}
           value={userInput}
         />
-        <Link
-          href={
-            toggled
-              ? withQuery('/books', { isbn: userInput })
-              : withQuery('/search', { q: userInput })
-          }
+        <button
+          className={clsx(
+            'absolute top-0 right-0 btn dark:btn-accent',
+            !userInput && 'pointer-events-none'
+          )}
         >
-          <a
-            className={clsx(
-              'absolute top-0 right-0 btn dark:btn-accent',
-              !userInput && 'pointer-events-none'
-            )}
-          >
-            Find
-          </a>
-        </Link>
+          Find
+        </button>
       </label>
       <div className="flex justify-between mt-2 text-xs text-pink-600 dark:text-orange-400">
         <div>(click to change)</div>
         <div>(very obvious)</div>
       </div>
-    </div>
+    </form>
   );
 };
