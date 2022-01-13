@@ -56,3 +56,44 @@ export class OpenLibraryWorkDto {
    */
   authorName?: string[];
 }
+
+@ObjectType({
+  description: 'A work from the Open Library API',
+})
+@Directive('@specifiedBy(url: "https://openlibrary.org/dev/docs/api/books")')
+export class OpenLibraryWorkDetailsDto {
+  /**
+   * Title of the book
+   */
+  title: string;
+
+  /**
+   * Cover image IDs for the book
+   */
+  covers?: string[];
+
+  /**
+   * The names of the publishers
+   */
+  publishers?: string[];
+
+  @Field(() => Int, {
+    description: 'Number of pages in the book',
+  })
+  numberOfPages?: number;
+
+  /**
+   * Unique Industry Identifiers for the book
+   */
+  isbn13?: string[];
+
+  /**
+   * Unique Industry Identifiers for the book
+   */
+  isbn10?: string[];
+
+  /**
+   * The date on which the book was published
+   */
+  publishDate?: string;
+}
