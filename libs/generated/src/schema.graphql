@@ -361,6 +361,11 @@ input BookWhereUniqueInput {
   id: String
 }
 
+"""
+The result returned when a client tries to get details about a particular book
+"""
+union BooksDetailsResultUnion = BooksSearchError | OpenLibraryWorkDetailsDto
+
 """The object returned when there is an error while performing the search"""
 type BooksSearchError implements APIError {
   """The error encountered while executing this query"""
@@ -376,6 +381,7 @@ input BooksSearchInput {
   query: String!
 }
 
+"""The result returned when a client tries to search for a book"""
 union BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse
 
 input BoolFilter {
@@ -598,6 +604,30 @@ type OpenLibraryResponse {
   offset: Int!
 }
 
+"""A work from the Open Library API"""
+type OpenLibraryWorkDetailsDto {
+  """Cover image IDs for the book"""
+  covers: [String!]
+
+  """Unique Industry Identifiers for the book"""
+  isbn10: [String!]
+
+  """Unique Industry Identifiers for the book"""
+  isbn13: [String!]
+
+  """Number of pages in the book"""
+  numberOfPages: Int
+
+  """The date on which the book was published"""
+  publishDate: String
+
+  """The names of the publishers"""
+  publishers: [String!]
+
+  """Title of the book"""
+  title: String!
+}
+
 """A volume from the Open Library API"""
 type OpenLibraryWorkDto {
   """Names of the author of the book"""
@@ -631,6 +661,9 @@ type Query {
 
   """Get a list of books related to a search query from Open Library API."""
   openLibraryBooksSearch(input: BooksSearchInput!): BooksSearchResultUnion!
+
+  """Get details about a particular work from the Open Library API."""
+  openLibraryWorkDetails(isbn: String!): BooksDetailsResultUnion!
 
   """Get list of book progresses that are related to the user."""
   userBookProgressLogs(take: Int): [BookProgressLog!]!
