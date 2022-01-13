@@ -5,7 +5,7 @@ const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 module.exports = {
   darkMode: 'class',
   content: [
-    './apps/site/**/pages/*.{js,ts,jsx,tsx}',
+    './apps/site/**/pages/**/*.{js,ts,jsx,tsx}',
     './apps/site/**/components/**/*.{js,ts,jsx,tsx}',
     './libs/ui/**/*.{js,ts,jsx,tsx}',
   ],
@@ -19,7 +19,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Biotif', ...defaultTheme.fontFamily.sans],
-        heading: ['Neucha'],
+        heading: ['Neucha', ...defaultTheme.fontFamily.sans],
       },
       screens: {
         '3xl': '1600px',
