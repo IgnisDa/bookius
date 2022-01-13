@@ -10,7 +10,6 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import NextImage from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { withQuery } from 'ufo';
 import { BookItemComponent } from '../components/pages/search/BookItem';
 import { SearchPageInputComponent } from '../components/pages/search/SearchPageInput';
 import { GET_BOOKS_FOR_SEARCH_PAGE } from '../graphql/queries';
@@ -114,10 +113,10 @@ const Search = (
       )}
       <div className="flex justify-around w-full pt-8 text-center sm:btn-group sm:block">
         <Link
-          href={withQuery('/search', {
+          href={`/search?${new URLSearchParams({
             q: q,
             offset: (offset - 10).toString(),
-          })}
+          }).toString()}`}
         >
           <a
             className={clsx(
@@ -131,10 +130,10 @@ const Search = (
           </a>
         </Link>
         <Link
-          href={withQuery('/search', {
+          href={`/search?${new URLSearchParams({
             q: q,
             offset: (offset + 10).toString(),
-          })}
+          }).toString()}`}
         >
           <a
             className={clsx(

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { ChangeEvent, FC, FormEvent } from 'react';
-import { withQuery } from 'ufo';
 
 type SearchInputComponentProps = {
   search: string;
@@ -12,13 +11,14 @@ export const SearchInputComponent: FC<SearchInputComponentProps> = ({
   search,
   updateSearch,
 }) => {
+  const router = useRouter();
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    Router.push(
-      withQuery(`/search`, {
-        q: encodeURIComponent(search),
-      })
-    );
+    router.push({
+      pathname: `/search`,
+      query: { q: encodeURIComponent(search) },
+    });
   };
 
   return (
