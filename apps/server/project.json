@@ -135,7 +135,6 @@
       "rxjs",
       "tslib",
       "tslog",
-      "ufo",
       "unique-names-generator"
     ]
   }

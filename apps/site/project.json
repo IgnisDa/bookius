@@ -13,7 +13,9 @@
         "outputPath": "dist/apps/site",
         "root": "apps/site"
       },
-      "outputs": ["{options.outputPath}"]
+      "outputs": [
+        "{options.outputPath}"
+      ]
     },
     "export": {
       "executor": "@nrwl/next:export",
@@ -24,9 +26,13 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/site/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "apps/site/**/*.{ts,tsx,js,jsx}"
+        ]
       },
-      "outputs": ["{options.outputFile}"]
+      "outputs": [
+        "{options.outputFile}"
+      ]
     },
     "serve": {
       "configurations": {
@@ -47,7 +53,9 @@
         "jestConfig": "apps/site/jest.config.js",
         "passWithNoTests": true
       },
-      "outputs": ["coverage/apps/site"]
+      "outputs": [
+        "coverage/apps/site"
+      ]
     }
   },
   "tags": [],
@@ -131,7 +139,6 @@
       "react-is",
       "react-toastify",
       "sharp",
-      "ufo",
       "urql",
       "urql-custom-scalars-exchange",
       "use-dark-mode"
