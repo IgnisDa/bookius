@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { sampleSize } from 'lodash';
-import { withQuery } from 'ufo';
 import { ApplicationConfig } from '../config';
 import { BooksSearchInput } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
@@ -52,29 +51,44 @@ export class BooksService {
   }
 
   async openLibraryBooksSearch(input: BooksSearchInput) {
-    const openLibraryEndpoint = withQuery(
-      `${this.applicationConfig.OPEN_LIBRARY_API_URL}/search.json`,
-      {
-        q: decodeURIComponent(input.query as string),
-        fields: [
-          'title',
-          'key',
-          'isbn',
-          'author_name',
-          'cover_i',
-          'language',
-        ].join(','),
-        offset: input.offset ? input.offset.toString() : '0',
-        limit: '10',
-      }
-    );
     try {
-      const { data } = await axios.get(openLibraryEndpoint);
+      const { data } = await axios.get(
+        `${this.applicationConfig.OPEN_LIBRARY_API_URL}/search.json`,
+        {
+          params: {
+            q: decodeURIComponent(input.query as string),
+            fields: [
+              'title',
+              'key',
+              'isbn',
+              'author_name',
+              'cover_i',
+              'language',
+            ].join(','),
+            offset: input.offset ? input.offset.toString() : '0',
+            limit: '10',
+          },
+        }
+      );
       return camelCaseKeys(data);
     } catch (e) {
       console.error(e);
       return Promise.reject({
         message: 'The Open Library API did not respond as expected',
+      });
+    }
+  }
+
+  async openLibraryWorkDetails(isbn: string) {
+    const bibKeys = `ISBN:${isbn}`;
+    /* cspell:disable-next-line */
+    const url = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/api/books?bibkeys=${bibKeys}&format=json&jscmd=details`;
+    try {
+      const { data } = await axios.get(url);
+      return camelCaseKeys(data[bibKeys].details);
+    } catch (e) {
+      return Promise.reject({
+        message: `The Open Library API does not have a record with isbn='${isbn}'`,
       });
     }
   }

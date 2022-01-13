@@ -10,12 +10,16 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { BooksService } from './books.service';
 import {
+  BooksDetailsResultUnion,
   BooksSearchError,
   BooksSearchInput,
   BooksSearchResultUnion,
 } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
-import { OpenLibraryResponse } from './dto/open-library-books.dto';
+import {
+  OpenLibraryResponse,
+  OpenLibraryWorkDetailsDto,
+} from './dto/open-library-books.dto';
 import { UserBookProgressLogsInput } from './dto/user-book-progress-logs.dto';
 
 @Resolver()
@@ -66,6 +70,17 @@ export class BooksResolver {
     return this.booksService
       .openLibraryBooksSearch(input)
       .then((resp) => ({ __typename: OpenLibraryResponse.name, ...resp }))
+      .catch((resp) => ({ __typename: BooksSearchError.name, ...resp }));
+  }
+
+  @Query(() => BooksDetailsResultUnion, {
+    description:
+      'Get details about a particular work from the Open Library API.',
+  })
+  async openLibraryWorkDetails(@Args('isbn') isbn: string) {
+    return this.booksService
+      .openLibraryWorkDetails(isbn)
+      .then((resp) => ({ __typename: OpenLibraryWorkDetailsDto.name, ...resp }))
       .catch((resp) => ({ __typename: BooksSearchError.name, ...resp }));
   }
 }
