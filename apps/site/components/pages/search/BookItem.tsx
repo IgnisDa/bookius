@@ -1,4 +1,5 @@
 import { OpenLibraryWorkDto } from '@bookius/generated';
+import clsx from 'clsx';
 import truncate from 'lodash/truncate';
 import NextImage from 'next/image';
 import Link from 'next/link';
@@ -49,14 +50,19 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
       </div>
       <div className="flex flex-col flex-1 space-y-5">
         <div>
-          <Link href={`/book/${trueKey}`}>
-            <a className="text-2xl font-semibold underline md:no-underline text-primary dark:text-secondary hover:underline decoration-dashed">
+          <Link href={book.isbn ? `/book/${book.isbn?.at(0)}` : '#'}>
+            <a
+              className={clsx(
+                'text-2xl font-semibold underline md:no-underline text-primary dark:text-secondary hover:underline decoration-dashed',
+                !book.isbn && 'pointer-events-none'
+              )}
+            >
               {truncate(book.title, {
                 length: 30,
                 omission: '...',
-              })}{' '}
+              })}
             </a>
-          </Link>
+          </Link>{' '}
           {book.authorName && book.authorName.length > 0 && (
             <div>
               <span className="text-base-100 dark:text-primary-content">
