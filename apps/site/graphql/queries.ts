@@ -102,3 +102,28 @@ export const GET_BOOKS_FOR_SEARCH_PAGE = gql`
     }
   }
 `;
+
+export const GET_BOOK_DETAILS_FROM_OPEN_LIBRARY = gql`
+  query GetBookDetailsFromOpenLibrary($isbn: String!) {
+    openLibraryWorkDetails(isbn: $isbn) {
+      __typename
+      ... on BooksSearchError {
+        message
+      }
+      ... on OpenLibraryWorkDetailsDto {
+        authors {
+          key
+          name
+        }
+        covers
+        isbn13
+        isbn10
+        numberOfPages
+        publishDate
+        publishers
+        title
+        blurImageBase64Strings
+      }
+    }
+  }
+`;

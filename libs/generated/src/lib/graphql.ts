@@ -405,6 +405,11 @@ export type BookWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** The result returned when a client tries to get details about a particular book */
+export type BooksDetailsResultUnion =
+  | BooksSearchError
+  | OpenLibraryWorkDetailsDto;
+
 /** The object returned when there is an error while performing the search */
 export type BooksSearchError = ApiError & {
   __typename: 'BooksSearchError';
@@ -420,6 +425,7 @@ export type BooksSearchInput = {
   query: Scalars['String'];
 };
 
+/** The result returned when a client tries to search for a book */
 export type BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse;
 
 export type BoolFilter = {
@@ -641,6 +647,40 @@ export type OpenLibraryResponse = {
   offset: Scalars['Int'];
 };
 
+/** An author of a book */
+export type OpenLibraryWorkAuthorDto = {
+  __typename: 'OpenLibraryWorkAuthorDto';
+  /** A unique key assigned to this author */
+  key: Scalars['String'];
+  /** Name of the author */
+  name: Scalars['String'];
+};
+
+/** A work from the Open Library API */
+export type OpenLibraryWorkDetailsDto = {
+  __typename: 'OpenLibraryWorkDetailsDto';
+  /** A list of authors of this book */
+  authors?: Maybe<Array<OpenLibraryWorkAuthorDto>>;
+  /** Very blurred base64 encoded images for each cover */
+  blurImageBase64Strings?: Maybe<Array<Scalars['String']>>;
+  /** Cover image links for the book */
+  covers?: Maybe<Array<Scalars['String']>>;
+  /** Unique Industry Identifiers for the book */
+  isbn10?: Maybe<Array<Scalars['String']>>;
+  /** Unique Industry Identifiers for the book */
+  isbn13?: Maybe<Array<Scalars['String']>>;
+  /** Number of pages in the book */
+  numberOfPages?: Maybe<Scalars['Int']>;
+  /** The date on which the book was published */
+  publishDate?: Maybe<Scalars['String']>;
+  /** The names of the publishers */
+  publishers?: Maybe<Array<Scalars['String']>>;
+  /** A list of subjects this book is related to */
+  subjects?: Maybe<Array<Scalars['String']>>;
+  /** Title of the book */
+  title: Scalars['String'];
+};
+
 /** A volume from the Open Library API */
 export type OpenLibraryWorkDto = {
   __typename: 'OpenLibraryWorkDto';
@@ -668,6 +708,8 @@ export type Query = {
   filterUserShelves: Array<Shelf>;
   /** Get a list of books related to a search query from Open Library API. */
   openLibraryBooksSearch: BooksSearchResultUnion;
+  /** Get details about a particular work from the Open Library API. */
+  openLibraryWorkDetails: BooksDetailsResultUnion;
   /** Get list of book progresses that are related to the user. */
   userBookProgressLogs: Array<BookProgressLog>;
   /** Get a small list of authors that are related to the user. */
@@ -700,6 +742,10 @@ export type QueryFilterUserShelvesArgs = {
 
 export type QueryOpenLibraryBooksSearchArgs = {
   input: BooksSearchInput;
+};
+
+export type QueryOpenLibraryWorkDetailsArgs = {
+  isbn: Scalars['String'];
 };
 
 export type QueryUserBookProgressLogsArgs = {
@@ -1170,6 +1216,35 @@ export type GetBooksForSearchPageQuery = {
       };
 };
 
+export type GetBookDetailsFromOpenLibraryQueryVariables = Exact<{
+  isbn: Scalars['String'];
+}>;
+
+export type GetBookDetailsFromOpenLibraryQuery = {
+  __typename: 'Query';
+  openLibraryWorkDetails:
+    | { __typename: 'BooksSearchError'; message: string }
+    | {
+        __typename: 'OpenLibraryWorkDetailsDto';
+        covers?: Array<string> | null | undefined;
+        isbn13?: Array<string> | null | undefined;
+        isbn10?: Array<string> | null | undefined;
+        numberOfPages?: number | null | undefined;
+        publishDate?: string | null | undefined;
+        publishers?: Array<string> | null | undefined;
+        title: string;
+        blurImageBase64Strings?: Array<string> | null | undefined;
+        authors?:
+          | Array<{
+              __typename: 'OpenLibraryWorkAuthorDto';
+              key: string;
+              name: string;
+            }>
+          | null
+          | undefined;
+      };
+};
+
 export const LoginUserDocument = gql`
   mutation LoginUser($issuer: String!) {
     loginUser(issuer: $issuer) {
@@ -1393,6 +1468,42 @@ export function useGetBooksForSearchPageQuery(
 ) {
   return Urql.useQuery<GetBooksForSearchPageQuery>({
     query: GetBooksForSearchPageDocument,
+    ...options,
+  });
+}
+export const GetBookDetailsFromOpenLibraryDocument = gql`
+  query GetBookDetailsFromOpenLibrary($isbn: String!) {
+    openLibraryWorkDetails(isbn: $isbn) {
+      __typename
+      ... on BooksSearchError {
+        message
+      }
+      ... on OpenLibraryWorkDetailsDto {
+        authors {
+          key
+          name
+        }
+        covers
+        isbn13
+        isbn10
+        numberOfPages
+        publishDate
+        publishers
+        title
+        blurImageBase64Strings
+      }
+    }
+  }
+`;
+
+export function useGetBookDetailsFromOpenLibraryQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetBookDetailsFromOpenLibraryQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetBookDetailsFromOpenLibraryQuery>({
+    query: GetBookDetailsFromOpenLibraryDocument,
     ...options,
   });
 }
