@@ -63,14 +63,24 @@ export class OpenLibraryWorkDto {
 @Directive('@specifiedBy(url: "https://openlibrary.org/dev/docs/api/books")')
 export class OpenLibraryWorkDetailsDto {
   /**
+   * Unique key of the book
+   */
+  key: string;
+
+  /**
    * Title of the book
    */
   title: string;
 
   /**
-   * Cover image IDs for the book
+   * Cover image links for the book
    */
   covers?: string[];
+
+  /**
+   * Very blurred base64 encoded images for each cover
+   */
+  blurImageBase64Strings?: string[];
 
   /**
    * The names of the publishers
@@ -96,4 +106,29 @@ export class OpenLibraryWorkDetailsDto {
    * The date on which the book was published
    */
   publishDate?: string;
+
+  /**
+   * A list of subjects this book is related to
+   */
+  subjects?: string[];
+
+  @Field(() => [OpenLibraryWorkAuthorDto], {
+    description: 'A list of authors of this book',
+  })
+  authors?: OpenLibraryWorkAuthorDto[];
+}
+
+@ObjectType({
+  description: 'An author of a work present in the Open Library databases',
+})
+class OpenLibraryWorkAuthorDto {
+  /**
+   * A unique key assigned to this author
+   */
+  key: string;
+
+  /**
+   * Name of the author
+   */
+  name: string;
 }
