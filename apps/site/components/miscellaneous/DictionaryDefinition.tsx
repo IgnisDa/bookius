@@ -16,7 +16,7 @@ export const DictionaryDefinition: FC<DictionaryDefinitionProps> = ({
   example,
 }) => {
   return (
-    <div className="space-y-3 text-gray-700 lg:space-y-8 dark:text-primary-content">
+    <div className="space-y-3 lg:space-y-8 dark:text-primary-content">
       <div className="space-y-3">
         <div className="text-4xl font-semibold underline lg:text-6xl ">
           {word}

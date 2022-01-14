@@ -4,9 +4,9 @@ import { Fallback, Image, Root } from '@radix-ui/react-avatar';
 import clsx from 'clsx';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
+import noData from '../../../public/images/no-data-3.svg';
 import { MoreButton } from '../../miscellaneous/MoreButton';
 import { ReadingProgress } from './ReadingProgress';
-import noData from '../../../public/images/no-data-3.svg';
 
 type PopularAuthorsComponentProps = {
   logs: GetUserBooksProgressLogsQuery;
@@ -16,9 +16,9 @@ export const KeepReadingComponent: FunctionComponent<
   PopularAuthorsComponentProps
 > = ({ logs }) => {
   return (
-    <div className="py-3 bg-white shadow-md dark:bg-base-200 rounded-2xl lg:w-3/5">
+    <div className="py-3 shadow-md bg-base-200 rounded-2xl lg:w-3/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
-        <h1 className="text-4xl font-bold text-gray-700 dark:text-accent font-heading">
+        <h1 className="text-4xl font-bold text-accent font-heading">
           Keep Reading
         </h1>
         <MoreButton href="/shelves/reading" />
@@ -46,17 +46,17 @@ export const KeepReadingComponent: FunctionComponent<
                       <p
                         className={clsx(
                           clampNumberOfLines(1).className,
-                          'text-lg dark:text-secondary-content text-gray-700'
+                          'text-lg  text-gray-700'
                         )}
                       >
                         {log.book.title}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-accent-content">
+                      <p className="text-sm text-accent-content">
                         {log?.book?.architects?.at(0)?.author.name || 'Unknown'}
                       </p>
                     </div>
                     <div className="ml-auto">
-                      <p className="text-sm font-semibold font-heading dark:text-gray-400 text-base-100">
+                      <p className="text-sm font-semibold font-heading text-base-100">
                         {Math.round((log.percentage * log.numPages) / 100)}/
                         {log.numPages}
                       </p>
@@ -76,12 +76,10 @@ export const KeepReadingComponent: FunctionComponent<
             width={'500px'}
             className="object-contain"
           />
-          <p className="text-center dark:text-gray-400 text-base-100">
+          <p className="text-center text-primary-content">
             You have not started logging your progress. Add a book to the{' '}
-            <span className="text-primary dark:text-warning">
-              Currently Reading
-            </span>{' '}
-            shelf to add books here.
+            <span className="text-warning">Currently Reading</span> shelf to add
+            books here.
           </p>
         </div>
       )}

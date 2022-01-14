@@ -47,12 +47,6 @@ const Dashboard = (
         <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
       </div>
     </div>
-    // <>
-    //   {/* we only render this component on the client side */}
-    //   {/* <div className="flex-col justify-center flex-1 hidden 2xl:flex">
-    //     <SearchResultComponent search={search} />
-    //   </div> */}
-    // </>
   );
 };
 

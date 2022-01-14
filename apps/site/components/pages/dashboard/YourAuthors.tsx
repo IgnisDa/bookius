@@ -6,8 +6,8 @@ import zip from 'lodash/zip';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { VscNotebook } from 'react-icons/vsc';
-import { MoreButton } from '../../miscellaneous/MoreButton';
 import noData from '../../../public/images/no-data-1.svg';
+import { MoreButton } from '../../miscellaneous/MoreButton';
 
 type YourAuthorsComponentProps = {
   authors: GetUserRelatedAuthorsQuery;
@@ -17,9 +17,9 @@ export const YourAuthorsComponent: FunctionComponent<
   YourAuthorsComponentProps
 > = ({ authors }) => {
   return (
-    <div className="pt-3 bg-white rounded-bl-none shadow-md dark:bg-base-200 rounded-2xl lg:w-2/5">
+    <div className="pt-3 rounded-bl-none shadow-md bg-base-200 rounded-2xl lg:w-2/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
-        <h1 className="text-4xl font-bold text-gray-700 font-heading dark:text-accent">
+        <h1 className="text-4xl font-bold font-heading text-accent">
           Your Authors
         </h1>
         <MoreButton href="/authors" />
@@ -52,7 +52,7 @@ export const YourAuthorsComponent: FunctionComponent<
                   </Fallback>
                 </Root>
                 <div>
-                  <p className="text-lg text-gray-600 dark:text-secondary-content">
+                  <p className="text-lg text-secondary-content">
                     {author?.name}
                   </p>
                 </div>
@@ -71,7 +71,7 @@ export const YourAuthorsComponent: FunctionComponent<
             width={'500px'}
             className="object-contain"
           />
-          <p className="leading-none text-center dark:text-gray-400 text-base-100">
+          <p className="leading-none text-center text-primary-content">
             You have not looked up any authors yet.
           </p>
         </div>

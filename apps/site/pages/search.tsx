@@ -46,10 +46,8 @@ const Search = (
       </div>
       <div>
         <h1 className="text-3xl text-center md:text-4xl">
-          <span className="text-base-100 dark:text-gray-300">
-            Searching for
-          </span>{' '}
-          <span className="text-purple-600 dark:text-accent-lime-green">
+          <span className="text-gray-300">Searching for</span>{' '}
+          <span className=" text-accent-lime-green">
             {truncate(decodeURIComponent(q as string), {
               length: 20,
               separator: '',
@@ -58,12 +56,8 @@ const Search = (
           </span>
         </h1>
         <div className="text-center md:text-left">
-          <span className="text-gray-600 dark:text-gray-300">
-            Total results:
-          </span>{' '}
-          <span className="text-2xl text-black dark:text-success">
-            {response.numFound}
-          </span>
+          <span className="text-gray-300 ">Total results:</span>{' '}
+          <span className="text-2xl text-success">{response.numFound}</span>
         </div>
       </div>
       {response && response.docs.length > 0 ? (
@@ -93,7 +87,7 @@ const Search = (
           ))}
         </div>
       ) : (
-        <div className="p-3 border border-gray-400 rounded-lg dark:border-base-200">
+        <div className="p-3 border rounded-lg border-base-200">
           <div>
             <NextImage
               src={voidImage}
@@ -105,7 +99,7 @@ const Search = (
             />
           </div>
           <div>
-            <h1 className="mt-4 text-2xl text-center dark:text-error text-rose-600">
+            <h1 className="mt-4 text-2xl text-center text-rose-600">
               No search results found!
             </h1>
           </div>
@@ -122,8 +116,8 @@ const Search = (
             className={clsx(
               'btn sm:btn-wide btn-outline',
               offset === 0
-                ? 'dark:btn-disabled btn-ghost text-base-200 pointer-events-none'
-                : 'bg-slate-700 dark:bg-opacity-0'
+                ? 'btn-disabled btn-ghost text-base-200 pointer-events-none'
+                : 'bg-slate-700 bg-opacity-0'
             )}
           >
             Previous Page
@@ -139,8 +133,8 @@ const Search = (
             className={clsx(
               'btn sm:btn-wide btn-outline',
               !getBooksForSearchPageQueryData || offset + 10 > response.numFound
-                ? 'dark:btn-disabled btn-ghost text-base-200 pointer-events-none'
-                : 'bg-slate-700 dark:bg-opacity-0'
+                ? 'btn-disabled btn-ghost text-base-200 pointer-events-none'
+                : 'bg-slate-700 bg-opacity-0'
             )}
           >
             Next Page

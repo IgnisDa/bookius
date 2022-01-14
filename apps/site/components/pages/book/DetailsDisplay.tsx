@@ -36,11 +36,11 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
         />
       </div>
       <div className="w-full space-y-1 sm:max-w-md md:max-w-none">
-        <h1 className="text-4xl font-bold text-left md:text-5xl font-heading text-base-100 dark:text-secondary-content">
+        <h1 className="text-4xl font-bold text-left md:text-5xl font-heading text-secondary-content">
           {book.title}
         </h1>
         {book.authors && (
-          <h2 className="text-gray-700 dark:text-gray-100">
+          <h2 className="text-gray-100 ">
             <span className="opacity-75 md:text-lg">by</span>{' '}
             <span className="text-xl underline md:text-2xl">
               {book.authors.map((a) => a.name).join(', ')}
@@ -49,41 +49,41 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
         )}
         <div className="h-8" />
         {book.numberOfPages && (
-          <p className="text-gray-700 ">
-            <span className="text-sm md:text-base dark:text-gray-500 lg:text-lg">
+          <p>
+            <span className="text-sm text-gray-500 md:text-base lg:text-lg">
               Pages:
             </span>{' '}
-            <span className="font-semibold md:text-xl lg:text-2xl dark:text-gray-300">
+            <span className="font-semibold text-gray-300 md:text-xl lg:text-2xl">
               {book.numberOfPages}
             </span>
           </p>
         )}
         {book.publishDate && (
-          <p className="text-gray-700 ">
-            <span className="text-sm md:text-base dark:text-gray-500 lg:text-lg">
+          <p>
+            <span className="text-sm text-gray-500 md:text-base lg:text-lg">
               Published on:
             </span>{' '}
-            <span className="font-semibold md:text-xl lg:text-2xl dark:text-gray-300">
+            <span className="font-semibold text-gray-300 md:text-xl lg:text-2xl">
               {book.publishDate}
             </span>
           </p>
         )}
         {book.publishers && (
-          <p className="text-gray-700 ">
-            <span className="text-sm md:text-base dark:text-gray-500 lg:text-lg">
+          <p>
+            <span className="text-sm text-gray-500 md:text-base lg:text-lg">
               Published by:
             </span>{' '}
-            <span className="font-semibold md:text-xl lg:text-2xl dark:text-gray-300">
+            <span className="font-semibold text-gray-300 md:text-xl lg:text-2xl">
               {book.publishers.join(', ')}
             </span>
           </p>
         )}
         {isbn.length > 0 && (
-          <p className="text-gray-700 ">
-            <span className="text-sm md:text-base dark:text-gray-500 lg:text-lg">
+          <p>
+            <span className="text-sm text-gray-500 md:text-base lg:text-lg">
               ISBNs:
             </span>{' '}
-            <span className="font-semibold md:text-xl lg:text-2xl dark:text-gray-300">
+            <span className="font-semibold text-gray-300 md:text-xl lg:text-2xl">
               {isbn.join(', ')}
             </span>
           </p>

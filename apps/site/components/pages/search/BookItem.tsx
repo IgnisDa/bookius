@@ -53,7 +53,7 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           <Link href={book.isbn ? `/book/${book.isbn?.at(0)}` : '#'}>
             <a
               className={clsx(
-                'text-2xl font-semibold md:no-underline text-primary dark:text-secondary hover:underline decoration-dashed',
+                'text-2xl font-semibold md:no-underline  text-secondary hover:underline decoration-dashed',
                 !book.isbn ? 'pointer-events-none' : 'underline'
               )}
             >
@@ -65,10 +65,8 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           </Link>{' '}
           {book.authorName && book.authorName.length > 0 && (
             <div>
-              <span className="text-base-100 dark:text-primary-content">
-                by
-              </span>{' '}
-              <span className="text-lg text-secondary dark:text-warning">
+              <span className=" text-primary-content">by</span>{' '}
+              <span className="text-lg text-warning">
                 {book.authorName.at(0)}
               </span>
             </div>
@@ -76,10 +74,10 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
         </div>
         {book.isbn && (
           <div>
-            <span className="text-gray-600 dark:text-gray-400">ISBNs:</span>
+            <span className="text-gray-400 ">ISBNs:</span>
             {book.isbn?.slice(0, 3).map((identifier, identifierIndex) => (
               <p key={identifierIndex} className="text-xs">
-                <span className="font-semibold text-gray-900 dark:text-gray-200">
+                <span className="font-semibold text-gray-200">
                   {identifier}
                 </span>
               </p>

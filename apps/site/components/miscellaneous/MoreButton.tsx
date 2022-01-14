@@ -11,11 +11,11 @@ export const MoreButton: FunctionComponent<MoreButtonProps> = ({ href }) => {
   return (
     <NextLink href={href} passHref>
       <a className="flex items-center justify-center">
-        <button className="text-gray-800 hover:underline decoration-wavy dark:text-base-content">
+        <button className=" hover:underline decoration-wavy text-base-content">
           More
         </button>
         <Icon label="Right Arrow">
-          <ArrowRightIcon className="w-4 h-4 ml-1 text-gray-800 fill-current dark:text-base-content" />
+          <ArrowRightIcon className="w-4 h-4 ml-1 fill-current text-base-content" />
         </Icon>
       </a>
     </NextLink>
