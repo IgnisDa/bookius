@@ -25,9 +25,14 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? defaultLayout;
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
 
-  const darkMode = useDarkMode(false, {
-    classNameDark: 'dark',
-    classNameLight: 'light',
+  /* const darkMode = */ useDarkMode(true, {
+    onChange: (enabled) => {
+      if (enabled) {
+        document.body.setAttribute('data-theme', 'dark');
+      } else {
+        document.body.setAttribute('data-theme', 'light');
+      }
+    },
   });
 
   return (
@@ -39,14 +44,14 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
       <DefaultSeo />
       <NextNprogress />
       <Provider value={client}>
-        {process.env.NODE_ENV === 'development' && (
+        {/* {process.env.NODE_ENV === 'development' && (
           <button
             className="absolute px-4 py-2 bg-blue-400 btn rounded-2xl"
             onClick={darkMode.toggle}
           >
             Theme
           </button>
-        )}
+        )} */}
         <ToastContainer position="bottom-center" />
         {getLayout(
           <AnimatePresence exitBeforeEnter>

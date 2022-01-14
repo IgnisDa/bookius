@@ -23,18 +23,18 @@ export const SearchInputComponent: FC<SearchInputComponentProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold text-700 font-heading text-base-100 dark:text-accent">
+      <h1 className="text-2xl font-bold text-700 font-heading text-accent">
         Find your favorite books/authors
       </h1>
       <fieldset className="flex w-full space-x-2">
         <motion.input
           type="text"
-          className="flex-1 text-gray-900 input input-ghost input-bordered dark:text-gray-500 focus:bg-gray-200 focus:dark:bg-gray-800 focus:text-gray-900 focus:dark:text-gray-200"
+          className="flex-1 text-gray-500 input input-ghost input-bordered focus:bg-gray-800 focus:text-gray-200"
           placeholder="Enter something and press enter"
           onChange={updateSearch}
         />
         <motion.button
-          className="btn btn-secondary dark:btn-primary disabled:!text-black"
+          className="btn btn-secondary btn-primary"
           type="submit"
           disabled={!search}
         >

@@ -5,8 +5,8 @@ import zip from 'lodash/zip';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
-import { MoreButton } from '../../miscellaneous/MoreButton';
 import noData from '../../../public/images/no-data-2.svg';
+import { MoreButton } from '../../miscellaneous/MoreButton';
 
 type MyBooksComponentProps = {
   books: GetUserRelatedBooksQuery;
@@ -18,7 +18,7 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   return (
     <>
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold text-gray-700 font-heading dark:text-accent">
+        <h1 className="text-4xl font-bold font-heading text-accent">
           My Books
         </h1>
         <MoreButton href="/books" />
@@ -26,9 +26,9 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
       {books.userRelatedBooks.length > 0 ? (
         <div className="flex flex-col mt-4 space-y-6 lg:flex-row lg:space-x-5 lg:space-y-0">
           {zip(books.userRelatedBooks.slice(0, 3), [
-            'bg-accent-light-blue dark:bg-blue-500',
-            'bg-accent-purple dark:bg-purple-600',
-            'bg-accent-lime-green dark:bg-green-600',
+            'bg-blue-500',
+            'bg-purple-600',
+            'bg-green-600',
           ]).map(([book, color]) => (
             <div
               className={clsx(
@@ -76,7 +76,7 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
             width={'300px'}
             className="object-contain"
           />
-          <p className="text-center dark:text-gray-400 text-base-100">
+          <p className="text-center text-primary-content">
             You have not started reading any books yet.
           </p>
         </div>
