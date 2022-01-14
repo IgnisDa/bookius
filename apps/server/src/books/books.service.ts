@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { sampleSize } from 'lodash';
+import { getPlaiceholder } from 'plaiceholder';
 import { ApplicationConfig } from '../config';
 import { BooksSearchInput } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
@@ -85,10 +86,23 @@ export class BooksService {
     const url = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/api/books?bibkeys=${bibKeys}&format=json&jscmd=details`;
     try {
       const { data } = await axios.get(url);
-      return camelCaseKeys(data[bibKeys].details);
+      const book = data[bibKeys].details;
+      const getImageUrl = (coverId: number, size: string) =>
+        `${this.applicationConfig.OPEN_LIBRARY_COVER_API_URL}/id/${coverId}-${size}.jpg?default=false`;
+      const covers = [];
+      const blurImageBase64Strings = [];
+      for (const coverId of book.covers) {
+        covers.push(getImageUrl(coverId, 'L'));
+        blurImageBase64Strings.push(
+          (await getPlaiceholder(getImageUrl(coverId, 'L'))).base64
+        );
+      }
+      book.covers = covers;
+      book.blurImageBase64Strings = blurImageBase64Strings;
+      return camelCaseKeys(book);
     } catch (e) {
       return Promise.reject({
-        message: `The Open Library API does not have a record with isbn='${isbn}'`,
+        message: `The Open Library API does not have a record with ISBN='${isbn}'`,
       });
     }
   }
