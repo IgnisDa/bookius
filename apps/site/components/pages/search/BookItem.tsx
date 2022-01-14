@@ -53,8 +53,8 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           <Link href={book.isbn ? `/book/${book.isbn?.at(0)}` : '#'}>
             <a
               className={clsx(
-                'text-2xl font-semibold underline md:no-underline text-primary dark:text-secondary hover:underline decoration-dashed',
-                !book.isbn && 'pointer-events-none'
+                'text-2xl font-semibold md:no-underline text-primary dark:text-secondary hover:underline decoration-dashed',
+                !book.isbn ? 'pointer-events-none' : 'underline'
               )}
             >
               {truncate(book.title, {

@@ -1,7 +1,7 @@
 import { OpenLibraryWorkDetailsDto } from '@bookius/generated';
+import Image from 'next/image';
 import { FC } from 'react';
 import noBookImage from '../../../public/images/no-book.png';
-import Image from 'next/image';
 
 type DetailsDisplayComponentProps = {
   book: OpenLibraryWorkDetailsDto;
@@ -25,10 +25,14 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
               ? book.blurImageBase64Strings.at(0)
               : undefined
           }
-          alt={'Image'}
+          alt={
+            !!book.covers
+              ? `Image for '${book.title}'`
+              : 'No valid book covers found'
+          }
           className="rounded-xl"
           layout="fill"
-          priority
+          loading="eager"
         />
       </div>
       <div className="w-full space-y-1 sm:max-w-md md:max-w-none">
