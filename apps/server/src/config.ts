@@ -21,6 +21,13 @@ export class ApplicationConfig extends RootConfig {
   OPEN_LIBRARY_API_URL = 'https://openlibrary.org';
 
   /**
+   * URL endpoint of the open Library API
+   */
+  @IsNotEmpty()
+  @IsUrl()
+  OPEN_LIBRARY_COVER_API_URL = 'https://covers.openlibrary.org/b';
+
+  /**
    * The git revision that deployed this application
    */
   @IsNotEmpty()
