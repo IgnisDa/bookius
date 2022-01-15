@@ -75,11 +75,13 @@ export class BooksResolver {
 
   @Query(() => BooksDetailsResultUnion, {
     description:
-      'Get details about a particular work from the Open Library API.',
+      'Get details about a particular work from the Open Library API. A list of possible ISBNs for that book are accepted, and details about the first hit are returned.',
   })
-  async openLibraryWorkDetails(@Args('isbn') isbn: string) {
+  async openLibraryWorkDetails(
+    @Args('possibleIsbn', { type: () => [String] }) possibleIsbn: string[]
+  ) {
     return this.booksService
-      .openLibraryWorkDetails(isbn)
+      .openLibraryWorkDetails(possibleIsbn)
       .then((resp) => ({ __typename: OpenLibraryWorkDetailsDto.name, ...resp }))
       .catch((resp) => ({ __typename: BooksSearchError.name, ...resp }));
   }

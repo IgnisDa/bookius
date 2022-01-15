@@ -50,7 +50,13 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
       </div>
       <div className="flex flex-col flex-1 space-y-5">
         <div>
-          <Link href={book.isbn ? `/book/${book.isbn?.at(0)}` : '#'}>
+          <Link
+            href={
+              !!book.isbn
+                ? { pathname: `/book`, query: { isbn: book.isbn } }
+                : '#'
+            }
+          >
             <a
               className={clsx(
                 'text-2xl font-semibold md:no-underline  text-secondary hover:underline decoration-dashed',
