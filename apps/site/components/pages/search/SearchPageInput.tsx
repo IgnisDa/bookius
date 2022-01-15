@@ -15,7 +15,7 @@ export const SearchPageInputComponent: FC<
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     toggled
-      ? router.push(`/book/${userInput}`)
+      ? router.push({ pathname: `/book`, query: { isbn: userInput } })
       : router.push({ pathname: '/search', query: { q: userInput } });
   };
 

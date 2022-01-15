@@ -5522,7 +5522,7 @@
       {
         "kind": "OBJECT",
         "name": "OpenLibraryWorkAuthorDto",
-        "description": "An author of a book",
+        "description": "An author of a work present in the Open Library databases",
         "fields": [
           {
             "name": "key",
@@ -5662,6 +5662,22 @@
                   "name": "String",
                   "ofType": null
                 }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "key",
+            "description": "Unique key of the book",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -6170,15 +6186,23 @@
             "description": "Get details about a particular work from the Open Library API.",
             "args": [
               {
-                "name": "isbn",
+                "name": "possibleIsbn",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "SCALAR",
+                        "name": "String",
+                        "ofType": null
+                      }
+                    }
                   }
                 },
                 "defaultValue": null,

@@ -11,10 +11,10 @@ import { client, ssrCache } from '../../lib/helpers/urqlClient';
 import ufoImage from '../../public/images/ufo.svg';
 
 const BookDetailPage = ({
-  isbn,
+  possibleIsbn,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [{ data }] = useGetBookDetailsFromOpenLibraryQuery({
-    variables: { isbn },
+    variables: { possibleIsbn },
   });
 
   return (
@@ -49,16 +49,17 @@ const BookDetailPage = ({
 };
 
 export const getServerSideProps = async ({
-  params,
+  query,
 }: GetServerSidePropsContext) => {
-  const isbn = params!.isbn as string;
   await client
     .query<
       GetBookDetailsFromOpenLibraryQuery,
       GetBookDetailsFromOpenLibraryQueryVariables
-    >(GET_BOOK_DETAILS_FROM_OPEN_LIBRARY, { isbn })
+    >(GET_BOOK_DETAILS_FROM_OPEN_LIBRARY, { possibleIsbn: query.isbn! })
     .toPromise();
-  return { props: { urqlState: ssrCache.extractData(), isbn: isbn } };
+  return {
+    props: { urqlState: ssrCache.extractData(), possibleIsbn: query.isbn! },
+  };
 };
 
 export default BookDetailPage;

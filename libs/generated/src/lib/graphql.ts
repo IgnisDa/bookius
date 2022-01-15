@@ -647,7 +647,7 @@ export type OpenLibraryResponse = {
   offset: Scalars['Int'];
 };
 
-/** An author of a book */
+/** An author of a work present in the Open Library databases */
 export type OpenLibraryWorkAuthorDto = {
   __typename: 'OpenLibraryWorkAuthorDto';
   /** A unique key assigned to this author */
@@ -669,6 +669,8 @@ export type OpenLibraryWorkDetailsDto = {
   isbn10?: Maybe<Array<Scalars['String']>>;
   /** Unique Industry Identifiers for the book */
   isbn13?: Maybe<Array<Scalars['String']>>;
+  /** Unique key of the book */
+  key: Scalars['String'];
   /** Number of pages in the book */
   numberOfPages?: Maybe<Scalars['Int']>;
   /** The date on which the book was published */
@@ -745,7 +747,7 @@ export type QueryOpenLibraryBooksSearchArgs = {
 };
 
 export type QueryOpenLibraryWorkDetailsArgs = {
-  isbn: Scalars['String'];
+  possibleIsbn: Array<Scalars['String']>;
 };
 
 export type QueryUserBookProgressLogsArgs = {
@@ -1217,7 +1219,7 @@ export type GetBooksForSearchPageQuery = {
 };
 
 export type GetBookDetailsFromOpenLibraryQueryVariables = Exact<{
-  isbn: Scalars['String'];
+  possibleIsbn: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 export type GetBookDetailsFromOpenLibraryQuery = {
@@ -1226,6 +1228,7 @@ export type GetBookDetailsFromOpenLibraryQuery = {
     | { __typename: 'BooksSearchError'; message: string }
     | {
         __typename: 'OpenLibraryWorkDetailsDto';
+        key: string;
         covers?: Array<string> | null | undefined;
         isbn13?: Array<string> | null | undefined;
         isbn10?: Array<string> | null | undefined;
@@ -1472,13 +1475,14 @@ export function useGetBooksForSearchPageQuery(
   });
 }
 export const GetBookDetailsFromOpenLibraryDocument = gql`
-  query GetBookDetailsFromOpenLibrary($isbn: String!) {
-    openLibraryWorkDetails(isbn: $isbn) {
+  query GetBookDetailsFromOpenLibrary($possibleIsbn: [String!]!) {
+    openLibraryWorkDetails(possibleIsbn: $possibleIsbn) {
       __typename
       ... on BooksSearchError {
         message
       }
       ... on OpenLibraryWorkDetailsDto {
+        key
         authors {
           key
           name

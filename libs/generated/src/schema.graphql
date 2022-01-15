@@ -683,8 +683,10 @@ type Query {
   """Get a list of books related to a search query from Open Library API."""
   openLibraryBooksSearch(input: BooksSearchInput!): BooksSearchResultUnion!
 
-  """Get details about a particular work from the Open Library API."""
-  openLibraryWorkDetails(isbn: String!): BooksDetailsResultUnion!
+  """
+  Get details about a particular work from the Open Library API. A list of possible ISBNs for that book are accepted, and details about the first hit are returned.
+  """
+  openLibraryWorkDetails(possibleIsbn: [String!]!): BooksDetailsResultUnion!
 
   """Get list of book progresses that are related to the user."""
   userBookProgressLogs(take: Int): [BookProgressLog!]!

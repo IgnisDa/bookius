@@ -80,30 +80,50 @@ export class BooksService {
     }
   }
 
-  async openLibraryWorkDetails(isbn: string) {
-    const bibKeys = `ISBN:${isbn}`;
-    /* cspell:disable-next-line */
-    const url = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/api/books?bibkeys=${bibKeys}&format=json&jscmd=details`;
-    try {
-      const { data } = await axios.get(url);
-      const book = data[bibKeys].details;
-      const getImageUrl = (coverId: number, size: string) =>
-        `${this.applicationConfig.OPEN_LIBRARY_COVER_API_URL}/id/${coverId}-${size}.jpg?default=false`;
-      const covers = [];
-      const blurImageBase64Strings = [];
-      for (const coverId of book.covers) {
-        covers.push(getImageUrl(coverId, 'L'));
-        blurImageBase64Strings.push(
-          (await getPlaiceholder(getImageUrl(coverId, 'L'))).base64
-        );
+  // This code is horribly written and will break at the first chance it gets, but oh well
+  // I tried didn't I?
+  async openLibraryWorkDetails(possibleIsbn: string[]) {
+    for (const isbn of possibleIsbn) {
+      const bookUrl = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/isbn/${isbn}.json`;
+      try {
+        const { data: book } = await axios.get(bookUrl);
+        const authors = [];
+        if (book.authors) {
+          for (const author of book.authors) {
+            {
+              const authorUrl = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/${author.key}.json`;
+              const { data: authorDetails } = await axios.get(authorUrl);
+              authors.push({
+                key: authorDetails.key,
+                name: authorDetails.name,
+              });
+            }
+          }
+        }
+        book.authors = authors;
+        const getImageUrl = (coverId: number, size: string) =>
+          `${this.applicationConfig.OPEN_LIBRARY_COVER_API_URL}/id/${coverId}-${size}.jpg?default=false`;
+        const covers = [];
+        const blurImageBase64Strings = [];
+        if (book.covers)
+          for (const coverId of book.covers) {
+            covers.push(getImageUrl(coverId, 'L'));
+            blurImageBase64Strings.push(
+              (await getPlaiceholder(getImageUrl(coverId, 'L'))).base64
+            );
+          }
+        book.covers = covers;
+        book.blurImageBase64Strings = blurImageBase64Strings;
+        return camelCaseKeys(book);
+      } catch (e) {
+        continue;
       }
-      book.covers = covers;
-      book.blurImageBase64Strings = blurImageBase64Strings;
-      return camelCaseKeys(book);
-    } catch (e) {
-      return Promise.reject({
-        message: `The Open Library API does not have a record with ISBN='${isbn}'`,
-      });
     }
+    const length = possibleIsbn.length > 1;
+    return Promise.reject({
+      message: `The Open Library API does not have a record with ${
+        length ? 'these' : 'this'
+      } ISBN${length ? 's' : ''}`,
+    });
   }
 }
