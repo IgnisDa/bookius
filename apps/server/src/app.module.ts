@@ -24,7 +24,7 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
           redis: {
             username: connection.username,
             password: connection.password,
-            host: connection.host,
+            host: connection.hostname,
             port: Number(connection.port),
           },
         };
