@@ -19,10 +19,10 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
-RUN NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API} \
-    GIT_REV=${GIT_REV} \
-    NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API} \
-    NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}
+RUN echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}" >> .env && \
+    echo "GIT_REV=${GIT_REV}" >> .env && \
+    echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}" >> .env && \
+    echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" >> .env
 RUN yarn global add nx pnpm && \
     pnpx nx build site --prod && \
     pnpm install --production --ignore-scripts --prefer-offline
@@ -34,7 +34,7 @@ WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/dist/apps/site/next.config.js /app/apps/site/ci/start.sh /app/dist/apps/site/package.json /app/apps/site/ci/CHECKS ./
+COPY --from=builder /app/.env /app/dist/apps/site/next.config.js /app/apps/site/ci/start.sh /app/dist/apps/site/package.json /app/apps/site/ci/CHECKS ./
 COPY --from=builder /app/dist/apps/site/public ./public
 COPY --from=builder /app/dist/apps/site/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules

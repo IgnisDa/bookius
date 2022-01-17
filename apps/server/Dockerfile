@@ -18,11 +18,11 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
-ENV PORT=80 \
-    REDIS_URL=${REDIS_URL} \
-    GIT_REV=${GIT_REV} \
-    DATABASE_URL=${DATABASE_URL} \
-    MAGIC_SECRET_KEY=${MAGIC_SECRET_KEY}
+RUN echo "PORT=80" >> .env && \
+    echo "REDIS_URL=${REDIS_URL}" >> .env && \
+    echo "GIT_REV=${GIT_REV}" >> .env && \
+    echo "DATABASE_URL=${DATABASE_URL}"  >> .env && \
+    echo "MAGIC_SECRET_KEY=${MAGIC_SECRET_KEY}" >> .env
 RUN yarn global add nx pnpm && \
     pnpx nx run model:generate && \
     pnpx nx build server --prod && \
@@ -32,7 +32,7 @@ RUN yarn global add nx pnpm && \
 FROM node:alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/dist/apps/server/main.js ./
+COPY --from=builder /app/dist/apps/server/main.js /app/.env ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY apps/server/ci/start.sh apps/server/ci/CHECKS libs/model/prisma ./
 EXPOSE 80
