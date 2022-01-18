@@ -16,16 +16,6 @@ generator dbml {
   projectNote         = "The database schema of the main bookius server"
 }
 
-generator prismaNestjsGraphql {
-  provider              = "prisma-nestjs-graphql"
-  output                = "../../../libs/generated/src/lib/prisma-nestjs-graphql"
-  noAtomicOperations    = true
-  emitSingle            = true
-  purgeOutput           = true
-  fields_Scalars_from   = "graphql-scalars"
-  fields_Scalars_output = true
-}
-
 /// This model will represent a user of the service.
 model User {
   id              String            @id @default(cuid())
@@ -129,4 +119,25 @@ model BookProgressLog {
   updatedOn  DateTime @updatedAt
 
   @@unique([bookId, userId])
+}
+
+/// The status of a job which is performed by a bull queue.
+enum JobStatus {
+  PENDING
+  STARTED
+  FAILED
+  SUCCESSFUL
+}
+
+/// This model will keep track of all jobs that are performed via queues in the application.
+model JobLog {
+  id          Int       @id @default(autoincrement())
+  name        String
+  status      JobStatus @default(PENDING)
+  data        Json
+  startedOn   DateTime  @default(now())
+  // will be empty if it resulted in an error
+  completedOn DateTime?
+  errorLog    String?
+  queueName   String
 }
