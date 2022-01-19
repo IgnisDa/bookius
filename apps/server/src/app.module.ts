@@ -5,10 +5,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
 import { join } from 'path';
-import { ApplicationConfig } from './config';
-import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
+import { ApplicationConfig } from './config';
+import { CoreModule } from './core/core.module';
 import { ShelvesModule } from './shelves/shelves.module';
 
 const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
@@ -17,7 +17,6 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
   imports: [
     ScheduleModule.forRoot(),
     BullModule.forRootAsync({
-      imports: [ApplicationConfig],
       useFactory: async (configService: ApplicationConfig) => {
         const connection = new URL(configService.REDIS_URL);
         return {
