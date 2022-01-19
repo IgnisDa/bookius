@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "config": "libs/config",
+    "data": "libs/data",
     "general": "libs/general",
     "generated": "libs/generated",
     "model": "libs/model",

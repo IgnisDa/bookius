@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@bookius/config": ["libs/config/src/index.ts"],
+      "@bookius/data": ["libs/data/src/index.ts"],
       "@bookius/general": ["libs/general/src/index.ts"],
       "@bookius/general/frontend": ["libs/general/src/frontend.ts"],
       "@bookius/generated": ["libs/generated/src/index.ts"],
