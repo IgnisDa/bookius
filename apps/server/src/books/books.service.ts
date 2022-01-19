@@ -1,11 +1,14 @@
 import { camelCaseKeys } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
+import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import axios from 'axios';
+import { Queue } from 'bull';
 import { sampleSize } from 'lodash';
 import { getPlaiceholder } from 'plaiceholder';
 import { ApplicationConfig } from '../config';
+import { COLLECT_BOOKS_DATA_JOB, MODULE_QUEUE_NAME } from './books.constants';
 import { BooksSearchInput } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
 
@@ -13,7 +16,9 @@ import { FilterBooksArgs } from './dto/filter-books.dto';
 export class BooksService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly applicationConfig: ApplicationConfig
+    private readonly applicationConfig: ApplicationConfig,
+    @InjectQueue(MODULE_QUEUE_NAME)
+    private readonly serviceQueue: Queue
   ) {}
 
   async filterBooks(args: FilterBooksArgs) {
@@ -83,6 +88,7 @@ export class BooksService {
   // This code is horribly written and will break at the first chance it gets, but oh well
   // I tried didn't I?
   async openLibraryWorkDetails(possibleIsbn: string[]) {
+    await this.serviceQueue.add(COLLECT_BOOKS_DATA_JOB, { possibleIsbn });
     for (const isbn of possibleIsbn) {
       const bookUrl = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/isbn/${isbn}.json`;
       try {
