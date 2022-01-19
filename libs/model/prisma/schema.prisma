@@ -123,7 +123,6 @@ model BookProgressLog {
 
 /// The status of a job which is performed by a bull queue.
 enum JobStatus {
-  PENDING
   STARTED
   FAILED
   SUCCESSFUL
@@ -131,9 +130,9 @@ enum JobStatus {
 
 /// This model will keep track of all jobs that are performed via queues in the application.
 model JobLog {
-  id          Int       @id @default(autoincrement())
+  id          Int       @id
   name        String
-  status      JobStatus @default(PENDING)
+  status      JobStatus @default(STARTED)
   data        Json
   startedOn   DateTime  @default(now())
   // will be empty if it resulted in an error
