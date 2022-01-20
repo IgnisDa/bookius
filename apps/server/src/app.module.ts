@@ -1,3 +1,4 @@
+import { ApplicationConfig } from '@bookius/config';
 import { PrismaModule } from '@bookius/model';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
@@ -7,7 +8,6 @@ import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
-import { ApplicationConfig } from './config';
 import { CoreModule } from './core/core.module';
 import { ShelvesModule } from './shelves/shelves.module';
 

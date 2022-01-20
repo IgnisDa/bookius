@@ -1,6 +1,6 @@
+import { ApplicationConfig } from '@bookius/config';
 import { PrismaService } from '@bookius/model';
 import { Injectable } from '@nestjs/common';
-import { ApplicationConfig } from '../config';
 
 @Injectable()
 export class CoreService {
