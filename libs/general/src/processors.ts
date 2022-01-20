@@ -31,15 +31,30 @@ export class UpdateJobLogsProcessor extends DatabaseInjectedProcessor {
    */
   @OnQueueActive()
   private async internalOnQueueActive(job: Job, _jobPromise: JobPromise) {
-    await this.prisma.jobLog.create({
-      data: {
-        id: Number(job.id),
-        name: job.name,
-        data: job.data,
-        queueName: job.queue.name,
-        startedOn: DateTime.now().toJSDate(),
-      },
-    });
+    try {
+      await this.prisma.jobLog.create({
+        data: {
+          id: Number(job.id),
+          name: job.name,
+          data: job.data,
+          queueName: job.queue.name,
+          startedOn: DateTime.now().toJSDate(),
+        },
+      });
+    } catch {
+      // a job with that ID is already present
+      await this.prisma.jobLog.update({
+        where: { id: Number(job.id) },
+        data: {
+          id: Number(job.id),
+          name: job.name,
+          data: job.data,
+          queueName: job.queue.name,
+          startedOn: DateTime.now().toJSDate(),
+          status: JobStatus.STARTED,
+        },
+      });
+    }
   }
 
   /**
