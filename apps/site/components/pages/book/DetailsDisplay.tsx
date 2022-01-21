@@ -13,8 +13,8 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
   book;
   const hasCovers = book.bookImages.length > 0;
   const isbn = [];
-  if (book.isbn13) isbn.push(...book.isbn13);
-  if (book.isbn10) isbn.push(...book.isbn10);
+  if (book.isbn13) isbn.push(book.isbn13);
+  if (book.isbn10) isbn.push(book.isbn10);
 
   return (
     <>
@@ -39,7 +39,7 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
         <h1 className="text-4xl font-bold text-left md:text-5xl font-heading text-secondary-content">
           {book.title}
         </h1>
-        {book.architects && (
+        {book.architects.length > 0 && (
           <h2 className="text-gray-100 ">
             <span className="opacity-75 md:text-lg">by</span>{' '}
             <span className="text-xl underline md:text-2xl">
