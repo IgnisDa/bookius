@@ -1,14 +1,14 @@
+import { ListFilterArgs } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { CreateUserShelfInput } from './dto/create-user-shelf.dto';
-import { FilterUserShelvesArgs } from './dto/filter-user-shelves.dto';
 
 @Injectable()
 export class ShelvesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async filterUserShelves(currentUser: User, args: FilterUserShelvesArgs) {
+  async filterUserShelves(currentUser: User, args: ListFilterArgs) {
     const resp = await this.prisma.shelf.findMany({
       ...args,
       where: { userId: currentUser.id },

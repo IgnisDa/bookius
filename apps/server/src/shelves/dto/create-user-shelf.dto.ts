@@ -1,9 +1,22 @@
-import { ShelfCreateInput as GeneratedShelfCreateInput } from '@bookius/generated/prisma-nestjs-graphql';
-import { InputType, PickType } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
 
-@InputType()
-export class CreateUserShelfInput extends PickType(GeneratedShelfCreateInput, [
-  'name',
-  'description',
-  'isPublic',
-]) {}
+@InputType({
+  description: 'The input type to create a new shelf for a user',
+})
+export class CreateUserShelfInput {
+  /**
+   * Name of the new shelf
+   */
+  name: string;
+
+  /**
+   * A description associated with this shelf
+   */
+  description?: string;
+
+  /**
+   * Wether this shelf will be publicly available to others. A public shelf can be viewed
+   * by anyone.
+   */
+  isPublic?: boolean;
+}

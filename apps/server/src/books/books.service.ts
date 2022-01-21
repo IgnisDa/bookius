@@ -1,6 +1,6 @@
 import { ApplicationConfig } from '@bookius/config';
 import { OpenLibraryCollector } from '@bookius/data';
-import { camelCaseKeys } from '@bookius/general';
+import { camelCaseKeys, ListFilterArgs } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
@@ -10,7 +10,6 @@ import { Queue } from 'bull';
 import { sampleSize } from 'lodash';
 import { COLLECT_BOOKS_DATA_JOB, MODULE_QUEUE_NAME } from './books.constants';
 import { BooksSearchInput } from './dto/books-search.dto';
-import { FilterBooksArgs } from './dto/filter-books.dto';
 
 @Injectable()
 export class BooksService {
@@ -22,7 +21,7 @@ export class BooksService {
     private readonly openLibraryService: OpenLibraryCollector
   ) {}
 
-  async filterBooks(args: FilterBooksArgs) {
+  async filterBooks(args: ListFilterArgs) {
     const resp = await this.prisma.book.findMany({
       include: { architects: { include: { author: true } } },
       // ...args,
