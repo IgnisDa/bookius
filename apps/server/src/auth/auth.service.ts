@@ -1,8 +1,8 @@
+import { ApplicationConfig } from '@bookius/config';
 import { PrismaService } from '@bookius/model';
 import { Magic } from '@magic-sdk/admin';
 import { Injectable } from '@nestjs/common';
 import { names, uniqueNamesGenerator } from 'unique-names-generator';
-import { ApplicationConfig } from '../config';
 
 @Injectable()
 export class AuthService {
