@@ -1,10 +1,10 @@
+import { ListFilterArgs } from '@bookius/general';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CreateUserShelfInput } from './dto/create-user-shelf.dto';
-import { FilterUserShelvesArgs } from './dto/filter-user-shelves.dto';
 import { ShelfDto } from './dto/shelf.dto';
 import { ShelvesService } from './shelves.service';
 
@@ -20,7 +20,7 @@ export class ShelvesResolver {
   })
   async filterUserShelves(
     @CurrentUser() currentUser: User,
-    @Args() args: FilterUserShelvesArgs
+    @Args() args: ListFilterArgs
   ) {
     return await this.shelvesService.filterUserShelves(currentUser, args);
   }

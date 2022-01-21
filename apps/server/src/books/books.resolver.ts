@@ -1,3 +1,4 @@
+import { ListFilterArgs } from '@bookius/general';
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
@@ -17,9 +18,7 @@ import {
   BooksSearchInput,
   BooksSearchResultUnion,
 } from './dto/books-search.dto';
-import { FilterBooksArgs } from './dto/filter-books.dto';
 import { OpenLibraryResponse } from './dto/open-library-books.dto';
-import { UserBookProgressLogsInput } from './dto/user-book-progress-logs.dto';
 
 @Resolver()
 export class BooksResolver {
@@ -30,7 +29,7 @@ export class BooksResolver {
   @Query(() => [BookDto], {
     description: 'Get a filtered list of all books in the service.',
   })
-  async filterBooks(@Args() args: FilterBooksArgs) {
+  async filterBooks(@Args() args: ListFilterArgs) {
     return await this.booksService.filterBooks(args);
   }
 
@@ -55,7 +54,7 @@ export class BooksResolver {
     description: 'Get list of book progresses that are related to the user.',
   })
   async userBookProgressLogs(
-    @Args() { take }: UserBookProgressLogsInput,
+    @Args() { take }: ListFilterArgs,
     @CurrentUser() currentUser: User
   ) {
     return await this.booksService.userBookProgressLogs(currentUser, take);

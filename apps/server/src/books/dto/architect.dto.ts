@@ -18,6 +18,6 @@ export class ArchitectDto {
 }
 
 registerEnumType(ArchitectRole, {
-  name: 'ArchitectRoles',
+  name: 'ArchitectRole',
   description: 'The role of a person in the complete production of a book',
 });

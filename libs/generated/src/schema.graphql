@@ -16,89 +16,13 @@ type ArchitectDto {
   author: AuthorDto!
 
   """Role of this particular architect"""
-  role: ArchitectRoles!
+  role: ArchitectRole!
 }
 
 """The role of a person in the complete production of a book"""
 enum ArchitectRole {
   AUTHOR
   ILLUSTRATOR
-}
-
-"""The role of a person in the complete production of a book"""
-enum ArchitectRoles {
-  AUTHOR
-  ILLUSTRATOR
-}
-
-"""The people who have worked on a book"""
-type ArchitectsOnBooks {
-  author: Author!
-  authorId: BigInt!
-  book: Book!
-  bookId: BigInt!
-  role: ArchitectRole!
-}
-
-type ArchitectsOnBooksAvgAggregate {
-  authorId: Float
-  bookId: Float
-}
-
-type ArchitectsOnBooksCountAggregate {
-  _all: Int!
-  authorId: Int!
-  bookId: Int!
-  role: Int!
-}
-
-type ArchitectsOnBooksMaxAggregate {
-  authorId: BigInt
-  bookId: BigInt
-  role: ArchitectRole
-}
-
-type ArchitectsOnBooksMinAggregate {
-  authorId: BigInt
-  bookId: BigInt
-  role: ArchitectRole
-}
-
-type ArchitectsOnBooksSumAggregate {
-  authorId: BigInt
-  bookId: BigInt
-}
-
-"""
-This model will keep track of authors that will be made available to the users
-"""
-type Author {
-  _count: AuthorCount!
-  bio: String
-  books: [ArchitectsOnBooks!]
-  createdAt: DateTime!
-  id: BigInt!
-  name: String!
-  openLibraryKey: String!
-  updatedAt: DateTime!
-}
-
-type AuthorAvgAggregate {
-  id: Float
-}
-
-type AuthorCount {
-  books: Int!
-}
-
-type AuthorCountAggregate {
-  _all: Int!
-  bio: Int!
-  createdAt: Int!
-  id: Int!
-  name: Int!
-  openLibraryKey: Int!
-  updatedAt: Int!
 }
 
 """An author that is available to be viewed by the user"""
@@ -119,68 +43,10 @@ type AuthorDto {
   updatedAt: DateTime!
 }
 
-type AuthorMaxAggregate {
-  bio: String
-  createdAt: DateTime
-  id: BigInt
-  name: String
-  openLibraryKey: String
-  updatedAt: DateTime
-}
-
-type AuthorMinAggregate {
-  bio: String
-  createdAt: DateTime
-  id: BigInt
-  name: String
-  openLibraryKey: String
-  updatedAt: DateTime
-}
-
-type AuthorSumAggregate {
-  id: BigInt
-}
-
 """
 The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
-
-"""
-This model will keep track of books that will be made available to the users
-"""
-type Book {
-  BookProgressLog: [BookProgressLog!]
-  _count: BookCount!
-  architects: [ArchitectsOnBooks!]
-  createdAt: DateTime!
-  description: String
-  id: BigInt!
-  isbn: String!
-  shelves: [Shelf!]
-  title: String!
-  updatedAt: DateTime!
-}
-
-type BookAvgAggregate {
-  id: Float
-}
-
-type BookCount {
-  BookProgressLog: Int!
-  architects: Int!
-  shelves: Int!
-}
-
-type BookCountAggregate {
-  _all: Int!
-  createdAt: Int!
-  description: Int!
-  id: Int!
-  isbn: Int!
-  title: Int!
-  updatedAt: Int!
-}
 
 """A book that is available to be viewed by the user"""
 type BookDto {
@@ -251,57 +117,6 @@ type BookImageDto {
   coverUrl: URL!
 }
 
-type BookMaxAggregate {
-  createdAt: DateTime
-  description: String
-  id: BigInt
-  isbn: String
-  title: String
-  updatedAt: DateTime
-}
-
-type BookMinAggregate {
-  createdAt: DateTime
-  description: String
-  id: BigInt
-  isbn: String
-  title: String
-  updatedAt: DateTime
-}
-
-"""Model to track a user's reading progress with a particular book"""
-type BookProgressLog {
-  book: Book!
-  bookId: BigInt!
-  id: BigInt!
-  numPages: Int!
-
-  """Face value, so if a book is 82% complete, this value will be `82.00`"""
-  percentage: Decimal!
-  startedOn: DateTime!
-  updatedOn: DateTime!
-  user: User!
-  userId: String!
-}
-
-type BookProgressLogAvgAggregate {
-  bookId: Float
-  id: Float
-  numPages: Float
-  percentage: Decimal
-}
-
-type BookProgressLogCountAggregate {
-  _all: Int!
-  bookId: Int!
-  id: Int!
-  numPages: Int!
-  percentage: Int!
-  startedOn: Int!
-  updatedOn: Int!
-  userId: Int!
-}
-
 """Model to track a user's reading progress with a particular book"""
 type BookProgressLogDto {
   """The ID of the book it is associated with"""
@@ -321,37 +136,6 @@ type BookProgressLogDto {
 
   """The date and time this was last updated on"""
   updatedOn: DateTime!
-}
-
-type BookProgressLogMaxAggregate {
-  bookId: BigInt
-  id: BigInt
-  numPages: Int
-  percentage: Decimal
-  startedOn: DateTime
-  updatedOn: DateTime
-  userId: String
-}
-
-type BookProgressLogMinAggregate {
-  bookId: BigInt
-  id: BigInt
-  numPages: Int
-  percentage: Decimal
-  startedOn: DateTime
-  updatedOn: DateTime
-  userId: String
-}
-
-type BookProgressLogSumAggregate {
-  bookId: BigInt
-  id: BigInt
-  numPages: Int
-  percentage: Decimal
-}
-
-type BookSumAggregate {
-  id: BigInt
 }
 
 """
@@ -394,9 +178,18 @@ type CreateUserError {
 """Result type returned as the result when new user is created."""
 union CreateUserResultUnion = CreateUserError | UserDto
 
+"""The input type to create a new shelf for a user"""
 input CreateUserShelfInput {
+  """A description associated with this shelf"""
   description: String
+
+  """
+  Wether this shelf will be publicly available to others. A public shelf can be viewed
+  by anyone.
+  """
   isPublic: Boolean
+
+  """Name of the new shelf"""
   name: String!
 }
 
@@ -404,14 +197,6 @@ input CreateUserShelfInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-"""An arbitrary-precision Decimal type"""
-scalar Decimal
-
-"""
-A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
-"""
-scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 
 """
 A field whose value is a ISBN-10 or ISBN-13 number: https://en.wikipedia.org/wiki/International_Standard_Book_Number.
@@ -503,51 +288,31 @@ type Query {
   checkUserByIssuer(issuer: String!): Boolean!
 
   """Get a filtered list of all books in the service."""
-  filterBooks(take: Int): [BookDto!]!
+  filterBooks(
+    """The number of items to take"""
+    take: NonNegativeInt!
+  ): [BookDto!]!
 
   """Get a list of all shelves created by this user."""
-  filterUserShelves(take: Int): [ShelfDto!]!
+  filterUserShelves(
+    """The number of items to take"""
+    take: NonNegativeInt!
+  ): [ShelfDto!]!
 
   """Get a list of books related to a search query from Open Library API."""
   openLibraryBooksSearch(input: BooksSearchInput!): BooksSearchResultUnion!
 
   """Get list of book progresses that are related to the user."""
-  userBookProgressLogs(take: Int): [BookProgressLogDto!]!
+  userBookProgressLogs(
+    """The number of items to take"""
+    take: NonNegativeInt!
+  ): [BookProgressLogDto!]!
 
   """Get a small list of authors that are related to the user."""
   userRelatedAuthors: [AuthorDto!]!
 
   """Get a small list of books that are related to the user."""
   userRelatedBooks: [BookDto!]!
-}
-
-"""A shelf is created by users to collect a number of books together"""
-type Shelf {
-  _count: ShelfCount!
-  books: [Book!]
-  createdAt: DateTime!
-  description: String
-  id: ID!
-  isPublic: Boolean!
-  name: String!
-  updatedAt: DateTime!
-  user: User!
-  userId: String!
-}
-
-type ShelfCount {
-  books: Int!
-}
-
-type ShelfCountAggregate {
-  _all: Int!
-  createdAt: Int!
-  description: Int!
-  id: Int!
-  isPublic: Int!
-  name: Int!
-  updatedAt: Int!
-  userId: Int!
 }
 
 """Counts of various statistics related to shelves"""
@@ -583,130 +348,13 @@ type ShelfDto {
   updatedAt: DateTime!
 }
 
-type ShelfMaxAggregate {
-  createdAt: DateTime
-  description: String
-  id: String
-  isPublic: Boolean
-  name: String
-  updatedAt: DateTime
-  userId: String
-}
-
-type ShelfMinAggregate {
-  createdAt: DateTime
-  description: String
-  id: String
-  isPublic: Boolean
-  name: String
-  updatedAt: DateTime
-  userId: String
-}
-
 """
 A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
 """
 scalar URL
 
-"""
-A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
-"""
-scalar UUID
-
-"""This model will represent a user of the service."""
-type User {
-  BookProgressLog: [BookProgressLog!]
-  _count: UserCount!
-  createdAt: DateTime!
-  id: ID!
-  issuer: String!
-  profile: UserProfile
-  shelves: [Shelf!]
-}
-
-type UserCount {
-  BookProgressLog: Int!
-  shelves: Int!
-}
-
-type UserCountAggregate {
-  _all: Int!
-  createdAt: Int!
-  id: Int!
-  issuer: Int!
-}
-
 """Critical details about a user of the service"""
 type UserDto {
   """The unique identifier for this user"""
   id: String!
-}
-
-type UserMaxAggregate {
-  createdAt: DateTime
-  id: String
-  issuer: String
-}
-
-type UserMinAggregate {
-  createdAt: DateTime
-  id: String
-  issuer: String
-}
-
-"""This model will track profile information about the user"""
-type UserProfile {
-  age: Int
-  bio: String
-  countryId: Int
-  email: EmailAddress!
-  id: UUID!
-  updatedAt: DateTime!
-  user: User!
-  userId: String!
-  username: String!
-}
-
-type UserProfileAvgAggregate {
-  age: Float
-  countryId: Float
-}
-
-type UserProfileCountAggregate {
-  _all: Int!
-  age: Int!
-  bio: Int!
-  countryId: Int!
-  email: Int!
-  id: Int!
-  updatedAt: Int!
-  userId: Int!
-  username: Int!
-}
-
-type UserProfileMaxAggregate {
-  age: Int
-  bio: String
-  countryId: Int
-  email: EmailAddress
-  id: UUID
-  updatedAt: DateTime
-  userId: String
-  username: String
-}
-
-type UserProfileMinAggregate {
-  age: Int
-  bio: String
-  countryId: Int
-  email: EmailAddress
-  id: UUID
-  updatedAt: DateTime
-  userId: String
-  username: String
-}
-
-type UserProfileSumAggregate {
-  age: Int
-  countryId: Int
 }
