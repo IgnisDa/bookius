@@ -10,8 +10,23 @@ interface APIError {
   message: String!
 }
 
+"""The people who have worked on a book"""
+type ArchitectDto {
+  """Details about the author"""
+  author: AuthorDto!
+
+  """Role of this particular architect"""
+  role: ArchitectRoles!
+}
+
 """The role of a person in the complete production of a book"""
 enum ArchitectRole {
+  AUTHOR
+  ILLUSTRATOR
+}
+
+"""The role of a person in the complete production of a book"""
+enum ArchitectRoles {
   AUTHOR
   ILLUSTRATOR
 }
@@ -169,10 +184,11 @@ type BookCountAggregate {
 
 """A book that is available to be viewed by the user"""
 type BookDto {
-  authors: [SimplifiedAuthor!]!
+  """The people involved in the production of this book"""
+  architects: [ArchitectDto!]!
 
   """The images associated with this book"""
-  bookImages: [SimplifiedBookImage!]!
+  bookImages: [BookImageDto!]!
 
   """The date and time when this book was added to the service"""
   createdAt: DateTime!
@@ -198,10 +214,11 @@ type BookDto {
 
 """Details about a book without their architect details"""
 type BookDtoWithoutArchitect {
-  authors: [SimplifiedAuthor!]!
+  """The people involved in the production of this book"""
+  architects: [ArchitectDto!]!
 
   """The images associated with this book"""
-  bookImages: [SimplifiedBookImage!]!
+  bookImages: [BookImageDto!]!
 
   """The date and time when this book was added to the service"""
   createdAt: DateTime!
@@ -223,6 +240,15 @@ type BookDtoWithoutArchitect {
 
   """The date and time when information about this book was last updated"""
   updatedAt: DateTime!
+}
+
+"""A simple author instance in database"""
+type BookImageDto {
+  """A base64 encoded string to be used to provide blurred previews"""
+  base64String: String!
+
+  """A fully qualified url to the book cover"""
+  coverUrl: URL!
 }
 
 type BookMaxAggregate {
@@ -575,24 +601,6 @@ type ShelfMinAggregate {
   name: String
   updatedAt: DateTime
   userId: String
-}
-
-"""A simple author instance in database"""
-type SimplifiedAuthor {
-  """The Open Library unique key for this author"""
-  key: String!
-
-  """The name of this author"""
-  name: String!
-}
-
-"""A simple author instance in database"""
-type SimplifiedBookImage {
-  """A base64 encoded string to be used to provide blurred previews"""
-  base64String: String!
-
-  """A fully qualified url to the book cover"""
-  coverUrl: URL!
 }
 
 """
