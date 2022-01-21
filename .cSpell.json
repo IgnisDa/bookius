@@ -26,6 +26,8 @@
     "dokku",
     "fontsource",
     "GraphQLUUID",
+    "GraphQLISBN",
+    "GraphQLURL",
     "headerapikey",
     "headlessui",
     "ignisda",
