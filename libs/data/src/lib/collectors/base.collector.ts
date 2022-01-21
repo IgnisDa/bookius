@@ -60,7 +60,7 @@ export class BaseCollector implements IBaseCollector {
   async findBookByIsbnFromDatabase(isbn: string) {
     const book = await this.prisma.book.findFirst({
       where: {
-        OR: [{ isbn13: { has: isbn } }, { isbn10: { has: isbn } }],
+        OR: [{ isbn13: { equals: isbn } }, { isbn10: { equals: isbn } }],
       },
       include: {
         architects: { include: { author: true } },

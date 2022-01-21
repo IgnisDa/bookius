@@ -49,15 +49,15 @@ export class BookDto {
   /** Name of the book */
   title: string;
 
-  @Field(() => [GraphQLISBN], {
-    description: 'The ISBN-13 unique identifiers of this book',
+  @Field(() => GraphQLISBN, {
+    description: 'The ISBN-13 unique identifier of this book',
   })
-  isbn13: string[];
+  isbn13: string;
 
-  @Field(() => [GraphQLISBN], {
-    description: 'The ISBN-10 unique identifiers of this book',
+  @Field(() => GraphQLISBN, {
+    description: 'The ISBN-10 unique identifier of this book',
   })
-  isbn10: string[];
+  isbn10: string;
 
   @Field(() => [SimplifiedAuthor])
   authors: SimplifiedAuthor[];
