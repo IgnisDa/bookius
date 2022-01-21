@@ -6,35 +6,6 @@ export const CHECK_USER_BY_ISSUER = gql`
   }
 `;
 
-export const GET_ALL_BOOKS = gql`
-  query GetAllBooks {
-    filterBooks {
-      id
-      title
-      architects {
-        author {
-          name
-          id
-        }
-        role
-      }
-    }
-  }
-`;
-
-export const GET_USER_SHELVES_SHORT = gql`
-  query GetUserShelvesShort {
-    filterUserShelves {
-      name
-      id
-      isPublic
-      _count {
-        books
-      }
-    }
-  }
-`;
-
 export const GET_USER_RELATED_BOOKS = gql`
   query GetUserRelatedBooks {
     userRelatedBooks {
@@ -60,7 +31,7 @@ export const GET_USER_RELATED_AUTHORS = gql`
 `;
 
 export const GET_USER_BOOKS_PROGRESS_LOGS = gql`
-  query GetUserBooksProgressLogs($take: Int) {
+  query GetUserBooksProgressLogs($take: NonNegativeInt!) {
     userBookProgressLogs(take: $take) {
       id
       percentage
@@ -104,27 +75,35 @@ export const GET_BOOKS_FOR_SEARCH_PAGE = gql`
 `;
 
 export const GET_BOOK_DETAILS_FROM_OPEN_LIBRARY = gql`
-  query GetBookDetailsFromOpenLibrary($possibleIsbn: [String!]!) {
-    openLibraryWorkDetails(possibleIsbn: $possibleIsbn) {
-      __typename
-      ... on BooksSearchError {
+  query GetBookDetails($isbn: ISBN!) {
+    bookDetails(isbn: $isbn) {
+      ... on BooksDetailsError {
         message
       }
-      ... on OpenLibraryWorkDetailsDto {
-        key
-        authors {
-          key
-          name
-        }
-        covers
-        isbn13
-        isbn10
-        numberOfPages
-        publishDate
-        publishers
-        title
-        blurImageBase64Strings
+      ... on BookDto {
+        ...BookDetails
       }
     }
+  }
+
+  fragment BookDetails on BookDto {
+    id
+    architects {
+      author {
+        id
+        name
+      }
+      role
+    }
+    bookImages {
+      base64String
+      coverUrl
+    }
+    description
+    createdAt
+    updatedAt
+    isbn10
+    isbn13
+    title
   }
 `;

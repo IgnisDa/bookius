@@ -1,7 +1,7 @@
 import {
-  GetBookDetailsFromOpenLibraryQuery,
-  GetBookDetailsFromOpenLibraryQueryVariables,
-  useGetBookDetailsFromOpenLibraryQuery,
+  GetBookDetailsQuery,
+  GetBookDetailsQueryVariables,
+  useGetBookDetailsQuery,
 } from '@bookius/generated';
 import { DetailsDisplayComponent } from 'apps/site/components/pages/book/DetailsDisplay';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -11,18 +11,18 @@ import { client, ssrCache } from '../../lib/helpers/urqlClient';
 import ufoImage from '../../public/images/ufo.svg';
 
 const BookDetailPage = ({
-  possibleIsbn,
+  isbn,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [{ data }] = useGetBookDetailsFromOpenLibraryQuery({
-    variables: { possibleIsbn },
+  const [{ data }] = useGetBookDetailsQuery({
+    variables: { isbn },
   });
 
   return (
     <div className="flex-grow px-3 mb-auto md:my-auto md:max-w-6xl">
-      {data?.openLibraryWorkDetails.__typename === 'BooksSearchError' ? (
+      {data?.bookDetails.__typename === 'BooksDetailsError' ? (
         <div className="flex flex-col items-center text-center">
           <h1 className="max-w-2xl text-2xl text-white lg:text-4xl 2xl:text-5xl">
-            {data.openLibraryWorkDetails.message}
+            {data.bookDetails.message}
           </h1>
           <div className="flex items-center justify-center">
             <Image
@@ -37,9 +37,9 @@ const BookDetailPage = ({
         </div>
       ) : (
         <>
-          {data?.openLibraryWorkDetails && (
+          {data?.bookDetails && (
             <div className="flex flex-col items-center space-y-5 md:flex-row md:space-x-10">
-              <DetailsDisplayComponent book={data.openLibraryWorkDetails} />
+              <DetailsDisplayComponent book={data.bookDetails} />
             </div>
           )}
         </>
@@ -51,14 +51,15 @@ const BookDetailPage = ({
 export const getServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
+  const isbn = query.isbn!.at(0) as string;
   await client
-    .query<
-      GetBookDetailsFromOpenLibraryQuery,
-      GetBookDetailsFromOpenLibraryQueryVariables
-    >(GET_BOOK_DETAILS_FROM_OPEN_LIBRARY, { possibleIsbn: query.isbn! })
+    .query<GetBookDetailsQuery, GetBookDetailsQueryVariables>(
+      GET_BOOK_DETAILS_FROM_OPEN_LIBRARY,
+      { isbn: isbn }
+    )
     .toPromise();
   return {
-    props: { urqlState: ssrCache.extractData(), possibleIsbn: query.isbn! },
+    props: { urqlState: ssrCache.extractData(), isbn: isbn },
   };
 };
 
