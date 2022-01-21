@@ -51,15 +51,23 @@ const BookDetailPage = ({
 export const getServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
-  const isbn = query.isbn!.at(0) as string;
-  await client
-    .query<GetBookDetailsQuery, GetBookDetailsQueryVariables>(
-      GET_BOOK_DETAILS_FROM_OPEN_LIBRARY,
-      { isbn: isbn }
-    )
-    .toPromise();
+  let isbn: string;
+  const allIsbn = query.isbn!;
+  for (const possibleIsbn of allIsbn) {
+    const { data } = await client
+      .query<GetBookDetailsQuery, GetBookDetailsQueryVariables>(
+        GET_BOOK_DETAILS_FROM_OPEN_LIBRARY,
+        { isbn: possibleIsbn }
+      )
+      .toPromise();
+    if (data?.bookDetails.__typename === 'BookDto') {
+      isbn = possibleIsbn;
+      break;
+    }
+  }
+
   return {
-    props: { urqlState: ssrCache.extractData(), isbn: isbn },
+    props: { urqlState: ssrCache.extractData(), isbn: isbn! },
   };
 };
 
