@@ -33,17 +33,12 @@
           }
         ]
       },
-      "outputs": [
-        "{options.outputPath}"
-      ]
+      "outputs": ["{options.outputPath}"]
     },
     "build-prod": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "nx run model:generate",
-          "nx run server:build:production"
-        ]
+        "commands": ["nx run model:generate", "nx run server:build:production"]
       }
     },
     "serve": {
@@ -92,7 +87,6 @@
       "eslint-config-prettier",
       "jest",
       "prisma-dbml-generator",
-      "prisma-nestjs-graphql",
       "ts-jest",
       "ts-node",
       "typescript"
