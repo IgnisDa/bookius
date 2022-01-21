@@ -49,12 +49,27 @@ model Book {
   id               BigInt              @id @default(autoincrement())
   title            String
   description      String?
-  isbn             String
+  isbn10           String[]
+  isbn13           String[]
+  /// The unique key for the book, eg: OL26868794M
+  openLibraryKey   String
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
   architects       ArchitectsOnBooks[]
   shelves          Shelf[]
   bookProgressLogs BookProgressLog[]
+  bookImages       BookImage[]
+}
+
+/// This model will be used for images of a book
+model BookImage {
+  bookId       BigInt @id
+  // the book this image belongs to
+  book         Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  // fully qualified URL of the book
+  coverUrl     String
+  // a base 64 encoded string for this book
+  base64String String
 }
 
 /// The role of a person in the complete production of a book
@@ -83,7 +98,7 @@ model Author {
   id             BigInt              @id @default(autoincrement())
   name           String
   bio            String?
-  openLibraryKey String
+  openLibraryKey String              @unique
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
   books          ArchitectsOnBooks[]
