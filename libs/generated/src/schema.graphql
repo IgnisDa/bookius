@@ -37,12 +37,6 @@ type ArchitectsOnBooksCountAggregate {
   role: Int!
 }
 
-input ArchitectsOnBooksListRelationFilter {
-  every: ArchitectsOnBooksWhereInput
-  none: ArchitectsOnBooksWhereInput
-  some: ArchitectsOnBooksWhereInput
-}
-
 type ArchitectsOnBooksMaxAggregate {
   authorId: BigInt
   bookId: BigInt
@@ -55,24 +49,9 @@ type ArchitectsOnBooksMinAggregate {
   role: ArchitectRole
 }
 
-input ArchitectsOnBooksOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
 type ArchitectsOnBooksSumAggregate {
   authorId: BigInt
   bookId: BigInt
-}
-
-input ArchitectsOnBooksWhereInput {
-  AND: [ArchitectsOnBooksWhereInput!]
-  NOT: [ArchitectsOnBooksWhereInput!]
-  OR: [ArchitectsOnBooksWhereInput!]
-  author: AuthorRelationFilter
-  authorId: BigIntFilter
-  book: BookRelationFilter
-  bookId: BigIntFilter
-  role: EnumArchitectRoleFilter
 }
 
 """
@@ -107,6 +86,24 @@ type AuthorCountAggregate {
   updatedAt: Int!
 }
 
+"""An author that is available to be viewed by the user"""
+type AuthorDto {
+  """A brief description of the author"""
+  bio: String
+
+  """The date and time when this author was added to the service"""
+  createdAt: DateTime!
+
+  """The primary key of the author"""
+  id: BigInt!
+
+  """Name of the author"""
+  name: String!
+
+  """The date and time when information about this author was last updated"""
+  updatedAt: DateTime!
+}
+
 type AuthorMaxAggregate {
   bio: String
   createdAt: DateTime
@@ -125,43 +122,14 @@ type AuthorMinAggregate {
   updatedAt: DateTime
 }
 
-input AuthorRelationFilter {
-  is: AuthorWhereInput
-  isNot: AuthorWhereInput
-}
-
 type AuthorSumAggregate {
   id: BigInt
-}
-
-input AuthorWhereInput {
-  AND: [AuthorWhereInput!]
-  NOT: [AuthorWhereInput!]
-  OR: [AuthorWhereInput!]
-  bio: StringNullableFilter
-  books: ArchitectsOnBooksListRelationFilter
-  createdAt: DateTimeFilter
-  id: BigIntFilter
-  name: StringFilter
-  openLibraryKey: StringFilter
-  updatedAt: DateTimeFilter
 }
 
 """
 The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
-
-input BigIntFilter {
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  not: NestedBigIntFilter
-  notIn: [String!]
-}
 
 """
 This model will keep track of books that will be made available to the users
@@ -199,10 +167,62 @@ type BookCountAggregate {
   updatedAt: Int!
 }
 
-input BookListRelationFilter {
-  every: BookWhereInput
-  none: BookWhereInput
-  some: BookWhereInput
+"""A book that is available to be viewed by the user"""
+type BookDto {
+  authors: [SimplifiedAuthor!]!
+
+  """The images associated with this book"""
+  bookImages: [SimplifiedBookImage!]!
+
+  """The date and time when this book was added to the service"""
+  createdAt: DateTime!
+
+  """A brief description of the author"""
+  description: String
+
+  """The primary key of the book"""
+  id: BigInt!
+
+  """The ISBN-10 unique identifiers of this book"""
+  isbn10: [ISBN!]!
+
+  """The ISBN-13 unique identifiers of this book"""
+  isbn13: [ISBN!]!
+
+  """Name of the book"""
+  title: String!
+
+  """The date and time when information about this book was last updated"""
+  updatedAt: DateTime!
+}
+
+"""Details about a book without their architect details"""
+type BookDtoWithoutArchitect {
+  authors: [SimplifiedAuthor!]!
+
+  """The images associated with this book"""
+  bookImages: [SimplifiedBookImage!]!
+
+  """The date and time when this book was added to the service"""
+  createdAt: DateTime!
+
+  """A brief description of the author"""
+  description: String
+
+  """The primary key of the book"""
+  id: BigInt!
+
+  """The ISBN-10 unique identifiers of this book"""
+  isbn10: [ISBN!]!
+
+  """The ISBN-13 unique identifiers of this book"""
+  isbn13: [ISBN!]!
+
+  """Name of the book"""
+  title: String!
+
+  """The date and time when information about this book was last updated"""
+  updatedAt: DateTime!
 }
 
 type BookMaxAggregate {
@@ -221,22 +241,6 @@ type BookMinAggregate {
   isbn: String
   title: String
   updatedAt: DateTime
-}
-
-input BookOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
-input BookOrderByWithRelationInput {
-  BookProgressLog: BookProgressLogOrderByRelationAggregateInput
-  architects: ArchitectsOnBooksOrderByRelationAggregateInput
-  createdAt: SortOrder
-  description: SortOrder
-  id: SortOrder
-  isbn: SortOrder
-  shelves: ShelfOrderByRelationAggregateInput
-  title: SortOrder
-  updatedAt: SortOrder
 }
 
 """Model to track a user's reading progress with a particular book"""
@@ -272,10 +276,25 @@ type BookProgressLogCountAggregate {
   userId: Int!
 }
 
-input BookProgressLogListRelationFilter {
-  every: BookProgressLogWhereInput
-  none: BookProgressLogWhereInput
-  some: BookProgressLogWhereInput
+"""Model to track a user's reading progress with a particular book"""
+type BookProgressLogDto {
+  """The ID of the book it is associated with"""
+  bookId: BigInt!
+
+  """A unique ID associated with this record"""
+  id: BigInt!
+
+  """The number of pages in this run of reading"""
+  numPages: NonNegativeInt!
+
+  """Face value, so if a book is 82% complete, this value will be `82.00`"""
+  percentage: NonNegativeFloat!
+
+  """The date and time this was first logged"""
+  startedOn: DateTime!
+
+  """The date and time this was last updated on"""
+  updatedOn: DateTime!
 }
 
 type BookProgressLogMaxAggregate {
@@ -298,10 +317,6 @@ type BookProgressLogMinAggregate {
   userId: String
 }
 
-input BookProgressLogOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
 type BookProgressLogSumAggregate {
   bookId: BigInt
   id: BigInt
@@ -309,62 +324,22 @@ type BookProgressLogSumAggregate {
   percentage: Decimal
 }
 
-input BookProgressLogWhereInput {
-  AND: [BookProgressLogWhereInput!]
-  NOT: [BookProgressLogWhereInput!]
-  OR: [BookProgressLogWhereInput!]
-  book: BookRelationFilter
-  bookId: BigIntFilter
-  id: BigIntFilter
-  numPages: IntFilter
-  percentage: DecimalFilter
-  startedOn: DateTimeFilter
-  updatedOn: DateTimeFilter
-  user: UserRelationFilter
-  userId: StringFilter
-}
-
-input BookRelationFilter {
-  is: BookWhereInput
-  isNot: BookWhereInput
-}
-
-enum BookScalarFieldEnum {
-  createdAt
-  description
-  id
-  isbn
-  title
-  updatedAt
-}
-
 type BookSumAggregate {
   id: BigInt
 }
 
-input BookWhereInput {
-  AND: [BookWhereInput!]
-  BookProgressLog: BookProgressLogListRelationFilter
-  NOT: [BookWhereInput!]
-  OR: [BookWhereInput!]
-  architects: ArchitectsOnBooksListRelationFilter
-  createdAt: DateTimeFilter
-  description: StringNullableFilter
-  id: BigIntFilter
-  isbn: StringFilter
-  shelves: ShelfListRelationFilter
-  title: StringFilter
-  updatedAt: DateTimeFilter
-}
-
-input BookWhereUniqueInput {
-  id: String
+"""
+The object returned when there is an error getting details about a book
+"""
+type BooksDetailsError implements APIError {
+  """The error encountered while executing this query"""
+  message: String!
 }
 
 """
 The result returned when a client tries to get details about a particular book
 """
-union BooksDetailsResultUnion = BooksSearchError | OpenLibraryWorkDetailsDto
+union BooksDetailsResultUnion = BookDto | BooksDetailsError
 
 """The object returned when there is an error while performing the search"""
 type BooksSearchError implements APIError {
@@ -383,11 +358,6 @@ input BooksSearchInput {
 
 """The result returned when a client tries to search for a book"""
 union BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse
-
-input BoolFilter {
-  equals: Boolean
-  not: NestedBoolFilter
-}
 
 """Type returned for the error when a new user is created."""
 type CreateUserError {
@@ -409,64 +379,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-input DateTimeFilter {
-  equals: DateTime
-  gt: DateTime
-  gte: DateTime
-  in: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  not: NestedDateTimeFilter
-  notIn: [DateTime!]
-}
-
 """An arbitrary-precision Decimal type"""
 scalar Decimal
-
-input DecimalFilter {
-  equals: Decimal
-  gt: Decimal
-  gte: Decimal
-  in: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  not: NestedDecimalFilter
-  notIn: [Decimal!]
-}
 
 """
 A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
 """
 scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 
-input EnumArchitectRoleFilter {
-  equals: ArchitectRole
-  in: [ArchitectRole!]
-  not: NestedEnumArchitectRoleFilter
-  notIn: [ArchitectRole!]
-}
-
-input IntFilter {
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  lt: Int
-  lte: Int
-  not: NestedIntFilter
-  notIn: [Int!]
-}
-
-input IntNullableFilter {
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  lt: Int
-  lte: Int
-  not: NestedIntNullableFilter
-  notIn: [Int!]
-}
+"""
+A field whose value is a ISBN-10 or ISBN-13 number: https://en.wikipedia.org/wiki/International_Standard_Book_Number.
+"""
+scalar ISBN
 
 """The type returned for the errors when login is unsuccessful"""
 type LoginError implements APIError {
@@ -491,106 +415,17 @@ type Mutation {
   createUser(issuer: String!): CreateUserResultUnion!
 
   """Create a shelf for the current user."""
-  createUserShelf(input: CreateUserShelfInput!): Shelf!
+  createUserShelf(input: CreateUserShelfInput!): ShelfDto!
 
   """Login using an authentication token."""
   loginUser(issuer: String!): LoginResultUnion!
 }
 
-input NestedBigIntFilter {
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  not: NestedBigIntFilter
-  notIn: [String!]
-}
+"""Floats that will have a value of 0 or more."""
+scalar NonNegativeFloat
 
-input NestedBoolFilter {
-  equals: Boolean
-  not: NestedBoolFilter
-}
-
-input NestedDateTimeFilter {
-  equals: DateTime
-  gt: DateTime
-  gte: DateTime
-  in: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  not: NestedDateTimeFilter
-  notIn: [DateTime!]
-}
-
-input NestedDecimalFilter {
-  equals: Decimal
-  gt: Decimal
-  gte: Decimal
-  in: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  not: NestedDecimalFilter
-  notIn: [Decimal!]
-}
-
-input NestedEnumArchitectRoleFilter {
-  equals: ArchitectRole
-  in: [ArchitectRole!]
-  not: NestedEnumArchitectRoleFilter
-  notIn: [ArchitectRole!]
-}
-
-input NestedIntFilter {
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  lt: Int
-  lte: Int
-  not: NestedIntFilter
-  notIn: [Int!]
-}
-
-input NestedIntNullableFilter {
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  lt: Int
-  lte: Int
-  not: NestedIntNullableFilter
-  notIn: [Int!]
-}
-
-input NestedStringFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  not: NestedStringFilter
-  notIn: [String!]
-  startsWith: String
-}
-
-input NestedStringNullableFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  not: NestedStringNullableFilter
-  notIn: [String!]
-  startsWith: String
-}
+"""Integers that will have a value of 0 or more."""
+scalar NonNegativeInt
 
 """The response object when communicating with the Open Library API"""
 type OpenLibraryResponse {
@@ -611,42 +446,6 @@ type OpenLibraryWorkAuthorDto {
 
   """Name of the author"""
   name: String!
-}
-
-"""A work from the Open Library API"""
-type OpenLibraryWorkDetailsDto {
-  """A list of authors of this book"""
-  authors: [OpenLibraryWorkAuthorDto!]
-
-  """Very blurred base64 encoded images for each cover"""
-  blurImageBase64Strings: [String!]
-
-  """Cover image links for the book"""
-  covers: [String!]
-
-  """Unique Industry Identifiers for the book"""
-  isbn10: [String!]
-
-  """Unique Industry Identifiers for the book"""
-  isbn13: [String!]
-
-  """Unique key of the book"""
-  key: String!
-
-  """Number of pages in the book"""
-  numberOfPages: Int
-
-  """The date on which the book was published"""
-  publishDate: String
-
-  """The names of the publishers"""
-  publishers: [String!]
-
-  """A list of subjects this book is related to"""
-  subjects: [String!]
-
-  """Title of the book"""
-  title: String!
 }
 
 """A volume from the Open Library API"""
@@ -671,36 +470,29 @@ type OpenLibraryWorkDto {
 }
 
 type Query {
+  """Get details about a particular work from the different APIs."""
+  bookDetails(isbn: ISBN!): BooksDetailsResultUnion!
+
   """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
 
   """Get a filtered list of all books in the service."""
-  filterBooks(cursor: BookWhereUniqueInput, distinct: [BookScalarFieldEnum!], orderBy: [BookOrderByWithRelationInput!], skip: Int, take: Int, where: BookWhereInput): [Book!]!
+  filterBooks(take: Int): [BookDto!]!
 
   """Get a list of all shelves created by this user."""
-  filterUserShelves(cursor: ShelfWhereUniqueInput, distinct: [ShelfScalarFieldEnum!], orderBy: [ShelfOrderByWithRelationInput!], skip: Int, take: Int, where: ShelfWhereInput): [Shelf!]!
+  filterUserShelves(take: Int): [ShelfDto!]!
 
   """Get a list of books related to a search query from Open Library API."""
   openLibraryBooksSearch(input: BooksSearchInput!): BooksSearchResultUnion!
 
-  """
-  Get details about a particular work from the Open Library API. A list of possible ISBNs for that book are accepted, and details about the first hit are returned.
-  """
-  openLibraryWorkDetails(possibleIsbn: [String!]!): BooksDetailsResultUnion!
-
   """Get list of book progresses that are related to the user."""
-  userBookProgressLogs(take: Int): [BookProgressLog!]!
+  userBookProgressLogs(take: Int): [BookProgressLogDto!]!
 
   """Get a small list of authors that are related to the user."""
-  userRelatedAuthors: [Author!]!
+  userRelatedAuthors: [AuthorDto!]!
 
   """Get a small list of books that are related to the user."""
-  userRelatedBooks: [Book!]!
-}
-
-enum QueryMode {
-  default
-  insensitive
+  userRelatedBooks: [BookDto!]!
 }
 
 """A shelf is created by users to collect a number of books together"""
@@ -732,10 +524,37 @@ type ShelfCountAggregate {
   userId: Int!
 }
 
-input ShelfListRelationFilter {
-  every: ShelfWhereInput
-  none: ShelfWhereInput
-  some: ShelfWhereInput
+"""Counts of various statistics related to shelves"""
+type ShelfCountDto {
+  """The number of books in this shelf"""
+  books: Float!
+}
+
+"""A shelf that is created by a user"""
+type ShelfDto {
+  """Counts of various statistics related to shelves"""
+  _count: ShelfCountDto!
+
+  """The books that are contained in this shelf"""
+  books: [BookDtoWithoutArchitect!]!
+
+  """The date and time when this shelf was created"""
+  createdAt: DateTime!
+
+  """A brief description about the shelf and what is contains"""
+  description: String
+
+  """Unique identifier for the shelf"""
+  id: ID!
+
+  """Whether the shelf is visible to other users"""
+  isPublic: Boolean!
+
+  """Name of the shelf"""
+  name: String!
+
+  """The date and time when information about this shelf was last updated"""
+  updatedAt: DateTime!
 }
 
 type ShelfMaxAggregate {
@@ -758,85 +577,28 @@ type ShelfMinAggregate {
   userId: String
 }
 
-input ShelfOrderByRelationAggregateInput {
-  _count: SortOrder
+"""A simple author instance in database"""
+type SimplifiedAuthor {
+  """The Open Library unique key for this author"""
+  key: String!
+
+  """The name of this author"""
+  name: String!
 }
 
-input ShelfOrderByWithRelationInput {
-  books: BookOrderByRelationAggregateInput
-  createdAt: SortOrder
-  description: SortOrder
-  id: SortOrder
-  isPublic: SortOrder
-  name: SortOrder
-  updatedAt: SortOrder
-  user: UserOrderByWithRelationInput
-  userId: SortOrder
+"""A simple author instance in database"""
+type SimplifiedBookImage {
+  """A base64 encoded string to be used to provide blurred previews"""
+  base64String: String!
+
+  """A fully qualified url to the book cover"""
+  coverUrl: URL!
 }
 
-enum ShelfScalarFieldEnum {
-  createdAt
-  description
-  id
-  isPublic
-  name
-  updatedAt
-  userId
-}
-
-input ShelfWhereInput {
-  AND: [ShelfWhereInput!]
-  NOT: [ShelfWhereInput!]
-  OR: [ShelfWhereInput!]
-  books: BookListRelationFilter
-  createdAt: DateTimeFilter
-  description: StringNullableFilter
-  id: StringFilter
-  isPublic: BoolFilter
-  name: StringFilter
-  updatedAt: DateTimeFilter
-  user: UserRelationFilter
-  userId: StringFilter
-}
-
-input ShelfWhereUniqueInput {
-  id: String
-}
-
-enum SortOrder {
-  asc
-  desc
-}
-
-input StringFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  mode: QueryMode
-  not: NestedStringFilter
-  notIn: [String!]
-  startsWith: String
-}
-
-input StringNullableFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  mode: QueryMode
-  not: NestedStringNullableFilter
-  notIn: [String!]
-  startsWith: String
-}
+"""
+A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
+"""
+scalar URL
 
 """
 A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
@@ -868,7 +630,8 @@ type UserCountAggregate {
 
 """Critical details about a user of the service"""
 type UserDto {
-  id: ID!
+  """The unique identifier for this user"""
+  id: String!
 }
 
 type UserMaxAggregate {
@@ -881,15 +644,6 @@ type UserMinAggregate {
   createdAt: DateTime
   id: String
   issuer: String
-}
-
-input UserOrderByWithRelationInput {
-  BookProgressLog: BookProgressLogOrderByRelationAggregateInput
-  createdAt: SortOrder
-  id: SortOrder
-  issuer: SortOrder
-  profile: UserProfileOrderByWithRelationInput
-  shelves: ShelfOrderByRelationAggregateInput
 }
 
 """This model will track profile information about the user"""
@@ -944,56 +698,7 @@ type UserProfileMinAggregate {
   username: String
 }
 
-input UserProfileOrderByWithRelationInput {
-  age: SortOrder
-  bio: SortOrder
-  countryId: SortOrder
-  email: SortOrder
-  id: SortOrder
-  updatedAt: SortOrder
-  user: UserOrderByWithRelationInput
-  userId: SortOrder
-  username: SortOrder
-}
-
-input UserProfileRelationFilter {
-  is: UserProfileWhereInput
-  isNot: UserProfileWhereInput
-}
-
 type UserProfileSumAggregate {
   age: Int
   countryId: Int
-}
-
-input UserProfileWhereInput {
-  AND: [UserProfileWhereInput!]
-  NOT: [UserProfileWhereInput!]
-  OR: [UserProfileWhereInput!]
-  age: IntNullableFilter
-  bio: StringNullableFilter
-  countryId: IntNullableFilter
-  email: StringFilter
-  id: StringFilter
-  updatedAt: DateTimeFilter
-  user: UserRelationFilter
-  userId: StringFilter
-  username: StringFilter
-}
-
-input UserRelationFilter {
-  is: UserWhereInput
-  isNot: UserWhereInput
-}
-
-input UserWhereInput {
-  AND: [UserWhereInput!]
-  BookProgressLog: BookProgressLogListRelationFilter
-  NOT: [UserWhereInput!]
-  OR: [UserWhereInput!]
-  createdAt: DateTimeFilter
-  id: StringFilter
-  issuer: StringFilter
-  profile: UserProfileRelationFilter
-  shelves: ShelfListRelationFilter
 }
