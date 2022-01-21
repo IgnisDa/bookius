@@ -89,6 +89,7 @@ export class BooksService {
   async bookDetails(isbn: string) {
     await this.serviceQueue.add(COLLECT_BOOKS_DATA_JOB, { isbn: isbn });
     const book = await this.openLibraryService.getBookByIsbn(isbn);
+    console.dir(book, { depth: 3 });
     return book
       ? book
       : Promise.reject({

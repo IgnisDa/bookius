@@ -1,35 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { GraphQLURL, GraphQLBigInt, GraphQLISBN } from 'graphql-scalars';
-
-@ObjectType({
-  description: 'A simple author instance in database',
-})
-class SimplifiedAuthor {
-  /**
-   * The name of this author
-   */
-  name: string;
-
-  /**
-   * The Open Library unique key for this author
-   */
-  key: string;
-}
-
-@ObjectType({
-  description: 'A simple author instance in database',
-})
-class SimplifiedBookImage {
-  @Field(() => GraphQLURL, {
-    description: 'A fully qualified url to the book cover',
-  })
-  coverUrl: string;
-
-  /**
-   * A base64 encoded string to be used to provide blurred previews
-   */
-  base64String: string;
-}
+import { GraphQLBigInt, GraphQLISBN } from 'graphql-scalars';
+import { ArchitectDto } from './architect.dto';
+import { BookImageDto } from './book-image.dto';
 
 @ObjectType({
   description: 'A book that is available to be viewed by the user',
@@ -59,14 +31,16 @@ export class BookDto {
   })
   isbn10: string;
 
-  @Field(() => [SimplifiedAuthor])
-  authors: SimplifiedAuthor[];
+  @Field(() => [ArchitectDto], {
+    description: 'The people involved in the production of this book',
+  })
+  architects: ArchitectDto[];
 
   /** A brief description of the author */
   description?: string;
 
-  @Field(() => [SimplifiedBookImage], {
+  @Field(() => [BookImageDto], {
     description: 'The images associated with this book',
   })
-  bookImages: SimplifiedBookImage[];
+  bookImages: BookImageDto[];
 }
