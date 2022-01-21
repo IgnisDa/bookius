@@ -183,11 +183,11 @@ type BookDto {
   """The primary key of the book"""
   id: BigInt!
 
-  """The ISBN-10 unique identifiers of this book"""
-  isbn10: [ISBN!]!
+  """The ISBN-10 unique identifier of this book"""
+  isbn10: ISBN!
 
-  """The ISBN-13 unique identifiers of this book"""
-  isbn13: [ISBN!]!
+  """The ISBN-13 unique identifier of this book"""
+  isbn13: ISBN!
 
   """Name of the book"""
   title: String!
@@ -212,11 +212,11 @@ type BookDtoWithoutArchitect {
   """The primary key of the book"""
   id: BigInt!
 
-  """The ISBN-10 unique identifiers of this book"""
-  isbn10: [ISBN!]!
+  """The ISBN-10 unique identifier of this book"""
+  isbn10: ISBN!
 
-  """The ISBN-13 unique identifiers of this book"""
-  isbn13: [ISBN!]!
+  """The ISBN-13 unique identifier of this book"""
+  isbn13: ISBN!
 
   """Name of the book"""
   title: String!

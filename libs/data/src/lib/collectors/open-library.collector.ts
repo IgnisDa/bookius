@@ -42,8 +42,8 @@ export class OpenLibraryCollector extends BaseCollector implements ICollector {
       const constructedBook: TBookBuilder = {
         title: book.title,
         description: book.description,
-        isbn10: book.isbn_10 ? book.isbn_10 : [],
-        isbn13: book.isbn_13 ? book.isbn_13 : [],
+        isbn10: book.isbn_10.length > 0 ? book.isbn_10[0] : null,
+        isbn13: book.isbn_13.length > 0 ? book.isbn_13[0] : null,
         openLibraryKey: book.key.split('/').at(-1),
         authors: book.authors.map((e: any) => ({
           name: e.name,

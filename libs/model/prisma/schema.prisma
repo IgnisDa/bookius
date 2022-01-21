@@ -49,8 +49,8 @@ model Book {
   id               BigInt              @id @default(autoincrement())
   title            String
   description      String?
-  isbn10           String[]
-  isbn13           String[]
+  isbn10           String?
+  isbn13           String?
   /// The unique key for the book, eg: OL26868794M
   openLibraryKey   String
   createdAt        DateTime            @default(now())
