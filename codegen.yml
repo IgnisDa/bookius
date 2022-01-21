@@ -22,6 +22,10 @@ generates:
         Decimal: number
         EmailAddress: string
         UUID: string
+        ISBN: string
+        NonNegativeFloat: number
+        NonNegativeInt: number
+        URL: string
   libs/generated/src/lib/graphql.schema.json:
     plugins:
       - 'introspection'
