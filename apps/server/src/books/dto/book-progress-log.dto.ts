@@ -4,6 +4,7 @@ import {
   GraphQLNonNegativeFloat,
   GraphQLNonNegativeInt,
 } from 'graphql-scalars';
+import { BookDto } from './book.dto';
 
 @ObjectType({
   description:
@@ -14,6 +15,11 @@ export class BookProgressLogDto {
     description: 'A unique ID associated with this record',
   })
   id: bigint;
+
+  /**
+   * The book this is related to
+   */
+  book: BookDto;
 
   @Field(() => GraphQLBigInt, {
     description: 'The ID of the book it is associated with',

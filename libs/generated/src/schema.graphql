@@ -119,6 +119,9 @@ type BookImageDto {
 
 """Model to track a user's reading progress with a particular book"""
 type BookProgressLogDto {
+  """The book this is related to"""
+  book: BookDto!
+
   """The ID of the book it is associated with"""
   bookId: BigInt!
 
