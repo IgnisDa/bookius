@@ -1,25 +1,24 @@
-import {
-  Author,
-  Book,
-  BookProgressLog,
-} from '@bookius/generated/prisma-nestjs-graphql';
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
+import { GraphQLISBN } from 'graphql-scalars';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { BooksService } from './books.service';
+import { AuthorDto } from './dto/author.dto';
 import {
+  BooksDetailsError,
   BooksDetailsResultUnion,
+} from './dto/book-details.dto';
+import { BookProgressLogDto } from './dto/book-progress-log.dto';
+import { BookDto } from './dto/book.dto';
+import {
   BooksSearchError,
   BooksSearchInput,
   BooksSearchResultUnion,
 } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
-import {
-  OpenLibraryResponse,
-  OpenLibraryWorkDetailsDto,
-} from './dto/open-library-books.dto';
+import { OpenLibraryResponse } from './dto/open-library-books.dto';
 import { UserBookProgressLogsInput } from './dto/user-book-progress-logs.dto';
 
 @Resolver()
@@ -28,7 +27,7 @@ export class BooksResolver {
 
   /* QUERIES */
 
-  @Query(() => [Book], {
+  @Query(() => [BookDto], {
     description: 'Get a filtered list of all books in the service.',
   })
   async filterBooks(@Args() args: FilterBooksArgs) {
@@ -36,7 +35,7 @@ export class BooksResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [Book], {
+  @Query(() => [BookDto], {
     description: 'Get a small list of books that are related to the user.',
   })
   async userRelatedBooks(@CurrentUser() currentUser: User) {
@@ -44,7 +43,7 @@ export class BooksResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [Author], {
+  @Query(() => [AuthorDto], {
     description: 'Get a small list of authors that are related to the user.',
   })
   async userRelatedAuthors(@CurrentUser() currentUser: User) {
@@ -52,7 +51,7 @@ export class BooksResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [BookProgressLog], {
+  @Query(() => [BookProgressLogDto], {
     description: 'Get list of book progresses that are related to the user.',
   })
   async userBookProgressLogs(
@@ -74,15 +73,15 @@ export class BooksResolver {
   }
 
   @Query(() => BooksDetailsResultUnion, {
-    description:
-      'Get details about a particular work from the Open Library API. A list of possible ISBNs for that book are accepted, and details about the first hit are returned.',
+    description: 'Get details about a particular work from the different APIs.',
   })
-  async openLibraryWorkDetails(
-    @Args('possibleIsbn', { type: () => [String] }) possibleIsbn: string[]
+  async bookDetails(
+    @Args('isbn', { type: () => GraphQLISBN })
+    isbn: string
   ) {
     return this.booksService
-      .openLibraryWorkDetails(possibleIsbn)
-      .then((resp) => ({ __typename: OpenLibraryWorkDetailsDto.name, ...resp }))
-      .catch((resp) => ({ __typename: BooksSearchError.name, ...resp }));
+      .bookDetails(isbn)
+      .then((resp) => ({ __typename: BookDto.name, ...resp }))
+      .catch((resp) => ({ __typename: BooksDetailsError.name, ...resp }));
   }
 }

@@ -1,12 +1,11 @@
-import { Shelf } from '@bookius/generated/prisma-nestjs-graphql';
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Query } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CreateUserShelfInput } from './dto/create-user-shelf.dto';
 import { FilterUserShelvesArgs } from './dto/filter-user-shelves.dto';
+import { ShelfDto } from './dto/shelf.dto';
 import { ShelvesService } from './shelves.service';
 
 @Resolver()
@@ -16,7 +15,7 @@ export class ShelvesResolver {
   /* QUERIES */
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [Shelf], {
+  @Query(() => [ShelfDto], {
     description: 'Get a list of all shelves created by this user.',
   })
   async filterUserShelves(
@@ -29,7 +28,7 @@ export class ShelvesResolver {
   /* MUTATIONS */
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => Shelf, {
+  @Mutation(() => ShelfDto, {
     description: 'Create a shelf for the current user.',
   })
   async createUserShelf(

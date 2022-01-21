@@ -1,3 +1,5 @@
+import { ApplicationConfig } from '@bookius/config';
+import { OpenLibraryCollector } from '@bookius/data';
 import { camelCaseKeys } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
 import { InjectQueue } from '@nestjs/bull';
@@ -6,8 +8,6 @@ import { User } from '@prisma/client';
 import axios from 'axios';
 import { Queue } from 'bull';
 import { sampleSize } from 'lodash';
-import { getPlaiceholder } from 'plaiceholder';
-import { ApplicationConfig } from '../config';
 import { COLLECT_BOOKS_DATA_JOB, MODULE_QUEUE_NAME } from './books.constants';
 import { BooksSearchInput } from './dto/books-search.dto';
 import { FilterBooksArgs } from './dto/filter-books.dto';
@@ -16,15 +16,16 @@ import { FilterBooksArgs } from './dto/filter-books.dto';
 export class BooksService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly applicationConfig: ApplicationConfig,
+    private readonly configService: ApplicationConfig,
     @InjectQueue(MODULE_QUEUE_NAME)
-    private readonly serviceQueue: Queue
+    private readonly serviceQueue: Queue,
+    private readonly openLibraryService: OpenLibraryCollector
   ) {}
 
   async filterBooks(args: FilterBooksArgs) {
     const resp = await this.prisma.book.findMany({
       include: { architects: { include: { author: true } } },
-      ...args,
+      // ...args,
     });
     return resp;
   }
@@ -59,7 +60,7 @@ export class BooksService {
   async openLibraryBooksSearch(input: BooksSearchInput) {
     try {
       const { data } = await axios.get(
-        `${this.applicationConfig.OPEN_LIBRARY_API_URL}/search.json`,
+        `${this.configService.OPEN_LIBRARY_API_URL}/search.json`,
         {
           params: {
             q: decodeURIComponent(input.query as string),
@@ -85,51 +86,13 @@ export class BooksService {
     }
   }
 
-  // This code is horribly written and will break at the first chance it gets, but oh well
-  // I tried didn't I?
-  async openLibraryWorkDetails(possibleIsbn: string[]) {
-    await this.serviceQueue.add(COLLECT_BOOKS_DATA_JOB, { possibleIsbn });
-    for (const isbn of possibleIsbn) {
-      const bookUrl = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/isbn/${isbn}.json`;
-      try {
-        const { data: book } = await axios.get(bookUrl);
-        const authors = [];
-        if (book.authors) {
-          for (const author of book.authors) {
-            {
-              const authorUrl = `${this.applicationConfig.OPEN_LIBRARY_API_URL}/${author.key}.json`;
-              const { data: authorDetails } = await axios.get(authorUrl);
-              authors.push({
-                key: authorDetails.key,
-                name: authorDetails.name,
-              });
-            }
-          }
-        }
-        book.authors = authors;
-        const getImageUrl = (coverId: number, size: string) =>
-          `${this.applicationConfig.OPEN_LIBRARY_COVER_API_URL}/id/${coverId}-${size}.jpg?default=false`;
-        const covers = [];
-        const blurImageBase64Strings = [];
-        if (book.covers)
-          for (const coverId of book.covers) {
-            covers.push(getImageUrl(coverId, 'L'));
-            blurImageBase64Strings.push(
-              (await getPlaiceholder(getImageUrl(coverId, 'L'))).base64
-            );
-          }
-        book.covers = covers;
-        book.blurImageBase64Strings = blurImageBase64Strings;
-        return camelCaseKeys(book);
-      } catch (e) {
-        continue;
-      }
-    }
-    const length = possibleIsbn.length > 1;
-    return Promise.reject({
-      message: `The Open Library API does not have a record with ${
-        length ? 'these' : 'this'
-      } ISBN${length ? 's' : ''}`,
-    });
+  async bookDetails(isbn: string) {
+    await this.serviceQueue.add(COLLECT_BOOKS_DATA_JOB, { isbn: isbn });
+    const book = await this.openLibraryService.getBookByIsbn(isbn);
+    return book
+      ? book
+      : Promise.reject({
+          message: `The Open Library API does not have a record with ISBN='${isbn}'`,
+        });
   }
 }
