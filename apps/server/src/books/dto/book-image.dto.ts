@@ -1,3 +1,4 @@
+import { GraphQLBase64Image } from '@bookius/general';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLURL } from 'graphql-scalars';
 
@@ -10,8 +11,9 @@ export class BookImageDto {
   })
   coverUrl: string;
 
-  /**
-   * A base64 encoded string to be used to provide blurred previews
-   */
+  @Field(() => GraphQLBase64Image, {
+    description:
+      'A base64 encoded string to be used to provide blurred previews',
+  })
   base64String: string;
 }
