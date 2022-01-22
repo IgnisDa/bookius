@@ -6,10 +6,7 @@ import {
   Int,
   ObjectType,
 } from '@nestjs/graphql';
-import {
-  OpenLibraryResponse,
-  OpenLibraryWorkDetailsDto,
-} from './open-library-books.dto';
+import { OpenLibraryResponse } from './open-library-books.dto';
 
 @InputType({
   description: 'The input type used to search for books',
@@ -44,11 +41,4 @@ export const BooksSearchResultUnion = createUnionType({
   name: 'BooksSearchResultUnion',
   types: () => [BooksSearchError, OpenLibraryResponse],
   description: 'The result returned when a client tries to search for a book',
-});
-
-export const BooksDetailsResultUnion = createUnionType({
-  name: 'BooksDetailsResultUnion',
-  types: () => [BooksSearchError, OpenLibraryWorkDetailsDto],
-  description:
-    'The result returned when a client tries to get details about a particular book',
 });
