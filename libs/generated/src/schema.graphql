@@ -44,6 +44,11 @@ type AuthorDto {
 }
 
 """
+A field whose value is a Base64 image string: https://en.wikipedia.org/wiki/Base64.
+"""
+scalar Base64Image
+
+"""
 The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
@@ -111,7 +116,7 @@ type BookDtoWithoutArchitect {
 """A simple author instance in database"""
 type BookImageDto {
   """A base64 encoded string to be used to provide blurred previews"""
-  base64String: String!
+  base64String: Base64Image!
 
   """A fully qualified url to the book cover"""
   coverUrl: URL!
@@ -253,15 +258,6 @@ type OpenLibraryResponse {
   offset: Int!
 }
 
-"""An author of a work present in the Open Library databases"""
-type OpenLibraryWorkAuthorDto {
-  """A unique key assigned to this author"""
-  key: String!
-
-  """Name of the author"""
-  name: String!
-}
-
 """A volume from the Open Library API"""
 type OpenLibraryWorkDto {
   """Names of the author of the book"""
@@ -270,8 +266,11 @@ type OpenLibraryWorkDto {
   """Cover image ID for the book"""
   coverI: String
 
-  """Unique Industry Identifiers for the book"""
-  isbn: [String!]
+  """The Open Library unique IDs associated with it"""
+  editionKey: [String!]!
+
+  """Unique industry identifiers for the book"""
+  isbn: [ISBN!]
 
   """The open library unique ID"""
   key: String!
