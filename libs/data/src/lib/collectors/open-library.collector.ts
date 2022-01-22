@@ -41,7 +41,7 @@ export class OpenLibraryCollector extends BaseCollector implements ICollector {
       book.blurImageBase64Strings = blurImageBase64Strings;
       const constructedBook: TBookBuilder = {
         title: book.title,
-        description: book.description,
+        description: book.description?.value || null,
         isbn10: book.isbn_10.length > 0 ? book.isbn_10[0] : null,
         isbn13: book.isbn_13.length > 0 ? book.isbn_13[0] : null,
         openLibraryKey: book.key.split('/').at(-1),
