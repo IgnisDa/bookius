@@ -19,9 +19,5 @@
       },
       "outputs": ["coverage/libs/ui"]
     }
-  },
-  "dependencies": {
-    "development": [],
-    "required": []
   }
 }

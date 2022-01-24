@@ -3,9 +3,5 @@
   "sourceRoot": "libs/config/src",
   "projectType": "library",
   "targets": {},
-  "tags": [],
-  "dependencies": {
-    "development": [],
-    "required": []
-  }
+  "tags": []
 }
