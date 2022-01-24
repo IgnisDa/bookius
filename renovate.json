@@ -2,9 +2,6 @@
     "extends": [
         "config:base"
     ],
-    "schedule": [
-        "before 3am on Monday"
-    ],
     "labels": [
         "dependencies"
     ],
