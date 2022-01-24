@@ -9,6 +9,7 @@
           "extractLicenses": true,
           "inspect": false,
           "optimization": false,
+          "generatePackageJson": true,
           "verbose": true
         }
       },
@@ -35,26 +36,10 @@
       },
       "outputs": ["{options.outputPath}"]
     },
-    "build-prod": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": ["nx run model:generate", "nx run server:build:production"]
-      }
-    },
     "serve": {
       "executor": "@nrwl/node:execute",
       "options": {
         "buildTarget": "server:build"
-      }
-    },
-    "start-prod": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": [
-          "nx run model:migrate-status",
-          "nx run model:migrate-deploy",
-          "node dist/apps/server/main"
-        ]
       }
     }
   },
