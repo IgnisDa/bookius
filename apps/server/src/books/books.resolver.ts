@@ -72,14 +72,27 @@ export class BooksResolver {
   }
 
   @Query(() => BooksDetailsResultUnion, {
-    description: 'Get details about a particular work from the different APIs.',
+    description: "Get details about a particular work by it's ISBN.",
   })
-  async bookDetails(
+  async bookDetailsByIsbn(
     @Args('isbn', { type: () => GraphQLISBN })
     isbn: string
   ) {
     return this.booksService
-      .bookDetails(isbn)
+      .bookDetailsByIsbn(isbn)
+      .then((resp) => ({ __typename: BookDto.name, ...resp }))
+      .catch((resp) => ({ __typename: BooksDetailsError.name, ...resp }));
+  }
+
+  @Query(() => BooksDetailsResultUnion, {
+    description: "Get details about a particular work by it's key.",
+  })
+  async bookDetailsByOlid(
+    @Args('key')
+    key: string
+  ) {
+    return this.booksService
+      .bookDetailsByOlid(key)
       .then((resp) => ({ __typename: BookDto.name, ...resp }))
       .catch((resp) => ({ __typename: BooksDetailsError.name, ...resp }));
   }
