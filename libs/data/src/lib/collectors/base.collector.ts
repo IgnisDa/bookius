@@ -8,7 +8,7 @@ import {
   Book,
   BookImage,
 } from '@prisma/client';
-import { TBookBuilder } from '.';
+import { TBookBuilder } from './index';
 
 export interface IBaseCollector {
   findBookByIsbnFromDatabase: (
@@ -82,7 +82,10 @@ export class BaseCollector implements IBaseCollector {
         openLibraryKey: book.openLibraryKey,
         isbn10: book.isbn10,
         isbn13: book.isbn13,
+        description: book.description,
         bookImages: { create: book.bookImages },
+        publishDate: book.publishDate,
+        publishers: book.publishers ? book.publishers : undefined,
       },
     });
     for (const apiAuthor of book.authors) {
