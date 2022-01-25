@@ -206,6 +206,16 @@
       },
       {
         "kind": "SCALAR",
+        "name": "Base64Image",
+        "description": "A field whose value is a Base64 image string: https://en.wikipedia.org/wiki/Base64.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
         "name": "BigInt",
         "description": "The `BigInt` scalar type represents non-fractional signed whole numeric values.",
         "fields": null,
@@ -316,13 +326,9 @@
             "description": "The ISBN-10 unique identifier of this book",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ISBN",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ISBN",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -332,12 +338,44 @@
             "description": "The ISBN-13 unique identifier of this book",
             "args": [],
             "type": {
+              "kind": "SCALAR",
+              "name": "ISBN",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "publishDate",
+            "description": "The date when this book was published",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "publishers",
+            "description": "The publishers of this book",
+            "args": [],
+            "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "ISBN",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -483,13 +521,9 @@
             "description": "The ISBN-10 unique identifier of this book",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ISBN",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ISBN",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -499,12 +533,44 @@
             "description": "The ISBN-13 unique identifier of this book",
             "args": [],
             "type": {
+              "kind": "SCALAR",
+              "name": "ISBN",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "publishDate",
+            "description": "The date when this book was published",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "publishers",
+            "description": "The publishers of this book",
+            "args": [],
+            "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "ISBN",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -562,7 +628,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Base64Image",
                 "ofType": null
               }
             },
@@ -1312,49 +1378,6 @@
       },
       {
         "kind": "OBJECT",
-        "name": "OpenLibraryWorkAuthorDto",
-        "description": "An author of a work present in the Open Library databases",
-        "fields": [
-          {
-            "name": "key",
-            "description": "A unique key assigned to this author",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "name",
-            "description": "Name of the author",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
         "name": "OpenLibraryWorkDto",
         "description": "A volume from the Open Library API",
         "fields": [
@@ -1391,8 +1414,32 @@
             "deprecationReason": null
           },
           {
+            "name": "editionKey",
+            "description": "The Open Library unique IDs associated with it",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "isbn",
-            "description": "Unique Industry Identifiers for the book",
+            "description": "Unique industry identifiers for the book",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -1402,7 +1449,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "ISBN",
                   "ofType": null
                 }
               }
@@ -1474,8 +1521,8 @@
         "description": null,
         "fields": [
           {
-            "name": "bookDetails",
-            "description": "Get details about a particular work from the different APIs.",
+            "name": "bookDetailsByIsbn",
+            "description": "Get details about a particular work by it's ISBN.",
             "args": [
               {
                 "name": "isbn",
@@ -1486,6 +1533,39 @@
                   "ofType": {
                     "kind": "SCALAR",
                     "name": "ISBN",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "BooksDetailsResultUnion",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "bookDetailsByOlid",
+            "description": "Get details about a particular work by it's key.",
+            "args": [
+              {
+                "name": "key",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
                   }
                 },

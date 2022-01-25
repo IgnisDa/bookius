@@ -58,6 +58,26 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
             </span>
           </p>
         )}
+        {book.publishDate && (
+          <p>
+            <span className="text-sm text-gray-500 md:text-base lg:text-lg">
+              Published on:
+            </span>{' '}
+            <span className="font-semibold text-gray-300 md:text-xl lg:text-2xl">
+              {book.publishDate}
+            </span>
+          </p>
+        )}
+        {book.publishers && (
+          <p>
+            <span className="text-sm text-gray-500 md:text-base lg:text-lg">
+              Published by:
+            </span>{' '}
+            <span className="font-semibold text-gray-300 md:text-xl lg:text-2xl">
+              {book.publishers.join(', ')}
+            </span>
+          </p>
+        )}
       </div>
     </>
   );

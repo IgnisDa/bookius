@@ -15,7 +15,7 @@ export const SearchPageInputComponent: FC<
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     toggled
-      ? router.push({ pathname: `/book`, query: { isbn: userInput } })
+      ? router.push({ pathname: `/book`, query: { isbn: userInput } }) // FIXME: Redirect using an API route
       : router.push({ pathname: '/search', query: { q: userInput } });
   };
 

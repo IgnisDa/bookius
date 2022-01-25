@@ -26,6 +26,7 @@ generates:
         NonNegativeFloat: number
         NonNegativeInt: number
         URL: string
+        Base64Image: string
   libs/generated/src/lib/graphql.schema.json:
     plugins:
       - 'introspection'

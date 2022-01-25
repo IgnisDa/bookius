@@ -20,6 +20,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A field whose value is a Base64 image string: https://en.wikipedia.org/wiki/Base64. */
+  Base64Image: string;
   /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   BigInt: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
@@ -84,9 +86,13 @@ export type BookDto = {
   /** The primary key of the book */
   id: Scalars['BigInt'];
   /** The ISBN-10 unique identifier of this book */
-  isbn10: Scalars['ISBN'];
+  isbn10?: Maybe<Scalars['ISBN']>;
   /** The ISBN-13 unique identifier of this book */
-  isbn13: Scalars['ISBN'];
+  isbn13?: Maybe<Scalars['ISBN']>;
+  /** The date when this book was published */
+  publishDate?: Maybe<Scalars['String']>;
+  /** The publishers of this book */
+  publishers: Array<Scalars['String']>;
   /** Name of the book */
   title: Scalars['String'];
   /** The date and time when information about this book was last updated */
@@ -107,9 +113,13 @@ export type BookDtoWithoutArchitect = {
   /** The primary key of the book */
   id: Scalars['BigInt'];
   /** The ISBN-10 unique identifier of this book */
-  isbn10: Scalars['ISBN'];
+  isbn10?: Maybe<Scalars['ISBN']>;
   /** The ISBN-13 unique identifier of this book */
-  isbn13: Scalars['ISBN'];
+  isbn13?: Maybe<Scalars['ISBN']>;
+  /** The date when this book was published */
+  publishDate?: Maybe<Scalars['String']>;
+  /** The publishers of this book */
+  publishers: Array<Scalars['String']>;
   /** Name of the book */
   title: Scalars['String'];
   /** The date and time when information about this book was last updated */
@@ -120,7 +130,7 @@ export type BookDtoWithoutArchitect = {
 export type BookImageDto = {
   __typename: 'BookImageDto';
   /** A base64 encoded string to be used to provide blurred previews */
-  base64String: Scalars['String'];
+  base64String: Scalars['Base64Image'];
   /** A fully qualified url to the book cover */
   coverUrl: Scalars['URL'];
 };
@@ -247,15 +257,6 @@ export type OpenLibraryResponse = {
   offset: Scalars['Int'];
 };
 
-/** An author of a work present in the Open Library databases */
-export type OpenLibraryWorkAuthorDto = {
-  __typename: 'OpenLibraryWorkAuthorDto';
-  /** A unique key assigned to this author */
-  key: Scalars['String'];
-  /** Name of the author */
-  name: Scalars['String'];
-};
-
 /** A volume from the Open Library API */
 export type OpenLibraryWorkDto = {
   __typename: 'OpenLibraryWorkDto';
@@ -263,8 +264,10 @@ export type OpenLibraryWorkDto = {
   authorName?: Maybe<Array<Scalars['String']>>;
   /** Cover image ID for the book */
   coverI?: Maybe<Scalars['String']>;
-  /** Unique Industry Identifiers for the book */
-  isbn?: Maybe<Array<Scalars['String']>>;
+  /** The Open Library unique IDs associated with it */
+  editionKey: Array<Scalars['String']>;
+  /** Unique industry identifiers for the book */
+  isbn?: Maybe<Array<Scalars['ISBN']>>;
   /** The open library unique ID */
   key: Scalars['String'];
   /** The language the book is written in */
@@ -275,8 +278,10 @@ export type OpenLibraryWorkDto = {
 
 export type Query = {
   __typename: 'Query';
-  /** Get details about a particular work from the different APIs. */
-  bookDetails: BooksDetailsResultUnion;
+  /** Get details about a particular work by it's ISBN. */
+  bookDetailsByIsbn: BooksDetailsResultUnion;
+  /** Get details about a particular work by it's key. */
+  bookDetailsByOlid: BooksDetailsResultUnion;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
   /** Get a filtered list of all books in the service. */
@@ -293,8 +298,12 @@ export type Query = {
   userRelatedBooks: Array<BookDto>;
 };
 
-export type QueryBookDetailsArgs = {
+export type QueryBookDetailsByIsbnArgs = {
   isbn: Scalars['ISBN'];
+};
+
+export type QueryBookDetailsByOlidArgs = {
+  key: Scalars['String'];
 };
 
 export type QueryCheckUserByIssuerArgs = {
@@ -466,25 +475,51 @@ export type GetBooksForSearchPageQuery = {
           language?: Array<string> | null | undefined;
           coverI?: string | null | undefined;
           title: string;
+          editionKey: Array<string>;
         }>;
       };
 };
 
-export type GetBookDetailsQueryVariables = Exact<{
+export type BookDetailsFragment = {
+  __typename: 'BookDto';
+  id: number;
+  publishers: Array<string>;
+  publishDate?: string | null | undefined;
+  description?: string | null | undefined;
+  createdAt: DateTime;
+  updatedAt: DateTime;
+  isbn10?: string | null | undefined;
+  isbn13?: string | null | undefined;
+  title: string;
+  architects: Array<{
+    __typename: 'ArchitectDto';
+    role: ArchitectRole;
+    author: { __typename: 'AuthorDto'; id: number; name: string };
+  }>;
+  bookImages: Array<{
+    __typename: 'BookImageDto';
+    base64String: string;
+    coverUrl: string;
+  }>;
+};
+
+export type GetBookDetailsByIsbnQueryVariables = Exact<{
   isbn: Scalars['ISBN'];
 }>;
 
-export type GetBookDetailsQuery = {
+export type GetBookDetailsByIsbnQuery = {
   __typename: 'Query';
-  bookDetails:
+  bookDetailsByIsbn:
     | {
         __typename: 'BookDto';
         id: number;
+        publishers: Array<string>;
+        publishDate?: string | null | undefined;
         description?: string | null | undefined;
         createdAt: DateTime;
         updatedAt: DateTime;
-        isbn10: string;
-        isbn13: string;
+        isbn10?: string | null | undefined;
+        isbn13?: string | null | undefined;
         title: string;
         architects: Array<{
           __typename: 'ArchitectDto';
@@ -500,25 +535,36 @@ export type GetBookDetailsQuery = {
     | { __typename: 'BooksDetailsError'; message: string };
 };
 
-export type BookDetailsFragment = {
-  __typename: 'BookDto';
-  id: number;
-  description?: string | null | undefined;
-  createdAt: DateTime;
-  updatedAt: DateTime;
-  isbn10: string;
-  isbn13: string;
-  title: string;
-  architects: Array<{
-    __typename: 'ArchitectDto';
-    role: ArchitectRole;
-    author: { __typename: 'AuthorDto'; id: number; name: string };
-  }>;
-  bookImages: Array<{
-    __typename: 'BookImageDto';
-    base64String: string;
-    coverUrl: string;
-  }>;
+export type GetBookDetailsByOlidQueryVariables = Exact<{
+  key: Scalars['String'];
+}>;
+
+export type GetBookDetailsByOlidQuery = {
+  __typename: 'Query';
+  bookDetailsByOlid:
+    | {
+        __typename: 'BookDto';
+        id: number;
+        publishers: Array<string>;
+        publishDate?: string | null | undefined;
+        description?: string | null | undefined;
+        createdAt: DateTime;
+        updatedAt: DateTime;
+        isbn10?: string | null | undefined;
+        isbn13?: string | null | undefined;
+        title: string;
+        architects: Array<{
+          __typename: 'ArchitectDto';
+          role: ArchitectRole;
+          author: { __typename: 'AuthorDto'; id: number; name: string };
+        }>;
+        bookImages: Array<{
+          __typename: 'BookImageDto';
+          base64String: string;
+          coverUrl: string;
+        }>;
+      }
+    | { __typename: 'BooksDetailsError'; message: string };
 };
 
 export const BookDetailsFragmentDoc = gql`
@@ -531,6 +577,8 @@ export const BookDetailsFragmentDoc = gql`
       }
       role
     }
+    publishers
+    publishDate
     bookImages {
       base64String
       coverUrl
@@ -688,7 +736,7 @@ export function useGetUserBooksProgressLogsQuery(
   });
 }
 export const GetBooksForSearchPageDocument = gql`
-  query getBooksForSearchPage($input: BooksSearchInput!) {
+  query GetBooksForSearchPage($input: BooksSearchInput!) {
     openLibraryBooksSearch(input: $input) {
       __typename
       ... on BooksSearchError {
@@ -704,6 +752,7 @@ export const GetBooksForSearchPageDocument = gql`
           language
           coverI
           title
+          editionKey
         }
       }
     }
@@ -721,9 +770,9 @@ export function useGetBooksForSearchPageQuery(
     ...options,
   });
 }
-export const GetBookDetailsDocument = gql`
-  query GetBookDetails($isbn: ISBN!) {
-    bookDetails(isbn: $isbn) {
+export const GetBookDetailsByIsbnDocument = gql`
+  query GetBookDetailsByISBN($isbn: ISBN!) {
+    bookDetailsByIsbn(isbn: $isbn) {
       ... on BooksDetailsError {
         message
       }
@@ -735,11 +784,39 @@ export const GetBookDetailsDocument = gql`
   ${BookDetailsFragmentDoc}
 `;
 
-export function useGetBookDetailsQuery(
-  options: Omit<Urql.UseQueryArgs<GetBookDetailsQueryVariables>, 'query'> = {}
+export function useGetBookDetailsByIsbnQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetBookDetailsByIsbnQueryVariables>,
+    'query'
+  > = {}
 ) {
-  return Urql.useQuery<GetBookDetailsQuery>({
-    query: GetBookDetailsDocument,
+  return Urql.useQuery<GetBookDetailsByIsbnQuery>({
+    query: GetBookDetailsByIsbnDocument,
+    ...options,
+  });
+}
+export const GetBookDetailsByOlidDocument = gql`
+  query GetBookDetailsByOlid($key: String!) {
+    bookDetailsByOlid(key: $key) {
+      ... on BooksDetailsError {
+        message
+      }
+      ... on BookDto {
+        ...BookDetails
+      }
+    }
+  }
+  ${BookDetailsFragmentDoc}
+`;
+
+export function useGetBookDetailsByOlidQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetBookDetailsByOlidQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetBookDetailsByOlidQuery>({
+    query: GetBookDetailsByOlidDocument,
     ...options,
   });
 }
