@@ -1,11 +1,10 @@
 import { ApplicationConfig } from '@bookius/config';
 import { OpenLibraryCollector } from '@bookius/data';
-import { camelCaseKeys, ListFilterArgs } from '@bookius/general';
+import { ListFilterArgs } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import axios from 'axios';
 import { Queue } from 'bull';
 import { sampleSize } from 'lodash';
 import { COLLECT_BOOKS_DATA_JOB, MODULE_QUEUE_NAME } from './books.constants';
@@ -15,7 +14,6 @@ import { BooksSearchInput } from './dto/books-search.dto';
 export class BooksService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ApplicationConfig,
     @InjectQueue(MODULE_QUEUE_NAME)
     private readonly serviceQueue: Queue,
     private readonly openLibraryService: OpenLibraryCollector
@@ -58,40 +56,34 @@ export class BooksService {
 
   async openLibraryBooksSearch(input: BooksSearchInput) {
     try {
-      const { data } = await axios.get(
-        `${this.configService.OPEN_LIBRARY_API_URL}/search.json`,
-        {
-          params: {
-            q: decodeURIComponent(input.query as string),
-            fields: [
-              'title',
-              'key',
-              'isbn',
-              'author_name',
-              'cover_i',
-              'language',
-            ].join(','),
-            offset: input.offset ? input.offset.toString() : '0',
-            limit: '10',
-          },
-        }
+      const resp = await this.openLibraryService.bookSearch(
+        input.query,
+        input.offset
       );
-      return camelCaseKeys(data);
-    } catch (e) {
-      console.error(e);
+      return resp;
+    } catch {
       return Promise.reject({
         message: 'The Open Library API did not respond as expected',
       });
     }
   }
 
-  async bookDetails(isbn: string) {
+  async bookDetailsByIsbn(isbn: string) {
     await this.serviceQueue.add(COLLECT_BOOKS_DATA_JOB, { isbn: isbn });
     const book = await this.openLibraryService.getBookByIsbn(isbn);
     return book
       ? book
       : Promise.reject({
           message: `The Open Library API does not have a record with ISBN='${isbn}'`,
+        });
+  }
+
+  async bookDetailsByOlid(key: string) {
+    const book = await this.openLibraryService.getBookByOlid(key);
+    return book
+      ? book
+      : Promise.reject({
+          message: `The Open Library API does not have a record with key='${key}'`,
         });
   }
 }
