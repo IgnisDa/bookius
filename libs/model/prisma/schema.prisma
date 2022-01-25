@@ -36,7 +36,6 @@ model UserProfile {
   bio       String?
   age       Int?     @db.SmallInt
   username  String   @unique @db.Citext
-  /// @FieldType('Scalars.GraphQLEmailAddress')
   email     String   @unique @db.Citext
   updatedAt DateTime @updatedAt
   // the country as represented in the country service file
@@ -45,7 +44,6 @@ model UserProfile {
 
 /// This model will keep track of books that will be made available to the users
 model Book {
-  /// @FieldType('Scalars.GraphQLBigInt')
   id               BigInt              @id @default(autoincrement())
   title            String
   description      String?
@@ -55,6 +53,8 @@ model Book {
   openLibraryKey   String
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
+  publishDate      String?
+  publishers       String[]
   architects       ArchitectsOnBooks[]
   shelves          Shelf[]
   bookProgressLogs BookProgressLog[]
@@ -63,13 +63,14 @@ model Book {
 
 /// This model will be used for images of a book
 model BookImage {
-  bookId       BigInt @id
+  id           BigInt @id @default(autoincrement())
   // the book this image belongs to
   book         Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
   // fully qualified URL of the book
   coverUrl     String
   // a base 64 encoded string for this book
   base64String String
+  bookId       BigInt
 }
 
 /// The role of a person in the complete production of a book
@@ -94,7 +95,6 @@ model ArchitectsOnBooks {
 
 /// This model will keep track of authors that will be made available to the users
 model Author {
-  /// @FieldType('Scalars.GraphQLBigInt')
   id             BigInt              @id @default(autoincrement())
   name           String
   bio            String?
@@ -119,14 +119,11 @@ model Shelf {
 
 /// Model to track a user's reading progress with a particular book
 model BookProgressLog {
-  /// @FieldType('Scalars.GraphQLBigInt')
   id         BigInt   @id @default(autoincrement())
   book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  /// @FieldType('Scalars.GraphQLBigInt')
   bookId     BigInt
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  /// @PropertyType({ name: 'Prisma.Decimal', from: '@prisma/client', namedImport: true })
   /// Face value, so if a book is 82% complete, this value will be `82.00`
   percentage Decimal  @default(0.00) @db.Decimal(5, 2)
   numPages   Int      @db.SmallInt
