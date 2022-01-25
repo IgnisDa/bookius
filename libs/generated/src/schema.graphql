@@ -71,10 +71,16 @@ type BookDto {
   id: BigInt!
 
   """The ISBN-10 unique identifier of this book"""
-  isbn10: ISBN!
+  isbn10: ISBN
 
   """The ISBN-13 unique identifier of this book"""
-  isbn13: ISBN!
+  isbn13: ISBN
+
+  """The date when this book was published"""
+  publishDate: String
+
+  """The publishers of this book"""
+  publishers: [String!]!
 
   """Name of the book"""
   title: String!
@@ -101,10 +107,16 @@ type BookDtoWithoutArchitect {
   id: BigInt!
 
   """The ISBN-10 unique identifier of this book"""
-  isbn10: ISBN!
+  isbn10: ISBN
 
   """The ISBN-13 unique identifier of this book"""
-  isbn13: ISBN!
+  isbn13: ISBN
+
+  """The date when this book was published"""
+  publishDate: String
+
+  """The publishers of this book"""
+  publishers: [String!]!
 
   """Name of the book"""
   title: String!
@@ -283,8 +295,11 @@ type OpenLibraryWorkDto {
 }
 
 type Query {
-  """Get details about a particular work from the different APIs."""
-  bookDetails(isbn: ISBN!): BooksDetailsResultUnion!
+  """Get details about a particular work by it's ISBN."""
+  bookDetailsByIsbn(isbn: ISBN!): BooksDetailsResultUnion!
+
+  """Get details about a particular work by it's key."""
+  bookDetailsByOlid(key: String!): BooksDetailsResultUnion!
 
   """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
