@@ -52,15 +52,23 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
         <div>
           <Link
             href={
-              !!book.isbn
-                ? { pathname: `/book`, query: { isbn: book.isbn } }
+              book.editionKey.length > 0
+                ? {
+                    pathname: `/book`,
+                    query: {
+                      k: book.editionKey,
+                      focused: book.editionKey.at(0),
+                    },
+                  }
                 : '#'
             }
           >
             <a
               className={clsx(
                 'text-2xl font-semibold md:no-underline  text-secondary hover:underline decoration-dashed',
-                !book.isbn ? 'pointer-events-none' : 'underline'
+                book.editionKey.length === 0
+                  ? 'pointer-events-none'
+                  : 'underline'
               )}
             >
               {truncate(book.title, {
@@ -71,25 +79,19 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           </Link>{' '}
           {book.authorName && book.authorName.length > 0 && (
             <div>
-              <span className=" text-primary-content">by</span>{' '}
+              <span className="text-primary-content">by</span>{' '}
               <span className="text-lg text-warning">
                 {book.authorName.at(0)}
               </span>
             </div>
           )}
         </div>
-        {book.isbn && (
-          <div>
-            <span className="text-gray-400 ">ISBNs:</span>
-            {book.isbn?.slice(0, 3).map((identifier, identifierIndex) => (
-              <p key={identifierIndex} className="text-xs">
-                <span className="font-semibold text-gray-200">
-                  {identifier}
-                </span>
-              </p>
-            ))}
-          </div>
-        )}
+        <div>
+          <p className="inline text-gray-400">Editions:</p>{' '}
+          <p className="inline text-lg font-semibold text-gray-200">
+            {book.editionKey?.length || 0}
+          </p>
+        </div>
       </div>
     </div>
   );

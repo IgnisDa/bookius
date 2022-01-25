@@ -52,7 +52,7 @@ export const GET_USER_BOOKS_PROGRESS_LOGS = gql`
 `;
 
 export const GET_BOOKS_FOR_SEARCH_PAGE = gql`
-  query getBooksForSearchPage($input: BooksSearchInput!) {
+  query GetBooksForSearchPage($input: BooksSearchInput!) {
     openLibraryBooksSearch(input: $input) {
       __typename
       ... on BooksSearchError {
@@ -68,24 +68,14 @@ export const GET_BOOKS_FOR_SEARCH_PAGE = gql`
           language
           coverI
           title
+          editionKey
         }
       }
     }
   }
 `;
 
-export const GET_BOOK_DETAILS_FROM_OPEN_LIBRARY = gql`
-  query GetBookDetails($isbn: ISBN!) {
-    bookDetails(isbn: $isbn) {
-      ... on BooksDetailsError {
-        message
-      }
-      ... on BookDto {
-        ...BookDetails
-      }
-    }
-  }
-
+export const BOOK_DETAILS_FRAGMENT = gql`
   fragment BookDetails on BookDto {
     id
     architects {
@@ -95,6 +85,8 @@ export const GET_BOOK_DETAILS_FROM_OPEN_LIBRARY = gql`
       }
       role
     }
+    publishers
+    publishDate
     bookImages {
       base64String
       coverUrl
@@ -105,5 +97,33 @@ export const GET_BOOK_DETAILS_FROM_OPEN_LIBRARY = gql`
     isbn10
     isbn13
     title
+  }
+`;
+
+export const GET_BOOK_DETAILS_BY_ISBN_FROM_OPEN_LIBRARY = gql`
+  ${BOOK_DETAILS_FRAGMENT}
+  query GetBookDetailsByISBN($isbn: ISBN!) {
+    bookDetailsByIsbn(isbn: $isbn) {
+      ... on BooksDetailsError {
+        message
+      }
+      ... on BookDto {
+        ...BookDetails
+      }
+    }
+  }
+`;
+
+export const GET_BOOK_DETAILS_BY_OLID_FROM_OPEN_LIBRARY = gql`
+  ${BOOK_DETAILS_FRAGMENT}
+  query GetBookDetailsByOlid($key: String!) {
+    bookDetailsByOlid(key: $key) {
+      ... on BooksDetailsError {
+        message
+      }
+      ... on BookDto {
+        ...BookDetails
+      }
+    }
   }
 `;
