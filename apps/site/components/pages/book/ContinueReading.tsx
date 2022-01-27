@@ -8,6 +8,7 @@ type ContinueReadingComponentProps = {
 export const ContinueReadingComponent: FC<ContinueReadingComponentProps> = ({
   book,
 }) => {
+  console.log(book);
   return (
     <div>
       <div>Continue Reading</div>
