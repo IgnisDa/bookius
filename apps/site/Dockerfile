@@ -1,11 +1,12 @@
+# syntax=docker/dockerfile:1.3-labs
 FROM node:alpine AS deps
-RUN apk add --no-cache libc6-compat curl
+RUN apk add --no-cache curl
 WORKDIR /app
 COPY package.json pnpm-lock.yaml workspace.json ./
 COPY apps/site/project.json ./apps/site/project.json
 RUN yarn global add pnpm && \
     curl https://raw.githubusercontent.com/IgnisDa/developrs/main/packages/esteem/install.sh | sh -s -- --yes && \
-    esteem --version && esteem install-isolated site && \
+    esteem install-isolated site && \
     pnpm install
 
 # Rebuild the source code only when needed
@@ -19,12 +20,12 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
-RUN { \
-        echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}"; \
-        echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}"; \
-        echo "GIT_REV=${GIT_REV}"; \
-        echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}"; \
-    } >> .env
+RUN cat > ".env" <<EOF
+NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}
+NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}
+GIT_REV=${GIT_REV}
+NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}
+EOF
 RUN yarn global add nx pnpm && \
     pnpx nx build site --prod && \
     pnpm install --production --ignore-scripts --prefer-offline
