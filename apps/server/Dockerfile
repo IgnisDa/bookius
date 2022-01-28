@@ -18,12 +18,14 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
-RUN echo "PORT=80" >> .env && \
-    echo "REDIS_URL=${REDIS_URL}" >> .env && \
-    echo "GIT_REV=${GIT_REV}" >> .env && \
-    echo "DATABASE_URL=${DATABASE_URL}"  >> .env && \
-    echo "MAGIC_SECRET_KEY=${MAGIC_SECRET_KEY}" >> .env
-RUN yarn global add nx pnpm && \
+RUN { \
+        echo "PORT=80"; \
+        echo "REDIS_URL=${REDIS_URL}"; \
+        echo "GIT_REV=${GIT_REV}"; \
+        echo "DATABASE_URL=${DATABASE_URL}" ;\
+        echo "MAGIC_SECRET_KEY=${MAGIC_SECRET_KEY}"; \
+    } >> .env
+RUN cat .env && yarn global add nx pnpm && \
     pnpx nx run model:generate && \
     pnpx nx build server --prod && \
     pnpm install --production --ignore-scripts --prefer-offline

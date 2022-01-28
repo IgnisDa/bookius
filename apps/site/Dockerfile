@@ -19,10 +19,12 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
-RUN echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}" >> .env && \
-    echo "GIT_REV=${GIT_REV}" >> .env && \
-    echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}" >> .env && \
-    echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}" >> .env
+RUN { \
+        echo "NEXT_PUBLIC_GRAPHQL_API=${NEXT_PUBLIC_GRAPHQL_API}"; \
+        echo "NEXT_SERVER_GRAPHQL_API=${NEXT_SERVER_GRAPHQL_API}"; \
+        echo "GIT_REV=${GIT_REV}"; \
+        echo "NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY}"; \
+    } >> .env
 RUN yarn global add nx pnpm && \
     pnpx nx build site --prod && \
     pnpm install --production --ignore-scripts --prefer-offline
