@@ -1,39 +1,22 @@
-# Bookius
+# Radix scroll-area in production error
 
-The monorepo containing all the micro-services that are associated with the Bookius
-ecosystem of tools.
-
-## Deployment
-
-We use dokku on a Digital Ocean server for deployment.
-
-The `site` and `server` containers need to be connected together via a network for them to
-communicate. To do so, use the following instructions.
+To reproduce it -
 
 ```bash
-dokku apps:create bookius-site
-dokku builder-dockerfile:set bookius-site dockerfile-path apps/site/Dockerfile
-dokku apps:create bookius-server
-dokku builder-dockerfile:set bookius-server dockerfile-path apps/server/Dockerfile
-dokku proxy:ports-add bookius-site http:80:80
-dokku proxy:ports-add bookius-server http:80:80
-dokku network:create bookius-network
-dokku network:set bookius-site attach-post-deploy bookius-network
-dokku network:set bookius-server attach-post-deploy bookius-network
-# deploy both applications from host machine
-# after doing that, enable SSL
-dokku letsencrypt:enable bookius-site
-dokku letsencrypt:enable bookius-server
+git clone --branch radix-error https://github.com/IgnisDa/bookius.git
+pnpm install # install the dependencies
 ```
 
-To test if the above worked, run the following:
+Add this to root `.env` file:
+
+```txt
+NEXT_SERVER_GRAPHQL_API="https://bookius-server.ignisda.tech/graphql"
+NEXT_PUBLIC_GRAPHQL_API="https://bookius-server.ignisda.tech/graphql"
+```
+
+To run the server:
 
 ```bash
-docker exec -it bookius-site.web.1 ash # drop into site's container
-curl -v http://bookius-server.web:80/status # see if the server is accessible internally
-# if the response is `true`, then it works
+npx nx serve site # in development mode
+npx nx build site --skip-nx-cache && npx nx serve site --prod # in production mode
 ```
-
-## Others
-
-This project was generated using [Nx](https://nx.dev).
