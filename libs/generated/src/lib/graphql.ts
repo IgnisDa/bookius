@@ -32,6 +32,8 @@ export type Scalars = {
   NonNegativeFloat: number;
   /** Integers that will have a value of 0 or more. */
   NonNegativeInt: number;
+  /** Integers that will have a value greater than 0. */
+  PositiveInt: number;
   /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
   URL: string;
 };
@@ -145,13 +147,38 @@ export type BookProgressLogDto = {
   /** A unique ID associated with this record */
   id: Scalars['BigInt'];
   /** The number of pages in this run of reading */
-  numPages: Scalars['NonNegativeInt'];
+  numPages: Scalars['PositiveInt'];
   /** Face value, so if a book is 82% complete, this value will be `82.00` */
   percentage: Scalars['NonNegativeFloat'];
   /** The date and time this was first logged */
   startedOn: Scalars['DateTime'];
+  /** The human representation of the book progress */
+  status: BookProgressStatus;
   /** The date and time this was last updated on */
   updatedOn: Scalars['DateTime'];
+};
+
+/** The human readable status of reading a book */
+export enum BookProgressStatus {
+  /** Book is more than 90% complete */
+  AlmostCompleted = 'ALMOST_COMPLETED',
+  /** Book is completed */
+  Completed = 'COMPLETED',
+  /** Book is more than 50% complete */
+  HalfwayThrough = 'HALFWAY_THROUGH',
+  /** Book is more than 10% complete */
+  IntoIt = 'INTO_IT',
+  /** Book is less than 10% complete */
+  Started = 'STARTED',
+}
+
+/** The type returned when statistics about a particular book is requested */
+export type BookStatisticsDto = {
+  __typename: 'BookStatisticsDto';
+  /** The number of people who have completed this book */
+  readBy: Scalars['NonNegativeInt'];
+  /** The number of people who have reviewed this book */
+  reviewedBy: Scalars['NonNegativeInt'];
 };
 
 /** The object returned when there is an error getting details about a book */
@@ -181,6 +208,33 @@ export type BooksSearchInput = {
 
 /** The result returned when a client tries to search for a book */
 export type BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse;
+
+/** Input to create a new book progress log instance */
+export type CreateBookProgressLogInput = {
+  /** The ID of the book it is associated with */
+  bookId: Scalars['BigInt'];
+  /** The number of pages in this run of reading */
+  numPages: Scalars['PositiveInt'];
+};
+
+/** The result if a book progress log creation is successful */
+export type CreateBookProgressLogResult = {
+  __typename: 'CreateBookProgressLogResult';
+  /** The ID of the book it is associated with */
+  bookId: Scalars['BigInt'];
+  /** A unique ID associated with this record */
+  id: Scalars['BigInt'];
+  /** The number of pages in this run of reading */
+  numPages: Scalars['PositiveInt'];
+  /** Face value, so if a book is 82% complete, this value will be `82.00` */
+  percentage: Scalars['NonNegativeFloat'];
+  /** The date and time this was first logged */
+  startedOn: Scalars['DateTime'];
+  /** The human representation of the book progress */
+  status: BookProgressStatus;
+  /** The date and time this was last updated on */
+  updatedOn: Scalars['DateTime'];
+};
 
 /** Type returned for the error when a new user is created. */
 export type CreateUserError = {
@@ -226,12 +280,20 @@ export type LoginResultUnion = LoginError | LoginResult;
 
 export type Mutation = {
   __typename: 'Mutation';
+  /** Mark a book as started reading for the currently logged in user. */
+  createBookProgressLog: CreateBookProgressLogResult;
   /** Mutation to create a new user with a given authentication token. */
   createUser: CreateUserResultUnion;
   /** Create a shelf for the current user. */
   createUserShelf: ShelfDto;
   /** Login using an authentication token. */
   loginUser: LoginResultUnion;
+  /** Update reading progress of a book for the currently logged in user. */
+  updateBookProgressLog: Scalars['Boolean'];
+};
+
+export type MutationCreateBookProgressLogArgs = {
+  input: CreateBookProgressLogInput;
 };
 
 export type MutationCreateUserArgs = {
@@ -244,6 +306,10 @@ export type MutationCreateUserShelfArgs = {
 
 export type MutationLoginUserArgs = {
   issuer: Scalars['String'];
+};
+
+export type MutationUpdateBookProgressLogArgs = {
+  input: UpdateBookProgressLogInput;
 };
 
 /** The response object when communicating with the Open Library API */
@@ -282,6 +348,8 @@ export type Query = {
   bookDetailsByIsbn: BooksDetailsResultUnion;
   /** Get details about a particular work by it's key. */
   bookDetailsByOlid: BooksDetailsResultUnion;
+  /** Get statistics about a particular book in the database. */
+  bookStatistics: BookStatisticsDto;
   /** Check whether a user with the given issuer exists in the database. */
   checkUserByIssuer: Scalars['Boolean'];
   /** Get a filtered list of all books in the service. */
@@ -292,6 +360,8 @@ export type Query = {
   openLibraryBooksSearch: BooksSearchResultUnion;
   /** Get list of book progresses that are related to the user. */
   userBookProgressLogs: Array<BookProgressLogDto>;
+  /** Get all book progresses for a particular book for the user. */
+  userParticularBookProgressLogs: Array<BookProgressLogDto>;
   /** Get a small list of authors that are related to the user. */
   userRelatedAuthors: Array<AuthorDto>;
   /** Get a small list of books that are related to the user. */
@@ -304,6 +374,10 @@ export type QueryBookDetailsByIsbnArgs = {
 
 export type QueryBookDetailsByOlidArgs = {
   key: Scalars['String'];
+};
+
+export type QueryBookStatisticsArgs = {
+  bookId: Scalars['BigInt'];
 };
 
 export type QueryCheckUserByIssuerArgs = {
@@ -324,6 +398,10 @@ export type QueryOpenLibraryBooksSearchArgs = {
 
 export type QueryUserBookProgressLogsArgs = {
   take: Scalars['NonNegativeInt'];
+};
+
+export type QueryUserParticularBookProgressLogsArgs = {
+  bookId: Scalars['BigInt'];
 };
 
 /** Counts of various statistics related to shelves */
@@ -352,6 +430,14 @@ export type ShelfDto = {
   name: Scalars['String'];
   /** The date and time when information about this shelf was last updated */
   updatedAt: Scalars['DateTime'];
+};
+
+/** Input to update a new book progress log instance */
+export type UpdateBookProgressLogInput = {
+  /** A unique ID associated with this record */
+  id: Scalars['BigInt'];
+  /** Face value, so if a book is 82% complete, this value will be `82.00` */
+  percentage: Scalars['NonNegativeFloat'];
 };
 
 /** Critical details about a user of the service */
@@ -390,6 +476,29 @@ export type CreateUserShelfMutationVariables = Exact<{
 export type CreateUserShelfMutation = {
   __typename: 'Mutation';
   createUserShelf: { __typename: 'ShelfDto'; id: string };
+};
+
+export type StartReadingBookMutationVariables = Exact<{
+  input: CreateBookProgressLogInput;
+}>;
+
+export type StartReadingBookMutation = {
+  __typename: 'Mutation';
+  createBookProgressLog: {
+    __typename: 'CreateBookProgressLogResult';
+    id: number;
+    status: BookProgressStatus;
+    percentage: number;
+  };
+};
+
+export type UpdateBookReadingProgressMutationVariables = Exact<{
+  input: UpdateBookProgressLogInput;
+}>;
+
+export type UpdateBookReadingProgressMutation = {
+  __typename: 'Mutation';
+  updateBookProgressLog: boolean;
 };
 
 export type CheckUserByIssuerQueryVariables = Exact<{
@@ -567,6 +676,35 @@ export type GetBookDetailsByOlidQuery = {
     | { __typename: 'BooksDetailsError'; message: string };
 };
 
+export type GetParticularBookProgressLogsQueryVariables = Exact<{
+  bookId: Scalars['BigInt'];
+}>;
+
+export type GetParticularBookProgressLogsQuery = {
+  __typename: 'Query';
+  userParticularBookProgressLogs: Array<{
+    __typename: 'BookProgressLogDto';
+    id: number;
+    status: BookProgressStatus;
+    percentage: number;
+    startedOn: DateTime;
+    updatedOn: DateTime;
+  }>;
+};
+
+export type GetBookStatisticsQueryVariables = Exact<{
+  bookId: Scalars['BigInt'];
+}>;
+
+export type GetBookStatisticsQuery = {
+  __typename: 'Query';
+  bookStatistics: {
+    __typename: 'BookStatisticsDto';
+    readBy: number;
+    reviewedBy: number;
+  };
+};
+
 export const BookDetailsFragmentDoc = gql`
   fragment BookDetails on BookDto {
     id
@@ -639,6 +777,34 @@ export function useCreateUserShelfMutation() {
     CreateUserShelfMutation,
     CreateUserShelfMutationVariables
   >(CreateUserShelfDocument);
+}
+export const StartReadingBookDocument = gql`
+  mutation StartReadingBook($input: CreateBookProgressLogInput!) {
+    createBookProgressLog(input: $input) {
+      id
+      status
+      percentage
+    }
+  }
+`;
+
+export function useStartReadingBookMutation() {
+  return Urql.useMutation<
+    StartReadingBookMutation,
+    StartReadingBookMutationVariables
+  >(StartReadingBookDocument);
+}
+export const UpdateBookReadingProgressDocument = gql`
+  mutation UpdateBookReadingProgress($input: UpdateBookProgressLogInput!) {
+    updateBookProgressLog(input: $input)
+  }
+`;
+
+export function useUpdateBookReadingProgressMutation() {
+  return Urql.useMutation<
+    UpdateBookReadingProgressMutation,
+    UpdateBookReadingProgressMutationVariables
+  >(UpdateBookReadingProgressDocument);
 }
 export const CheckUserByIssuerDocument = gql`
   query CheckUserByIssuer($issuer: String!) {
@@ -817,6 +983,49 @@ export function useGetBookDetailsByOlidQuery(
 ) {
   return Urql.useQuery<GetBookDetailsByOlidQuery>({
     query: GetBookDetailsByOlidDocument,
+    ...options,
+  });
+}
+export const GetParticularBookProgressLogsDocument = gql`
+  query GetParticularBookProgressLogs($bookId: BigInt!) {
+    userParticularBookProgressLogs(bookId: $bookId) {
+      id
+      status
+      percentage
+      startedOn
+      updatedOn
+    }
+  }
+`;
+
+export function useGetParticularBookProgressLogsQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetParticularBookProgressLogsQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetParticularBookProgressLogsQuery>({
+    query: GetParticularBookProgressLogsDocument,
+    ...options,
+  });
+}
+export const GetBookStatisticsDocument = gql`
+  query GetBookStatistics($bookId: BigInt!) {
+    bookStatistics(bookId: $bookId) {
+      readBy
+      reviewedBy
+    }
+  }
+`;
+
+export function useGetBookStatisticsQuery(
+  options: Omit<
+    Urql.UseQueryArgs<GetBookStatisticsQueryVariables>,
+    'query'
+  > = {}
+) {
+  return Urql.useQuery<GetBookStatisticsQuery>({
+    query: GetBookStatisticsDocument,
     ...options,
   });
 }

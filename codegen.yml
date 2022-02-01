@@ -27,6 +27,8 @@ generates:
         NonNegativeInt: number
         URL: string
         Base64Image: string
+        PositiveFloat: number
+        PositiveInt: number
   libs/generated/src/lib/graphql.schema.json:
     plugins:
       - 'introspection'

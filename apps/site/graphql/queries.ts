@@ -127,3 +127,24 @@ export const GET_BOOK_DETAILS_BY_OLID_FROM_OPEN_LIBRARY = gql`
     }
   }
 `;
+
+export const GET_PARTICULAR_BOOK_PROGRESS_LOGS = gql`
+  query GetParticularBookProgressLogs($bookId: BigInt!) {
+    userParticularBookProgressLogs(bookId: $bookId) {
+      id
+      status
+      percentage
+      startedOn
+      updatedOn
+    }
+  }
+`;
+
+export const GET_BOOK_STATISTICS = gql`
+  query GetBookStatistics($bookId: BigInt!) {
+    bookStatistics(bookId: $bookId) {
+      readBy
+      reviewedBy
+    }
+  }
+`;

@@ -146,7 +146,7 @@ type BookProgressLogDto {
   id: BigInt!
 
   """The number of pages in this run of reading"""
-  numPages: NonNegativeInt!
+  numPages: PositiveInt!
 
   """Face value, so if a book is 82% complete, this value will be `82.00`"""
   percentage: NonNegativeFloat!
@@ -154,8 +154,38 @@ type BookProgressLogDto {
   """The date and time this was first logged"""
   startedOn: DateTime!
 
+  """The human representation of the book progress"""
+  status: BookProgressStatus!
+
   """The date and time this was last updated on"""
   updatedOn: DateTime!
+}
+
+"""The human readable status of reading a book"""
+enum BookProgressStatus {
+  """Book is more than 90% complete"""
+  ALMOST_COMPLETED
+
+  """Book is completed"""
+  COMPLETED
+
+  """Book is more than 50% complete"""
+  HALFWAY_THROUGH
+
+  """Book is more than 10% complete"""
+  INTO_IT
+
+  """Book is less than 10% complete"""
+  STARTED
+}
+
+"""The type returned when statistics about a particular book is requested"""
+type BookStatisticsDto {
+  """The number of people who have completed this book"""
+  readBy: NonNegativeInt!
+
+  """The number of people who have reviewed this book"""
+  reviewedBy: NonNegativeInt!
 }
 
 """
@@ -188,6 +218,39 @@ input BooksSearchInput {
 
 """The result returned when a client tries to search for a book"""
 union BooksSearchResultUnion = BooksSearchError | OpenLibraryResponse
+
+"""Input to create a new book progress log instance"""
+input CreateBookProgressLogInput {
+  """The ID of the book it is associated with"""
+  bookId: BigInt!
+
+  """The number of pages in this run of reading"""
+  numPages: PositiveInt!
+}
+
+"""The result if a book progress log creation is successful"""
+type CreateBookProgressLogResult {
+  """The ID of the book it is associated with"""
+  bookId: BigInt!
+
+  """A unique ID associated with this record"""
+  id: BigInt!
+
+  """The number of pages in this run of reading"""
+  numPages: PositiveInt!
+
+  """Face value, so if a book is 82% complete, this value will be `82.00`"""
+  percentage: NonNegativeFloat!
+
+  """The date and time this was first logged"""
+  startedOn: DateTime!
+
+  """The human representation of the book progress"""
+  status: BookProgressStatus!
+
+  """The date and time this was last updated on"""
+  updatedOn: DateTime!
+}
 
 """Type returned for the error when a new user is created."""
 type CreateUserError {
@@ -242,6 +305,9 @@ type LoginResult {
 union LoginResultUnion = LoginError | LoginResult
 
 type Mutation {
+  """Mark a book as started reading for the currently logged in user."""
+  createBookProgressLog(input: CreateBookProgressLogInput!): CreateBookProgressLogResult!
+
   """Mutation to create a new user with a given authentication token."""
   createUser(issuer: String!): CreateUserResultUnion!
 
@@ -250,6 +316,9 @@ type Mutation {
 
   """Login using an authentication token."""
   loginUser(issuer: String!): LoginResultUnion!
+
+  """Update reading progress of a book for the currently logged in user."""
+  updateBookProgressLog(input: UpdateBookProgressLogInput!): Boolean!
 }
 
 """Floats that will have a value of 0 or more."""
@@ -294,12 +363,18 @@ type OpenLibraryWorkDto {
   title: String!
 }
 
+"""Integers that will have a value greater than 0."""
+scalar PositiveInt
+
 type Query {
   """Get details about a particular work by it's ISBN."""
   bookDetailsByIsbn(isbn: ISBN!): BooksDetailsResultUnion!
 
   """Get details about a particular work by it's key."""
   bookDetailsByOlid(key: String!): BooksDetailsResultUnion!
+
+  """Get statistics about a particular book in the database."""
+  bookStatistics(bookId: BigInt!): BookStatisticsDto!
 
   """Check whether a user with the given issuer exists in the database."""
   checkUserByIssuer(issuer: String!): Boolean!
@@ -324,6 +399,9 @@ type Query {
     """The number of items to take"""
     take: NonNegativeInt!
   ): [BookProgressLogDto!]!
+
+  """Get all book progresses for a particular book for the user."""
+  userParticularBookProgressLogs(bookId: BigInt!): [BookProgressLogDto!]!
 
   """Get a small list of authors that are related to the user."""
   userRelatedAuthors: [AuthorDto!]!
@@ -369,6 +447,15 @@ type ShelfDto {
 A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
 """
 scalar URL
+
+"""Input to update a new book progress log instance"""
+input UpdateBookProgressLogInput {
+  """A unique ID associated with this record"""
+  id: BigInt!
+
+  """Face value, so if a book is 82% complete, this value will be `82.00`"""
+  percentage: NonNegativeFloat!
+}
 
 """Critical details about a user of the service"""
 type UserDto {
