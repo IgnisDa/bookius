@@ -79,7 +79,7 @@ export class BaseCollector implements IBaseCollector {
     const createdBook = await this.prisma.book.create({
       data: {
         title: book.title,
-        openLibraryKey: book.openLibraryKey,
+        openLibraryKeys: book.openLibraryKeys,
         isbn10: book.isbn10,
         isbn13: book.isbn13,
         description: book.description,
