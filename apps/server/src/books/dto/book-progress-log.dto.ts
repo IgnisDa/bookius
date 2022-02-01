@@ -1,8 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { BookProgressStatus } from '@prisma/client';
 import {
   GraphQLBigInt,
   GraphQLNonNegativeFloat,
-  GraphQLNonNegativeInt,
+  GraphQLPositiveInt,
 } from 'graphql-scalars';
 import { BookDto } from './book.dto';
 
@@ -32,7 +33,7 @@ export class BookProgressLogDto {
   })
   percentage: number;
 
-  @Field(() => GraphQLNonNegativeInt, {
+  @Field(() => GraphQLPositiveInt, {
     description: 'The number of pages in this run of reading',
   })
   numPages: number;
@@ -46,4 +47,21 @@ export class BookProgressLogDto {
    * The date and time this was last updated on
    */
   updatedOn: Date;
+
+  @Field(() => BookProgressStatus, {
+    description: 'The human representation of the book progress',
+  })
+  status: BookProgressStatus;
 }
+
+registerEnumType(BookProgressStatus, {
+  name: 'BookProgressStatus',
+  description: 'The human readable status of reading a book',
+  valuesMap: {
+    COMPLETED: { description: 'Book is completed' },
+    ALMOST_COMPLETED: { description: 'Book is more than 90% complete' },
+    HALFWAY_THROUGH: { description: 'Book is more than 50% complete' },
+    INTO_IT: { description: 'Book is more than 10% complete' },
+    STARTED: { description: 'Book is less than 10% complete' },
+  },
+});
