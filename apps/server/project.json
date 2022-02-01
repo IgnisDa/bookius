@@ -7,9 +7,9 @@
       "configurations": {
         "production": {
           "extractLicenses": true,
+          "generatePackageJson": true,
           "inspect": false,
           "optimization": false,
-          "generatePackageJson": true,
           "verbose": true
         }
       },
@@ -46,6 +46,7 @@
   "tags": [],
   "dependencies": {
     "development": [
+      "@faker-js/faker",
       "@nestjs/schematics",
       "@nestjs/testing",
       "@nrwl/cli",
@@ -58,7 +59,6 @@
       "@nx-tools/nx-prisma",
       "@types/bull",
       "@types/cron",
-      "@types/faker",
       "@types/jest",
       "@types/lodash",
       "@types/luxon",
