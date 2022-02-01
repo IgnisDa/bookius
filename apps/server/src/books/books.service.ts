@@ -1,14 +1,15 @@
-import { ApplicationConfig } from '@bookius/config';
 import { OpenLibraryCollector } from '@bookius/data';
-import { ListFilterArgs } from '@bookius/general';
+import { ListFilterArgs, logger } from '@bookius/general';
 import { PrismaService } from '@bookius/model';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { BookProgressStatus, User } from '@prisma/client';
 import { Queue } from 'bull';
 import { sampleSize } from 'lodash';
 import { COLLECT_BOOKS_DATA_JOB, MODULE_QUEUE_NAME } from './books.constants';
 import { BooksSearchInput } from './dto/books-search.dto';
+import { CreateBookProgressLogInput } from './dto/create-book-progress-log.dto';
+import { UpdateBookProgressLogInput } from './dto/update-book-progress-log.dto';
 
 @Injectable()
 export class BooksService {
@@ -22,7 +23,7 @@ export class BooksService {
   async filterBooks(args: ListFilterArgs) {
     const resp = await this.prisma.book.findMany({
       include: { architects: { include: { author: true } } },
-      // ...args,
+      ...args,
     });
     return resp;
   }
@@ -54,6 +55,23 @@ export class BooksService {
     return resp;
   }
 
+  async bookStatistics(id: bigint) {
+    const readBy = await this.prisma.bookProgressLog.count({
+      where: { bookId: id, status: BookProgressStatus.COMPLETED },
+    });
+    // TODO: return correct data here
+    const reviewedBy = 69;
+    return { readBy, reviewedBy };
+  }
+
+  async userParticularBookProgressLogs(bookId: bigint, currentUser: User) {
+    const bookProgressLogs = await this.prisma.bookProgressLog.findMany({
+      where: { userId: currentUser.id, bookId: bookId },
+      orderBy: { updatedOn: 'desc' },
+    });
+    return bookProgressLogs;
+  }
+
   async openLibraryBooksSearch(input: BooksSearchInput) {
     try {
       const resp = await this.openLibraryService.bookSearch(
@@ -79,11 +97,41 @@ export class BooksService {
   }
 
   async bookDetailsByOlid(key: string) {
+    // TODO: This function should take the first key and return data for that, and then
+    // deploy a job to collect data from all other keys and store it back into the book
+    // record
     const book = await this.openLibraryService.getBookByOlid(key);
     return book
       ? book
       : Promise.reject({
           message: `The Open Library API does not have a record with key='${key}'`,
         });
+  }
+
+  async createBookProgressLog(
+    currentUser: User,
+    input: CreateBookProgressLogInput
+  ) {
+    const bookProgressLog = await this.prisma.bookProgressLog.create({
+      data: {
+        numPages: input.numPages,
+        bookId: input.bookId,
+        userId: currentUser.id,
+      },
+    });
+    return bookProgressLog;
+  }
+
+  async updateBookProgressLog(input: UpdateBookProgressLogInput) {
+    try {
+      const bookProgressLog = await this.prisma.bookProgressLog.update({
+        where: { id: input.id },
+        data: { percentage: input.percentage },
+      });
+      return !!bookProgressLog;
+    } catch (e) {
+      logger.error(e);
+      return false;
+    }
   }
 }

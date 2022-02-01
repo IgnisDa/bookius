@@ -32,3 +32,19 @@ export const CREATE_USER_SHELF = gql`
     }
   }
 `;
+
+export const START_READING_BOOK = gql`
+  mutation StartReadingBook($input: CreateBookProgressLogInput!) {
+    createBookProgressLog(input: $input) {
+      id
+      status
+      percentage
+    }
+  }
+`;
+
+export const UPDATE_BOOK_READING_PROGRESS = gql`
+  mutation UpdateBookReadingProgress($input: UpdateBookProgressLogInput!) {
+    updateBookProgressLog(input: $input)
+  }
+`;

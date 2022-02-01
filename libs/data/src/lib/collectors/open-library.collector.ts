@@ -49,9 +49,9 @@ export class OpenLibraryCollector extends BaseCollector implements ICollector {
   /**
    * Find a book from the Open library API by it's key, along with data about it's author.
    */
-  async findBookByKeyFromDatabase(key: string) {
+  async findBookByKeyFromDatabase(keys: string) {
     const book = await this.prisma.book.findFirst({
-      where: { openLibraryKey: key },
+      where: { openLibraryKeys: { hasSome: keys } },
       include: {
         architects: { include: { author: true } },
         bookImages: true,
@@ -66,11 +66,11 @@ export class OpenLibraryCollector extends BaseCollector implements ICollector {
    * tries to find it from the Open Library API. If found, saves it to the database and
    * returns the book details otherwise returns `undefined`.
    */
-  async getBookByOlid(key: string) {
-    const dbBook = await this.findBookByKeyFromDatabase(key);
+  async getBookByOlid(keys: string) {
+    const dbBook = await this.findBookByKeyFromDatabase(keys);
     if (dbBook) return dbBook;
     else {
-      const apiBook = await this.findBookByOlidFromAPI(key);
+      const apiBook = await this.findBookByOlidFromAPI(keys);
       if (apiBook) {
         const book = this.saveBookToDatabase(apiBook);
         return book;

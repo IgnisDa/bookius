@@ -29,7 +29,6 @@ model User {
 
 /// This model will track profile information about the user
 model UserProfile {
-  /// @FieldType('Scalars.GraphQLUUID')
   id        String   @id @default(uuid()) @db.Uuid
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @unique
@@ -49,8 +48,8 @@ model Book {
   description      String?
   isbn10           String?
   isbn13           String?
-  /// The unique key for the book, eg: OL26868794M
-  openLibraryKey   String
+  /// The unique keys for the book assigned by the Open Library API, eg: OL26868794M
+  openLibraryKeys  String[]
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
   publishDate      String?
@@ -83,9 +82,7 @@ enum ArchitectRole {
 model ArchitectsOnBooks {
   book     Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
   author   Author        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  /// @FieldType('Scalars.GraphQLBigInt')
   bookId   BigInt
-  /// @FieldType('Scalars.GraphQLBigInt')
   authorId BigInt
   role     ArchitectRole
 
@@ -117,20 +114,29 @@ model Shelf {
   updatedAt   DateTime @updatedAt
 }
 
+/// The human readable status of reading a book
+enum BookProgressStatus {
+  STARTED // < 10%
+  INTO_IT // > 10%
+  HALFWAY_THROUGH // > 50%
+  ALMOST_COMPLETED // > 90%
+  COMPLETED // == 100%
+}
+
 /// Model to track a user's reading progress with a particular book
 model BookProgressLog {
-  id         BigInt   @id @default(autoincrement())
-  book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  id         BigInt             @id @default(autoincrement())
+  book       Book               @relation(fields: [bookId], references: [id], onDelete: Cascade)
   bookId     BigInt
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   /// Face value, so if a book is 82% complete, this value will be `82.00`
-  percentage Decimal  @default(0.00) @db.Decimal(5, 2)
-  numPages   Int      @db.SmallInt
-  startedOn  DateTime @default(now())
-  updatedOn  DateTime @updatedAt
-
-  @@unique([bookId, userId])
+  percentage Decimal            @default(0.00) @db.Decimal(5, 2)
+  numPages   Int                @db.SmallInt
+  startedOn  DateTime           @default(now())
+  updatedOn  DateTime           @updatedAt
+  // this a generated column in the underlying schema
+  status     BookProgressStatus @default(dbgenerated())
 }
 
 /// The status of a job which is performed by a bull queue.

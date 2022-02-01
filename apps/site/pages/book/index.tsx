@@ -3,16 +3,34 @@ import {
   GetBookDetailsByOlidQueryVariables,
   useGetBookDetailsByOlidQuery,
 } from '@bookius/generated';
-import { DetailsDisplayComponent } from 'apps/site/components/pages/book/DetailsDisplay';
+import { Tab } from '@headlessui/react';
+import clsx from 'clsx';
+import Cookies from 'js-cookie';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { ContinueReadingComponent } from '../../components/pages/book/ContinueReading';
+import { DetailsDisplayComponent } from '../../components/pages/book/DetailsDisplay';
+import { ImageDisplayComponent } from '../../components/pages/book/ImageDisplay';
 import { GET_BOOK_DETAILS_BY_OLID_FROM_OPEN_LIBRARY } from '../../graphql/queries';
+import { AUTH_TOKEN_KEY } from '../../lib/constants';
 import { client, ssrCache } from '../../lib/helpers/urqlClient';
 import ufoImage from '../../public/images/ufo.svg';
+
+const tabs = [
+  { name: 'Description' },
+  { name: 'Continue reading', disableIfNotLoggedIn: true },
+];
 
 const BookDetailPage = ({
   olid,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [isAllowedToSwitchTabs, setIsAllowedToSwitchTabs] = useState(true);
+
+  useEffect(() => {
+    Cookies.get(AUTH_TOKEN_KEY) && setIsAllowedToSwitchTabs(false);
+  });
+
   const [{ data }] = useGetBookDetailsByOlidQuery({
     variables: { key: olid },
   });
@@ -38,8 +56,43 @@ const BookDetailPage = ({
       ) : (
         <>
           {data?.bookDetailsByOlid && (
-            <div className="flex flex-col items-center space-y-5 md:flex-row md:space-x-10">
-              <DetailsDisplayComponent book={data.bookDetailsByOlid} />
+            <div className="flex flex-col items-center space-y-10 md:items-stretch md:flex-row md:space-x-10 md:space-y-0">
+              <ImageDisplayComponent book={data.bookDetailsByOlid} />
+              <div className="flex flex-col-reverse flex-grow w-full md:flex-col md:pt-6 sm:max-w-md md:max-w-none">
+                <Tab.Group>
+                  <Tab.Panels className="flex flex-1 mt-8 md:mt-0">
+                    <Tab.Panel className="flex items-center flex-1">
+                      <DetailsDisplayComponent book={data.bookDetailsByOlid} />
+                    </Tab.Panel>
+                    <Tab.Panel className="flex items-center flex-1">
+                      <ContinueReadingComponent book={data.bookDetailsByOlid} />
+                    </Tab.Panel>
+                  </Tab.Panels>
+                  <Tab.List className="flex flex-none p-1 space-x-1 md:mt-5 bg-blue-900/10 rounded-xl">
+                    {tabs.map((tab, index) => (
+                      <Tab
+                        key={index}
+                        className={({ selected }) =>
+                          clsx(
+                            'w-full py-2.5 leading-5 font-medium text-blue-700 capitalize',
+                            'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
+                            selected
+                              ? 'bg-white shadow'
+                              : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
+                            index === tabs.length - 1 && 'rounded-r-lg',
+                            index === 0 && 'rounded-l-lg'
+                          )
+                        }
+                        disabled={
+                          tab.disableIfNotLoggedIn && isAllowedToSwitchTabs
+                        }
+                      >
+                        {tab.name}
+                      </Tab>
+                    ))}
+                  </Tab.List>
+                </Tab.Group>
+              </div>
             </div>
           )}
         </>

@@ -3,7 +3,7 @@ export type TBookBuilder = {
   description?: string | null;
   isbn10?: string | null;
   isbn13?: string | null;
-  openLibraryKey: string;
+  openLibraryKeys: string[];
   authors: { name: string; key: string }[];
   publishDate?: string | null;
   publishers?: string[] | null;

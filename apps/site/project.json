@@ -13,9 +13,7 @@
         "outputPath": "dist/apps/site",
         "root": "apps/site"
       },
-      "outputs": [
-        "{options.outputPath}"
-      ]
+      "outputs": ["{options.outputPath}"]
     },
     "export": {
       "executor": "@nrwl/next:export",
@@ -26,13 +24,9 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/site/**/*.{ts,tsx,js,jsx}"
-        ]
+        "lintFilePatterns": ["apps/site/**/*.{ts,tsx,js,jsx}"]
       },
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     },
     "serve": {
       "configurations": {
@@ -53,9 +47,7 @@
         "jestConfig": "apps/site/jest.config.js",
         "passWithNoTests": true
       },
-      "outputs": [
-        "coverage/apps/site"
-      ]
+      "outputs": ["coverage/apps/site"]
     }
   },
   "tags": [],
@@ -82,6 +74,7 @@
       "@types/jest",
       "@types/js-cookie",
       "@types/lodash",
+      "@types/lodash.debounce",
       "@types/luxon",
       "@types/react",
       "@types/react-dom",
@@ -106,6 +99,7 @@
     ],
     "required": [
       "@fontsource/neucha",
+      "@headlessui/react",
       "@nrwl/next",
       "@nrwl/tao",
       "@radix-ui/colors",
@@ -117,6 +111,7 @@
       "@radix-ui/react-progress",
       "@radix-ui/react-scroll-area",
       "@radix-ui/react-separator",
+      "@radix-ui/react-slider",
       "@radix-ui/react-toggle",
       "@stitches/react",
       "@urql/devtools",
@@ -126,6 +121,7 @@
       "graphql",
       "js-cookie",
       "lodash",
+      "lodash.debounce",
       "luxon",
       "magic-sdk",
       "next",
