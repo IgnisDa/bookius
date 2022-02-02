@@ -58,6 +58,7 @@ specifiers:
   '@types/js-cookie': 3.0.1
   '@types/lodash': 4.14.178
   '@types/lodash.debounce': 4.0.6
+  '@types/lodash.truncate': ^4.4.6
   '@types/luxon': 2.0.9
   '@types/node': 16.11.22
   '@types/nodemailer': 6.4.4
@@ -103,6 +104,7 @@ specifiers:
   js-cookie: 3.0.1
   lodash: 4.17.21
   lodash.debounce: 4.0.8
+  lodash.truncate: ^4.4.2
   luxon: 2.3.0
   magic-sdk: 7.0.0
   nest-typed-config: 2.3.0
@@ -197,6 +199,7 @@ dependencies:
   js-cookie: 3.0.1
   lodash: 4.17.21
   lodash.debounce: 4.0.8
+  lodash.truncate: 4.4.2
   luxon: 2.3.0
   magic-sdk: 7.0.0
   nest-typed-config: 2.3.0_0f75cad7c3bc55c714d492fe95499bdf
@@ -256,6 +259,7 @@ devDependencies:
   '@types/js-cookie': 3.0.1
   '@types/lodash': 4.14.178
   '@types/lodash.debounce': 4.0.6
+  '@types/lodash.truncate': 4.4.6
   '@types/luxon': 2.0.9
   '@types/node': 16.11.22
   '@types/nodemailer': 6.4.4
@@ -7435,6 +7439,15 @@ packages:
     resolution:
       {
         integrity: sha512-4WTmnnhCfDvvuLMaF3KV4Qfki93KebocUF45msxhYyjMttZDQYzHkO639ohhk8+oco2cluAFL3t5+Jn4mleylQ==,
+      }
+    dependencies:
+      '@types/lodash': 4.14.178
+    dev: true
+
+  /@types/lodash.truncate/4.4.6:
+    resolution:
+      {
+        integrity: sha512-PTZoD9mSRANSAHnb89AmoIiuthTPGfehBIo4ojd8U8CFc3aac89IVaaIRQNJbglY8SOJoOZEEVE3nNND3uRoyg==,
       }
     dependencies:
       '@types/lodash': 4.14.178
@@ -16154,6 +16167,10 @@ packages:
 
   /lodash.sortby/4.7.0:
     resolution: { integrity: sha1-7dFMgk4sycHgsKG0K7UhBRakJDg= }
+    dev: false
+
+  /lodash.truncate/4.4.2:
+    resolution: { integrity: sha1-WjUNoLERO4N+z//VgSy+WNbq4ZM= }
     dev: false
 
   /lodash.union/4.6.0:
