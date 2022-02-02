@@ -44,3 +44,13 @@
 * {
   font-family: 'Biotif';
 }
+
+input::-webkit-outer-spin-button.no-arrows,
+input::-webkit-inner-spin-button.no-arrows {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'].no-arrows {
+  -moz-appearance: textfield;
+}

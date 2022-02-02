@@ -16,9 +16,9 @@ export const KeepReadingComponent: FunctionComponent<
   PopularAuthorsComponentProps
 > = ({ logs }) => {
   return (
-    <div className="py-3 shadow-md bg-base-200 rounded-2xl lg:w-3/5">
+    <div className="rounded-2xl bg-base-200 py-3 shadow-md lg:w-3/5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
-        <h1 className="text-4xl font-bold text-accent font-heading">
+        <h1 className="font-heading text-4xl font-bold text-accent">
           Keep Reading
         </h1>
         <MoreButton href="/shelves/reading" />
@@ -28,25 +28,25 @@ export const KeepReadingComponent: FunctionComponent<
           {logs.userBookProgressLogs.map((log, index) => (
             <div key={log.id}>
               <div className="flex items-center px-4 py-2 lg:px-6">
-                <Root className="inline-flex items-center justify-center w-12 h-16 mr-4 overflow-hidden align-middle bg-black rounded-lg select-none">
+                <Root className="mr-4 inline-flex h-16 w-12 select-none items-center justify-center overflow-hidden rounded-lg bg-black align-middle">
                   <Image
-                    className="object-cover w-full h-full"
+                    className="h-full w-full object-cover"
                     src={`https://picsum.photos/seed/${log.id}/200`}
                   />
                   <Fallback
                     delayMs={600}
-                    className="flex items-center justify-center w-full h-full font-semibold text-black bg-white"
+                    className="flex h-full w-full items-center justify-center bg-white font-semibold text-black"
                   >
                     {log.book.title}
                   </Fallback>
                 </Root>
-                <div className="flex flex-col flex-1 space-y-2">
+                <div className="flex flex-1 flex-col space-y-2">
                   <div className="flex">
                     <div className="mr-8 space-y-1">
                       <p
                         className={clsx(
                           clampNumberOfLines(1).className,
-                          'text-lg  text-gray-700'
+                          'text-lg  text-gray-200'
                         )}
                       >
                         {log.book.title}
@@ -56,7 +56,7 @@ export const KeepReadingComponent: FunctionComponent<
                       </p>
                     </div>
                     <div className="ml-auto">
-                      <p className="text-sm font-semibold font-heading text-base-100">
+                      <p className="font-heading text-sm font-semibold  text-gray-400">
                         {Math.round((log.percentage * log.numPages) / 100)}/
                         {log.numPages}
                       </p>
@@ -69,7 +69,7 @@ export const KeepReadingComponent: FunctionComponent<
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center p-4 space-y-5">
+        <div className="flex flex-col items-center space-y-5 p-4">
           <NextImage
             src={noData}
             height={'210px'}
