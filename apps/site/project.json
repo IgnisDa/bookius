@@ -89,6 +89,8 @@
       "eslint-plugin-react",
       "eslint-plugin-react-hooks",
       "postcss",
+      "prettier",
+      "prettier-plugin-tailwindcss",
       "react-test-renderer",
       "sass",
       "tailwindcss",

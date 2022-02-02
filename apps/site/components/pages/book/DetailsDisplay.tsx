@@ -14,7 +14,7 @@ export const DetailsDisplayComponent: FC<DetailsDisplayComponentProps> = ({
 
   return (
     <div>
-      <h1 className="text-4xl font-bold text-left md:text-5xl font-heading text-secondary-content">
+      <h1 className="text-left font-heading  text-4xl font-bold text-secondary-content  md:text-5xl">
         {book.title}
       </h1>
       {book.architects.length > 0 && (

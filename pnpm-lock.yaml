@@ -114,6 +114,7 @@ specifiers:
   postcss: 8.4.5
   preact: 10.6.4
   prettier: 2.5.1
+  prettier-plugin-tailwindcss: ^0.1.4
   pretty-quick: 3.1.3
   prisma: 3.8.1
   prisma-dbml-generator: 0.8.3
@@ -274,6 +275,7 @@ devDependencies:
   jest: 27.4.7_ts-node@10.4.0
   postcss: 8.4.5
   prettier: 2.5.1
+  prettier-plugin-tailwindcss: 0.1.4_prettier@2.5.1
   pretty-quick: 3.1.3_prettier@2.5.1
   prisma-dbml-generator: 0.8.3
   react-test-renderer: 17.0.2_react@17.0.2
@@ -19413,6 +19415,17 @@ packages:
   /prepend-http/2.0.0:
     resolution: { integrity: sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc= }
     engines: { node: '>=4' }
+    dev: true
+
+  /prettier-plugin-tailwindcss/0.1.4_prettier@2.5.1:
+    resolution:
+      {
+        integrity: sha512-kt3YFWqxcG9+bilBI0hPF7RjQZNtgBRvjJZGw6B2MNAjPqlfcYIiZnNaIEnq4XimKLTzZYxz6jQnUXmSQ/5njg==,
+      }
+    peerDependencies:
+      prettier: '>=2.2.0'
+    dependencies:
+      prettier: 2.5.1
     dev: true
 
   /prettier/2.5.1:
