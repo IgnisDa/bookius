@@ -1,7 +1,6 @@
 import { GetUserRelatedBooksQuery } from '@bookius/generated';
 import { clampNumberOfLines, Icon } from '@bookius/ui';
 import clsx from 'clsx';
-import zip from 'lodash/zip';
 import NextImage from 'next/image';
 import { FunctionComponent } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
@@ -18,41 +17,39 @@ export const MyBooksComponent: FunctionComponent<MyBooksComponentProps> = ({
   return (
     <>
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold font-heading text-accent">
+        <h1 className="font-heading text-4xl font-bold text-accent">
           My Books
         </h1>
         <MoreButton href="/books" />
       </div>
       {books.userRelatedBooks.length > 0 ? (
-        <div className="flex flex-col mt-4 space-y-6 lg:flex-row lg:space-x-5 lg:space-y-0">
-          {zip(books.userRelatedBooks.slice(0, 3), [
-            'bg-blue-500',
-            'bg-purple-600',
-            'bg-green-600',
-          ]).map(([book, color]) => (
+        <div className="mt-4 flex flex-col space-y-6 lg:flex-row lg:space-x-5 lg:space-y-0">
+          {books.userRelatedBooks.slice(0, 3).map((book, index) => (
             <div
               className={clsx(
-                'flex items-center  flex-1 p-3 space-x-5 shadow-sm rounded-xl',
-                color
+                'flex flex-1 items-center space-x-5 rounded-xl p-3 shadow-sm',
+                index === 0 && 'bg-blue-500',
+                index === 1 && 'bg-purple-600',
+                index === 2 && 'bg-green-600'
               )}
-              key={book?.id}
+              key={index}
             >
-              <div className="flex-none w-24 h-40">
+              <div className="h-40 w-24 flex-none">
                 <NextImage
                   src={`https://picsum.photos/seed/${book?.id}/400`}
                   width={'96px'}
                   height={'160px'}
-                  className="object-cover rounded-lg"
+                  className="rounded-lg object-cover"
                 />
               </div>
-              <div className="flex flex-col justify-around my-4 space-y-3">
+              <div className="my-4 flex flex-col justify-around space-y-3">
                 <h1
                   className={clsx(
                     clampNumberOfLines(2).className,
-                    'font-sans text-lg text-gray-900 font-bold leading-tight'
+                    'font-sans text-lg font-bold leading-tight text-gray-900'
                   )}
                 >
-                  {book?.title!}
+                  {book?.title}
                 </h1>
                 <p className="text-gray-800">
                   {book?.architects?.at(0)?.author.name || 'Unknown author'}
