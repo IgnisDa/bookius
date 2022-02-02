@@ -5,7 +5,7 @@ import {
   useGetBooksForSearchPageQuery,
 } from '@bookius/generated';
 import clsx from 'clsx';
-import truncate from 'lodash/truncate';
+import truncate from 'lodash.truncate';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import NextImage from 'next/image';
 import Link from 'next/link';
@@ -33,19 +33,16 @@ const Search = (
       },
     });
 
-  // FIXME: this is hardcoded here, **ideally** we should handle the case if the response
-  // was unsuccessful
   const response =
     getBooksForSearchPageQueryData?.openLibraryBooksSearch as OpenLibraryResponse;
-  // so we will never revisit this piece of code? yeah right
 
-  return (
-    <div className="flex flex-col items-center h-full space-y-20 md:py-10 lg:pt-20">
+  return response ? (
+    <div className="flex h-full flex-col items-center space-y-20 md:py-10 lg:pt-20">
       <div className="w-full max-w-lg">
         <SearchPageInputComponent />
       </div>
       <div>
-        <h1 className="text-3xl text-center md:text-4xl">
+        <h1 className="text-center text-3xl md:text-4xl">
           <span className="text-gray-300">Searching for</span>{' '}
           <span className=" text-accent-lime-green">
             {truncate(decodeURIComponent(q as string), {
@@ -61,33 +58,13 @@ const Search = (
         </div>
       </div>
       {response && response.docs.length > 0 ? (
-        // FIXME: This causes some error only in production mode wherein the page does not render
-        // <ScrollArea.Root
-        //   type="auto"
-        //   className="flex w-full mx-5 md:w-11/12 lg:w-9/12 xl:w-10/12 2xl:w-9/12 3xl:w-4/5 md:justify-center md:items-center"
-        // >
-        //   <ScrollArea.Viewport className="w-full h-[600px] md:h-[500px] mr-4">
-        //     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10">
-        //       {response.docs.map((book, index) => (
-        //         <BookItemComponent book={book} key={index} />
-        //       ))}
-        //     </div>
-        //   </ScrollArea.Viewport>
-        //   <ScrollArea.Scrollbar
-        //     orientation="vertical"
-        //     className="flex w-2 transition-colors bg-gray-200 rounded-lg hover:bg-gray-400 "
-        //   >
-        //     <ScrollArea.Thumb className="flex-1 bg-purple-500 rounded-lg" />
-        //   </ScrollArea.Scrollbar>
-        //   <ScrollArea.Corner />
-        // </ScrollArea.Root>
-        <div className="grid w-full grid-cols-1 mx-5 md:grid-cols-2 xl:grid-cols-3 gap-x-16 gap-y-10 md:w-11/12 lg:w-9/12 xl:w-10/12 2xl:w-9/12 3xl:w-4/5 md:justify-center md:items-center">
+        <div className="mx-5 grid w-full grid-cols-1 gap-x-16 gap-y-10 md:w-11/12 md:grid-cols-2 md:items-center md:justify-center lg:w-9/12 xl:w-10/12 xl:grid-cols-3 2xl:w-9/12 3xl:w-4/5">
           {response.docs.map((book, index) => (
             <BookItemComponent book={book} key={index} />
           ))}
         </div>
       ) : (
-        <div className="p-3 border rounded-lg border-base-200">
+        <div className="rounded-lg border border-base-200 p-3">
           <div>
             <NextImage
               src={voidImage}
@@ -99,13 +76,13 @@ const Search = (
             />
           </div>
           <div>
-            <h1 className="mt-4 text-2xl text-center text-rose-600">
+            <h1 className="mt-4 text-center text-2xl text-rose-600">
               No search results found!
             </h1>
           </div>
         </div>
       )}
-      <div className="flex justify-around w-full pt-8 text-center sm:btn-group sm:block">
+      <div className="flex w-full justify-around pt-8 text-center sm:btn-group sm:block">
         <Link
           href={`/search?${new URLSearchParams({
             q: q,
@@ -114,9 +91,9 @@ const Search = (
         >
           <a
             className={clsx(
-              'btn sm:btn-wide btn-outline',
+              'btn-outline btn sm:btn-wide',
               offset === 0
-                ? 'btn-disabled btn-ghost text-base-200 pointer-events-none'
+                ? 'btn-disabled btn-ghost pointer-events-none text-base-200'
                 : 'bg-slate-700 bg-opacity-0'
             )}
           >
@@ -131,9 +108,9 @@ const Search = (
         >
           <a
             className={clsx(
-              'btn sm:btn-wide btn-outline',
+              'btn-outline btn sm:btn-wide',
               !getBooksForSearchPageQueryData || offset + 10 > response.numFound
-                ? 'btn-disabled btn-ghost text-base-200 pointer-events-none'
+                ? 'btn-disabled btn-ghost pointer-events-none text-base-200'
                 : 'bg-slate-700 bg-opacity-0'
             )}
           >
@@ -142,6 +119,8 @@ const Search = (
         </Link>
       </div>
     </div>
+  ) : (
+    <></>
   );
 };
 

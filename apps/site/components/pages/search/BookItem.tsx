@@ -1,6 +1,6 @@
 import { OpenLibraryWorkDto } from '@bookius/generated';
 import clsx from 'clsx';
-import truncate from 'lodash/truncate';
+import truncate from 'lodash.truncate';
 import NextImage from 'next/image';
 import Link from 'next/link';
 import { FC, useState } from 'react';
@@ -16,7 +16,7 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
 
   return (
     <div id={`book-id-${trueKey}`} className="flex items-center space-x-5">
-      <div className="h-[200px] w-[130px] md:h-[250px] md:w-[150px] flex-none flex items-center justify-center">
+      <div className="flex h-[200px] w-[130px] flex-none items-center justify-center md:h-[250px] md:w-[150px]">
         <NextImage
           id={book.coverI ? `book-image-${book.coverI}` : undefined}
           src={
@@ -48,7 +48,7 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           layout="intrinsic"
         />
       </div>
-      <div className="flex flex-col flex-1 space-y-5">
+      <div className="flex flex-1 flex-col space-y-5">
         <div>
           <Link
             href={
@@ -65,7 +65,7 @@ export const BookItemComponent: FC<BookItemComponentProps> = ({ book }) => {
           >
             <a
               className={clsx(
-                'text-2xl font-semibold md:no-underline  text-secondary hover:underline decoration-dashed',
+                'text-2xl font-semibold text-secondary  decoration-dashed hover:underline md:no-underline',
                 book.editionKey.length === 0
                   ? 'pointer-events-none'
                   : 'underline'

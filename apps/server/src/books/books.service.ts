@@ -5,7 +5,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { BookProgressStatus, User } from '@prisma/client';
 import { Queue } from 'bull';
-import { sampleSize } from 'lodash';
+import { uniqBy } from 'lodash';
 import { COLLECT_BOOKS_DATA_JOB, MODULE_QUEUE_NAME } from './books.constants';
 import { BooksSearchInput } from './dto/books-search.dto';
 import { CreateBookProgressLogInput } from './dto/create-book-progress-log.dto';
@@ -29,18 +29,48 @@ export class BooksService {
   }
 
   async userRelatedBooks(currentUser: User) {
-    // TODO: Use the `currentUser` to determine some books
-    const resp = await this.prisma.book.findMany({
-      include: { architects: { select: { role: true, author: true } } },
-      take: 10,
-    });
-    return sampleSize(resp, 5);
+    // FIXME: PERF: This query could probably be optimized
+    const allBooks = (
+      await this.prisma.user
+        .findUnique({
+          where: { id: currentUser.id },
+        })
+        .bookProgressLogs({
+          include: {
+            book: {
+              include: {
+                architects: { select: { role: true, author: true } },
+              },
+            },
+          },
+        })
+    ).flatMap((l) => l.book);
+    const filteredBooks = uniqBy(allBooks, (e) => e.id);
+    return filteredBooks;
   }
 
   async userRelatedAuthors(currentUser: User) {
-    // TODO: Use the `currentUser` to determine some books
-    const resp = await this.prisma.author.findMany({ take: 10 });
-    return sampleSize(resp, 5);
+    // FIXME: PERF: This query could probably be optimized
+    const allAuthors = (
+      await this.prisma.user
+        .findUnique({
+          where: { id: currentUser.id },
+        })
+        .bookProgressLogs({
+          include: {
+            book: {
+              include: {
+                architects: { select: { role: true, author: true } },
+              },
+            },
+          },
+        })
+    )
+      .flatMap((l) => l.book)
+      .flatMap((a) => a.architects)
+      .flatMap((r) => r.author);
+    const filteredAuthors = uniqBy(allAuthors, (e) => e.id);
+    return filteredAuthors;
   }
 
   async userBookProgressLogs(currentUser: User, take: number) {
