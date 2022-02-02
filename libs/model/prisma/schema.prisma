@@ -18,13 +18,13 @@ generator dbml {
 
 /// This model will represent a user of the service.
 model User {
-  id              String            @id @default(cuid())
+  id               String            @id @default(cuid())
   // the cryptographic address issued by magic
-  issuer          String            @unique
-  createdAt       DateTime          @default(now())
-  profile         UserProfile?
-  shelves         Shelf[]
-  BookProgressLog BookProgressLog[]
+  issuer           String            @unique
+  createdAt        DateTime          @default(now())
+  profile          UserProfile?
+  shelves          Shelf[]
+  bookProgressLogs BookProgressLog[]
 }
 
 /// This model will track profile information about the user
