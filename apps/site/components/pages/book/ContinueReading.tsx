@@ -12,6 +12,7 @@ import debounce from 'lodash.debounce';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai';
 import { toast } from 'react-toastify';
+import { StatDisplayComponent } from './StatDisplay';
 
 type ContinueReadingComponentProps = { book: BookDetailsFragment };
 
@@ -75,27 +76,21 @@ export const ContinueReadingComponent: FC<ContinueReadingComponentProps> = ({
   return (
     <div className="w-full space-y-4 sm:space-y-6 md:space-y-10">
       <div className="flex w-full flex-1 justify-around text-center">
-        <div>
-          <span className="block text-lg md:text-2xl">You read</span>
-          <span className="mt-2 block text-lg font-semibold text-accent md:text-6xl">
-            {completedBooks}
-          </span>
-          <span className="block text-lg md:text-2xl">times</span>
-        </div>
-        <div>
-          <span className="block text-lg md:text-2xl">Read by</span>
-          <span className="mt-2 block text-lg font-semibold text-accent md:text-6xl">
-            {getBookStatisticsQueryData?.bookStatistics.readBy || 0}
-          </span>
-          <span className="block text-lg md:text-2xl">others</span>
-        </div>
-        <div>
-          <span className="block text-lg md:text-2xl">Reviewed by</span>
-          <span className="mt-2 block text-lg font-semibold text-accent md:text-6xl">
-            {getBookStatisticsQueryData?.bookStatistics.reviewedBy || 0}
-          </span>
-          <span className="block text-lg md:text-2xl">readers</span>
-        </div>
+        <StatDisplayComponent
+          prefix="You read"
+          suffix="times"
+          value={completedBooks}
+        />
+        <StatDisplayComponent
+          prefix="Read by"
+          suffix="others"
+          value={getBookStatisticsQueryData?.bookStatistics.readBy || 0}
+        />
+        <StatDisplayComponent
+          prefix="Reviewed by"
+          suffix="readers"
+          value={getBookStatisticsQueryData?.bookStatistics.reviewedBy || 0}
+        />
       </div>
       {!getParticularBookProgressLogsQueryFetching ? (
         <div className="flex items-center justify-center">
@@ -123,6 +118,7 @@ export const ContinueReadingComponent: FC<ContinueReadingComponentProps> = ({
                 className="flex w-60 select-none items-center space-x-4 md:w-72 lg:w-80 xl:w-96 2xl:w-[450px]"
               >
                 <Slider
+                  key={'slider'}
                   aria-label="Always visible"
                   defaultValue={latestBookProgressLog.percentage}
                   onChange={(_, value) => {
