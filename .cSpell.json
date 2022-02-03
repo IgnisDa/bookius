@@ -75,6 +75,7 @@
     ".vscode/extensions.json",
     ".gitignore",
     ".dockerignore",
-    "*Dockerfile*"
+    "*Dockerfile*",
+    ".devcontainer/scripts/*"
   ]
 }
