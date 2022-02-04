@@ -13,5 +13,8 @@
     "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
     "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
     "VISUAL": "code --wait"
+  },
+  "features": {
+    "IgnisDa/developrs/fish@features-v0.0.1": {}
   }
 }
