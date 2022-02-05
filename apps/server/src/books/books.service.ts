@@ -77,7 +77,12 @@ export class BooksService {
     const resp = await this.prisma.bookProgressLog.findMany({
       take: take,
       include: {
-        book: { include: { architects: { include: { author: true } } } },
+        book: {
+          include: {
+            bookImages: true,
+            architects: { include: { author: true } },
+          },
+        },
       },
       where: { userId: currentUser.id },
       orderBy: { updatedOn: 'desc' },

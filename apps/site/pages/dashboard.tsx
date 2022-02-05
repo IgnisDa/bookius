@@ -32,17 +32,17 @@ const Dashboard = (
   const [search, setSearch] = useState('');
 
   const updateSearch = (e: ChangeEvent<HTMLInputElement>) =>
-    setSearch(e?.target?.value);
+    setSearch(e.target.value);
 
   return (
-    <div className="flex flex-col flex-none w-full max-w-5xl space-y-8 lg:flex-col">
+    <div className="flex w-full max-w-5xl flex-none flex-col space-y-8 lg:flex-col">
       <div>
         <SearchInputComponent search={search} updateSearch={updateSearch} />
       </div>
       <div>
         <MyBooksComponent books={userRelatedBooksData!} />
       </div>
-      <div className="flex flex-col space-y-8 lg:space-x-5 lg:flex-row lg: lg:space-y-0">
+      <div className="flex flex-col space-y-8 lg:flex-row lg:items-start lg:space-x-5 lg:space-y-0">
         <YourAuthorsComponent authors={userRelatedAuthorsData!} />
         <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
       </div>

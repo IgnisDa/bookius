@@ -16,7 +16,7 @@ export const YourAuthorsComponent: FunctionComponent<
   YourAuthorsComponentProps
 > = ({ authors }) => {
   return (
-    <div className="rounded-2xl rounded-bl-none bg-base-200 pt-3 shadow-md lg:w-2/5">
+    <div className="flex-shrink overflow-hidden rounded-2xl rounded-bl-sm bg-base-200 pt-3 shadow-md lg:w-2/5 lg:pb-0.5">
       <div className="flex items-center justify-between px-4 py-5 lg:px-6">
         <h1 className="font-heading text-4xl font-bold text-accent">
           Your Authors
@@ -59,7 +59,7 @@ export const YourAuthorsComponent: FunctionComponent<
                   </p>
                 </div>
                 <Icon label={`Icon for ${author?.name}`}>
-                  <VscNotebook className="ml-auto mr-2 h-6 w-6 text-primary" />
+                  <VscNotebook className="ml-auto mr-2 h-6 w-6 fill-current text-pink-400" />
                 </Icon>
               </div>
             </div>

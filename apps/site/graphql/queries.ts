@@ -41,6 +41,11 @@ export const GET_USER_BOOKS_PROGRESS_LOGS = gql`
       book {
         title
         id
+        bookImages {
+          coverUrl
+          base64String
+        }
+        openLibraryKeys
         architects {
           author {
             name

@@ -21,6 +21,11 @@ export class BookDto {
   /** Name of the book */
   title: string;
 
+  /**
+   * A list of unique keys associated with this book
+   */
+  openLibraryKeys: string[];
+
   @Field(() => GraphQLISBN, {
     description: 'The ISBN-13 unique identifier of this book',
   })

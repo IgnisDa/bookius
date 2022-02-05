@@ -76,6 +76,9 @@ type BookDto {
   """The ISBN-13 unique identifier of this book"""
   isbn13: ISBN
 
+  """A list of unique keys associated with this book"""
+  openLibraryKeys: [String!]!
+
   """The date when this book was published"""
   publishDate: String
 
@@ -111,6 +114,9 @@ type BookDtoWithoutArchitect {
 
   """The ISBN-13 unique identifier of this book"""
   isbn13: ISBN
+
+  """A list of unique keys associated with this book"""
+  openLibraryKeys: [String!]!
 
   """The date when this book was published"""
   publishDate: String

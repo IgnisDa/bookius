@@ -91,6 +91,8 @@ export type BookDto = {
   isbn10?: Maybe<Scalars['ISBN']>;
   /** The ISBN-13 unique identifier of this book */
   isbn13?: Maybe<Scalars['ISBN']>;
+  /** A list of unique keys associated with this book */
+  openLibraryKeys: Array<Scalars['String']>;
   /** The date when this book was published */
   publishDate?: Maybe<Scalars['String']>;
   /** The publishers of this book */
@@ -118,6 +120,8 @@ export type BookDtoWithoutArchitect = {
   isbn10?: Maybe<Scalars['ISBN']>;
   /** The ISBN-13 unique identifier of this book */
   isbn13?: Maybe<Scalars['ISBN']>;
+  /** A list of unique keys associated with this book */
+  openLibraryKeys: Array<Scalars['String']>;
   /** The date when this book was published */
   publishDate?: Maybe<Scalars['String']>;
   /** The publishers of this book */
@@ -465,7 +469,7 @@ export type CreateUserMutationVariables = Exact<{
 export type CreateUserMutation = {
   __typename: 'Mutation';
   createUser:
-    | { __typename: 'CreateUserError'; message?: string | null | undefined }
+    | { __typename: 'CreateUserError'; message?: string | null }
     | { __typename: 'UserDto' };
 };
 
@@ -556,6 +560,12 @@ export type GetUserBooksProgressLogsQuery = {
       __typename: 'BookDto';
       title: string;
       id: number;
+      openLibraryKeys: Array<string>;
+      bookImages: Array<{
+        __typename: 'BookImageDto';
+        coverUrl: string;
+        base64String: string;
+      }>;
       architects: Array<{
         __typename: 'ArchitectDto';
         author: { __typename: 'AuthorDto'; name: string };
@@ -578,11 +588,11 @@ export type GetBooksForSearchPageQuery = {
         offset: number;
         docs: Array<{
           __typename: 'OpenLibraryWorkDto';
-          authorName?: Array<string> | null | undefined;
-          isbn?: Array<string> | null | undefined;
+          authorName?: Array<string> | null;
+          isbn?: Array<string> | null;
           key: string;
-          language?: Array<string> | null | undefined;
-          coverI?: string | null | undefined;
+          language?: Array<string> | null;
+          coverI?: string | null;
           title: string;
           editionKey: Array<string>;
         }>;
@@ -593,12 +603,12 @@ export type BookDetailsFragment = {
   __typename: 'BookDto';
   id: number;
   publishers: Array<string>;
-  publishDate?: string | null | undefined;
-  description?: string | null | undefined;
+  publishDate?: string | null;
+  description?: string | null;
   createdAt: DateTime;
   updatedAt: DateTime;
-  isbn10?: string | null | undefined;
-  isbn13?: string | null | undefined;
+  isbn10?: string | null;
+  isbn13?: string | null;
   title: string;
   architects: Array<{
     __typename: 'ArchitectDto';
@@ -623,12 +633,12 @@ export type GetBookDetailsByIsbnQuery = {
         __typename: 'BookDto';
         id: number;
         publishers: Array<string>;
-        publishDate?: string | null | undefined;
-        description?: string | null | undefined;
+        publishDate?: string | null;
+        description?: string | null;
         createdAt: DateTime;
         updatedAt: DateTime;
-        isbn10?: string | null | undefined;
-        isbn13?: string | null | undefined;
+        isbn10?: string | null;
+        isbn13?: string | null;
         title: string;
         architects: Array<{
           __typename: 'ArchitectDto';
@@ -655,12 +665,12 @@ export type GetBookDetailsByOlidQuery = {
         __typename: 'BookDto';
         id: number;
         publishers: Array<string>;
-        publishDate?: string | null | undefined;
-        description?: string | null | undefined;
+        publishDate?: string | null;
+        description?: string | null;
         createdAt: DateTime;
         updatedAt: DateTime;
-        isbn10?: string | null | undefined;
-        isbn13?: string | null | undefined;
+        isbn10?: string | null;
+        isbn13?: string | null;
         title: string;
         architects: Array<{
           __typename: 'ArchitectDto';
@@ -813,10 +823,7 @@ export const CheckUserByIssuerDocument = gql`
 `;
 
 export function useCheckUserByIssuerQuery(
-  options: Omit<
-    Urql.UseQueryArgs<CheckUserByIssuerQueryVariables>,
-    'query'
-  > = {}
+  options: Omit<Urql.UseQueryArgs<CheckUserByIssuerQueryVariables>, 'query'>
 ) {
   return Urql.useQuery<CheckUserByIssuerQuery>({
     query: CheckUserByIssuerDocument,
@@ -839,10 +846,7 @@ export const GetUserRelatedBooksDocument = gql`
 `;
 
 export function useGetUserRelatedBooksQuery(
-  options: Omit<
-    Urql.UseQueryArgs<GetUserRelatedBooksQueryVariables>,
-    'query'
-  > = {}
+  options?: Omit<Urql.UseQueryArgs<GetUserRelatedBooksQueryVariables>, 'query'>
 ) {
   return Urql.useQuery<GetUserRelatedBooksQuery>({
     query: GetUserRelatedBooksDocument,
@@ -859,10 +863,10 @@ export const GetUserRelatedAuthorsDocument = gql`
 `;
 
 export function useGetUserRelatedAuthorsQuery(
-  options: Omit<
+  options?: Omit<
     Urql.UseQueryArgs<GetUserRelatedAuthorsQueryVariables>,
     'query'
-  > = {}
+  >
 ) {
   return Urql.useQuery<GetUserRelatedAuthorsQuery>({
     query: GetUserRelatedAuthorsDocument,
@@ -880,6 +884,11 @@ export const GetUserBooksProgressLogsDocument = gql`
       book {
         title
         id
+        bookImages {
+          coverUrl
+          base64String
+        }
+        openLibraryKeys
         architects {
           author {
             name
@@ -894,7 +903,7 @@ export function useGetUserBooksProgressLogsQuery(
   options: Omit<
     Urql.UseQueryArgs<GetUserBooksProgressLogsQueryVariables>,
     'query'
-  > = {}
+  >
 ) {
   return Urql.useQuery<GetUserBooksProgressLogsQuery>({
     query: GetUserBooksProgressLogsDocument,
@@ -926,10 +935,7 @@ export const GetBooksForSearchPageDocument = gql`
 `;
 
 export function useGetBooksForSearchPageQuery(
-  options: Omit<
-    Urql.UseQueryArgs<GetBooksForSearchPageQueryVariables>,
-    'query'
-  > = {}
+  options: Omit<Urql.UseQueryArgs<GetBooksForSearchPageQueryVariables>, 'query'>
 ) {
   return Urql.useQuery<GetBooksForSearchPageQuery>({
     query: GetBooksForSearchPageDocument,
@@ -951,10 +957,7 @@ export const GetBookDetailsByIsbnDocument = gql`
 `;
 
 export function useGetBookDetailsByIsbnQuery(
-  options: Omit<
-    Urql.UseQueryArgs<GetBookDetailsByIsbnQueryVariables>,
-    'query'
-  > = {}
+  options: Omit<Urql.UseQueryArgs<GetBookDetailsByIsbnQueryVariables>, 'query'>
 ) {
   return Urql.useQuery<GetBookDetailsByIsbnQuery>({
     query: GetBookDetailsByIsbnDocument,
@@ -976,10 +979,7 @@ export const GetBookDetailsByOlidDocument = gql`
 `;
 
 export function useGetBookDetailsByOlidQuery(
-  options: Omit<
-    Urql.UseQueryArgs<GetBookDetailsByOlidQueryVariables>,
-    'query'
-  > = {}
+  options: Omit<Urql.UseQueryArgs<GetBookDetailsByOlidQueryVariables>, 'query'>
 ) {
   return Urql.useQuery<GetBookDetailsByOlidQuery>({
     query: GetBookDetailsByOlidDocument,
@@ -1002,7 +1002,7 @@ export function useGetParticularBookProgressLogsQuery(
   options: Omit<
     Urql.UseQueryArgs<GetParticularBookProgressLogsQueryVariables>,
     'query'
-  > = {}
+  >
 ) {
   return Urql.useQuery<GetParticularBookProgressLogsQuery>({
     query: GetParticularBookProgressLogsDocument,
@@ -1019,10 +1019,7 @@ export const GetBookStatisticsDocument = gql`
 `;
 
 export function useGetBookStatisticsQuery(
-  options: Omit<
-    Urql.UseQueryArgs<GetBookStatisticsQueryVariables>,
-    'query'
-  > = {}
+  options: Omit<Urql.UseQueryArgs<GetBookStatisticsQueryVariables>, 'query'>
 ) {
   return Urql.useQuery<GetBookStatisticsQuery>({
     query: GetBookStatisticsDocument,
