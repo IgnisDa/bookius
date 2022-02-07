@@ -2,9 +2,11 @@ import { ApplicationConfig } from '@bookius/config';
 import { PrismaModule } from '@bookius/model';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
+import { RateLimiterGuard, RateLimiterModule } from 'nestjs-rate-limiter';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
@@ -14,7 +16,16 @@ import { ShelvesModule } from './shelves/shelves.module';
 const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RateLimiterGuard,
+    },
+  ],
   imports: [
+    RateLimiterModule.register({
+      for: 'ExpressGraphql',
+    }),
     ScheduleModule.forRoot(),
     BullModule.forRootAsync({
       useFactory: async (configService: ApplicationConfig) => {
