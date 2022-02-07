@@ -38,11 +38,21 @@ export class ShelfDto {
   /** Whether the shelf is visible to other users */
   isPublic: boolean;
 
-  @Field(() => [BookDtoWithoutArchitect], {
+  @Field(() => [BookInShelf], {
     description: 'The books that are contained in this shelf',
   })
-  books: BookDtoWithoutArchitect[];
+  booksInThisShelf: BookInShelf[];
 
   /** Counts of various statistics related to shelves */
   _count: ShelfCountDto;
+}
+
+@ObjectType({
+  description: 'A book in a shelf',
+})
+class BookInShelf {
+  /**
+   * The book in this record
+   */
+  book: BookDtoWithoutArchitect;
 }
