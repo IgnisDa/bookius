@@ -105,6 +105,7 @@
       "luxon",
       "magic-sdk",
       "nest-typed-config",
+      "nestjs-rate-limiter",
       "nodemailer",
       "passport",
       "passport-headerapikey",
