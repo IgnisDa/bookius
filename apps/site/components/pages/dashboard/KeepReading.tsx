@@ -37,15 +37,18 @@ export const KeepReadingComponent: FC<PopularAuthorsComponentProps> = ({
               <div key={log.id}>
                 <div className="flex items-center px-4 py-2 lg:px-6">
                   <Root
-                    aria-details={`Image on ${images?.coverUrl}`}
-                    className="relative mr-4 inline-flex h-20 w-14 select-none items-center justify-center overflow-hidden rounded-lg bg-black align-middle"
+                    aria-details={
+                      images ? `Image on ${images?.coverUrl}` : 'Fallback image'
+                    }
+                    className="relative mr-4 inline-flex h-16 w-12 select-none items-center justify-center overflow-hidden rounded-lg bg-black align-middle"
                   >
                     <Image asChild src={images?.coverUrl}>
                       <NextImageWithRef
                         src={images?.coverUrl!}
                         blurDataURL={images?.base64String}
                         className="inset-0 object-cover object-top"
-                        layout="fill"
+                        width={'48px'}
+                        height={'64px'}
                       />
                     </Image>
                     <Fallback

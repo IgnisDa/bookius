@@ -36,11 +36,11 @@ export const StatDisplayComponent: FC<StatDisplayComponentProps> = ({
 }) => {
   return (
     <div>
-      <p className="block text-lg md:text-2xl">{prefix}</p>
+      <p className="block text-lg text-gray-300 md:text-2xl">{prefix}</p>
       <p className="mt-2 block text-4xl font-semibold text-accent sm:text-5xl md:text-6xl">
         <StatsCounterComponent from={0} to={value} />
       </p>
-      <p className="block text-lg md:text-2xl">{suffix}</p>
+      <p className="block text-lg text-gray-300 md:text-2xl">{suffix}</p>
     </div>
   );
 };

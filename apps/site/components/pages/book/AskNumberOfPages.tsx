@@ -22,13 +22,17 @@ export const AskNumberOfPagesComponent: FC<AskNumberOfPagesComponentProps> = ({
       leaveFrom="opacity-100 translate-y-0"
       leaveTo="opacity-0 translate-y-1"
     >
-      <Popover.Panel
-        focus={true}
-        className="absolute top-full right-0 z-10 mt-3 flex transform items-center space-x-4 rounded-sm rounded-tr-none bg-gray-800  px-3 py-2"
-      >
+      <Popover.Panel focus={true}>
         {({ close }) => (
-          <>
-            <div className="flex-none">Pages</div>:
+          <form
+            className="absolute top-full right-0 z-10 mt-3 flex transform items-center space-x-4 rounded-lg rounded-tr-none bg-gray-800  px-3 py-2"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await executesStartReadingBookMutation(numPages);
+              close();
+            }}
+          >
+            <div className="flex-none text-cream-white">Pages</div>:
             <div className="flex-1">
               <input
                 className="no-arrows input-bordered input-ghost input input-sm w-16 font-sans text-primary-content"
@@ -41,17 +45,12 @@ export const AskNumberOfPagesComponent: FC<AskNumberOfPagesComponentProps> = ({
                 }}
               />
             </div>
-            <button
-              onClick={async () => {
-                await executesStartReadingBookMutation(numPages);
-                close();
-              }}
-            >
+            <button>
               <Icon label="Check">
                 <CheckIcon className="h-8 w-8 fill-current text-green-500" />
               </Icon>
             </button>
-          </>
+          </form>
         )}
       </Popover.Panel>
     </Transition>
