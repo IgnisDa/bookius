@@ -29,6 +29,7 @@ generates:
         Base64Image: string
         PositiveFloat: number
         PositiveInt: number
+        Noop: number
   libs/generated/src/lib/graphql.schema.json:
     plugins:
       - 'introspection'
