@@ -39,7 +39,6 @@
     "@stitches/react": "1.2.6",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-auth": "0.1.7",
-    "add": "^2.0.6",
     "apollo-server-core": "3.6.2",
     "apollo-server-errors": "3.3.1",
     "apollo-server-express": "3.6.2",

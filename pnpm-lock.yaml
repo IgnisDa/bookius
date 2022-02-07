@@ -70,7 +70,6 @@ specifiers:
   '@typescript-eslint/parser': 5.10.2
   '@urql/devtools': 2.0.3
   '@urql/exchange-auth': 0.1.7
-  add: ^2.0.6
   apollo-server-core: 3.6.2
   apollo-server-errors: 3.3.1
   apollo-server-express: 3.6.2
@@ -179,7 +178,6 @@ dependencies:
   '@stitches/react': 1.2.6_react@17.0.2
   '@urql/devtools': 2.0.3_graphql@15.8.0
   '@urql/exchange-auth': 0.1.7_graphql@15.8.0
-  add: 2.0.6
   apollo-server-core: 3.6.2_graphql@15.8.0
   apollo-server-errors: 3.3.1_graphql@15.8.0
   apollo-server-express: 3.6.2_graphql@15.8.0
@@ -8676,10 +8674,6 @@ packages:
       }
     engines: { node: '>=0.4.0' }
     hasBin: true
-
-  /add/2.0.6:
-    resolution: { integrity: sha1-JI8Kn25aUo7yKV2+7DBTITCuIjU= }
-    dev: false
 
   /agent-base/6.0.2:
     resolution:
