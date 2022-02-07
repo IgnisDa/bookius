@@ -107,6 +107,7 @@ specifiers:
   luxon: 2.3.0
   magic-sdk: 7.0.0
   nest-typed-config: 2.3.0
+  nestjs-rate-limiter: ^3.1.0
   next: 12.0.10
   next-seo: 4.29.0
   next-urql: 3.3.2
@@ -201,6 +202,7 @@ dependencies:
   luxon: 2.3.0
   magic-sdk: 7.0.0
   nest-typed-config: 2.3.0_0f75cad7c3bc55c714d492fe95499bdf
+  nestjs-rate-limiter: 3.1.0
   next: 12.0.10_9ee0ffa523ab8c6f438140d2dc1876c7
   next-seo: 4.29.0_61390be992b634a688f7c2555547b55b
   next-urql: 3.3.2_react@17.0.2+urql@2.1.2
@@ -17243,6 +17245,15 @@ packages:
       - supports-color
     dev: false
 
+  /nestjs-rate-limiter/3.1.0:
+    resolution:
+      {
+        integrity: sha512-Qwr6daFvNppy038rs0iCQzX/uC3/czCC/2jATcETLIvyFmcBgySOMg7HGEquPKUZDX9lbc06Tn9L6U3QZS13HQ==,
+      }
+    dependencies:
+      rate-limiter-flexible: 2.1.10
+    dev: false
+
   /netmask/2.0.2:
     resolution:
       {
@@ -19445,6 +19456,13 @@ packages:
         integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==,
       }
     engines: { node: '>= 0.6' }
+
+  /rate-limiter-flexible/2.1.10:
+    resolution:
+      {
+        integrity: sha512-Pa+8TPD4xYaiCUB5K4a/+j2FHDUe4HP1g49JmKEmkOkhqPaeVqxJsZuuVaza/svSCOT+V73vtsyBiSFK/e1yXw==,
+      }
+    dev: false
 
   /raw-body/2.4.2:
     resolution:
