@@ -120,7 +120,6 @@
       "@stitches/react",
       "@urql/devtools",
       "@urql/exchange-auth",
-      "add",
       "clsx",
       "framer-motion",
       "graphql",
