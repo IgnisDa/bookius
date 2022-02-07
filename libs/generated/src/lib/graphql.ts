@@ -32,6 +32,8 @@ export type Scalars = {
   NonNegativeFloat: number;
   /** Integers that will have a value of 0 or more. */
   NonNegativeInt: number;
+  /** A field whose value holds absolutely no meaning */
+  Noop: number;
   /** Integers that will have a value greater than 0. */
   PositiveInt: number;
   /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
@@ -43,6 +45,33 @@ export type ApiError = {
   /** The error message giving details about what went wrong */
   message: Scalars['String'];
 };
+
+/** The return type when a book can not be added to a shelf */
+export type AddBookToShelfError = ApiError & {
+  __typename: 'AddBookToShelfError';
+  /** The message explaining what went wrong */
+  message: Scalars['String'];
+};
+
+/** The input type to add a book to a shelf for a user */
+export type AddBookToShelfInput = {
+  /** The ID of the book that would get added to the shelf */
+  bookId: Scalars['BigInt'];
+  /** The ID of the shelf to which the book will get added to */
+  shelfId: Scalars['ID'];
+};
+
+/** The return type when a book has been added to the shelf successfully */
+export type AddBookToShelfResult = NoopDto & {
+  __typename: 'AddBookToShelfResult';
+  /** This has no meaning */
+  noop?: Maybe<Scalars['Noop']>;
+};
+
+/** The type returned when a book is added to a shelf */
+export type AddBookToShelfResultUnion =
+  | AddBookToShelfError
+  | AddBookToShelfResult;
 
 /** The people who have worked on a book */
 export type ArchitectDto = {
@@ -141,6 +170,13 @@ export type BookImageDto = {
   coverUrl: Scalars['URL'];
 };
 
+/** A book in a shelf */
+export type BookInShelf = {
+  __typename: 'BookInShelf';
+  /** The book in this record */
+  book: BookDtoWithoutArchitect;
+};
+
 /** Model to track a user's reading progress with a particular book */
 export type BookProgressLogDto = {
   __typename: 'BookProgressLogDto';
@@ -179,10 +215,10 @@ export enum BookProgressStatus {
 /** The type returned when statistics about a particular book is requested */
 export type BookStatisticsDto = {
   __typename: 'BookStatisticsDto';
+  /** The number of shelves this book has been added to */
+  addedToShelves: Scalars['NonNegativeInt'];
   /** The number of people who have completed this book */
   readBy: Scalars['NonNegativeInt'];
-  /** The number of people who have reviewed this book */
-  reviewedBy: Scalars['NonNegativeInt'];
 };
 
 /** The object returned when there is an error getting details about a book */
@@ -284,6 +320,8 @@ export type LoginResultUnion = LoginError | LoginResult;
 
 export type Mutation = {
   __typename: 'Mutation';
+  /** Add a book to a shelf for the current user. */
+  addBookToShelf: AddBookToShelfResultUnion;
   /** Mark a book as started reading for the currently logged in user. */
   createBookProgressLog: CreateBookProgressLogResult;
   /** Mutation to create a new user with a given authentication token. */
@@ -292,8 +330,14 @@ export type Mutation = {
   createUserShelf: ShelfDto;
   /** Login using an authentication token. */
   loginUser: LoginResultUnion;
+  /** Remove a book from a shelf for the current user. */
+  removeBookFromShelf: RemoveBookToShelfResultUnion;
   /** Update reading progress of a book for the currently logged in user. */
   updateBookProgressLog: Scalars['Boolean'];
+};
+
+export type MutationAddBookToShelfArgs = {
+  input: AddBookToShelfInput;
 };
 
 export type MutationCreateBookProgressLogArgs = {
@@ -312,8 +356,18 @@ export type MutationLoginUserArgs = {
   issuer: Scalars['String'];
 };
 
+export type MutationRemoveBookFromShelfArgs = {
+  input: RemoveBookToShelfInput;
+};
+
 export type MutationUpdateBookProgressLogArgs = {
   input: UpdateBookProgressLogInput;
+};
+
+/** A noop type which means absolutely nothing */
+export type NoopDto = {
+  /** This has no meaning */
+  noop?: Maybe<Scalars['Noop']>;
 };
 
 /** The response object when communicating with the Open Library API */
@@ -359,7 +413,7 @@ export type Query = {
   /** Get a filtered list of all books in the service. */
   filterBooks: Array<BookDto>;
   /** Get a list of all shelves created by this user. */
-  filterUserShelves: Array<ShelfDto>;
+  getUserShelves: Array<ShelfDto>;
   /** Get a list of books related to a search query from Open Library API. */
   openLibraryBooksSearch: BooksSearchResultUnion;
   /** Get list of book progresses that are related to the user. */
@@ -392,7 +446,7 @@ export type QueryFilterBooksArgs = {
   take: Scalars['NonNegativeInt'];
 };
 
-export type QueryFilterUserShelvesArgs = {
+export type QueryGetUserShelvesArgs = {
   take: Scalars['NonNegativeInt'];
 };
 
@@ -408,6 +462,33 @@ export type QueryUserParticularBookProgressLogsArgs = {
   bookId: Scalars['BigInt'];
 };
 
+/** The return type when a book can not be removed from a shelf */
+export type RemoveBookToShelfError = ApiError & {
+  __typename: 'RemoveBookToShelfError';
+  /** The message explaining what went wrong */
+  message: Scalars['String'];
+};
+
+/** The input type to remove a book from a shelf for a user */
+export type RemoveBookToShelfInput = {
+  /** The ID of the book that would get removed from the shelf */
+  bookId: Scalars['BigInt'];
+  /** The ID of the shelf to which the book will get removed from */
+  shelfId: Scalars['ID'];
+};
+
+/** The return type when a book has been removed from a shelf successfully */
+export type RemoveBookToShelfResult = NoopDto & {
+  __typename: 'RemoveBookToShelfResult';
+  /** This has no meaning */
+  noop?: Maybe<Scalars['Noop']>;
+};
+
+/** The type returned when a book is added to a shelf */
+export type RemoveBookToShelfResultUnion =
+  | RemoveBookToShelfError
+  | RemoveBookToShelfResult;
+
 /** Counts of various statistics related to shelves */
 export type ShelfCountDto = {
   __typename: 'ShelfCountDto';
@@ -421,7 +502,7 @@ export type ShelfDto = {
   /** Counts of various statistics related to shelves */
   _count: ShelfCountDto;
   /** The books that are contained in this shelf */
-  books: Array<BookDtoWithoutArchitect>;
+  booksInThisShelf: Array<BookInShelf>;
   /** The date and time when this shelf was created */
   createdAt: Scalars['DateTime'];
   /** A brief description about the shelf and what is contains */
@@ -503,6 +584,28 @@ export type UpdateBookReadingProgressMutationVariables = Exact<{
 export type UpdateBookReadingProgressMutation = {
   __typename: 'Mutation';
   updateBookProgressLog: boolean;
+};
+
+export type AddBookToShelfMutationVariables = Exact<{
+  input: AddBookToShelfInput;
+}>;
+
+export type AddBookToShelfMutation = {
+  __typename: 'Mutation';
+  addBookToShelf:
+    | { __typename: 'AddBookToShelfError'; message: string }
+    | { __typename: 'AddBookToShelfResult' };
+};
+
+export type RemoveBookFromShelfMutationVariables = Exact<{
+  input: RemoveBookToShelfInput;
+}>;
+
+export type RemoveBookFromShelfMutation = {
+  __typename: 'Mutation';
+  removeBookFromShelf:
+    | { __typename: 'RemoveBookToShelfError'; message: string }
+    | { __typename: 'RemoveBookToShelfResult'; noop?: number | null };
 };
 
 export type CheckUserByIssuerQueryVariables = Exact<{
@@ -711,8 +814,25 @@ export type GetBookStatisticsQuery = {
   bookStatistics: {
     __typename: 'BookStatisticsDto';
     readBy: number;
-    reviewedBy: number;
+    addedToShelves: number;
   };
+};
+
+export type GetUserShelvesQueryVariables = Exact<{
+  take: Scalars['NonNegativeInt'];
+}>;
+
+export type GetUserShelvesQuery = {
+  __typename: 'Query';
+  getUserShelves: Array<{
+    __typename: 'ShelfDto';
+    name: string;
+    id: string;
+    booksInThisShelf: Array<{
+      __typename: 'BookInShelf';
+      book: { __typename: 'BookDtoWithoutArchitect'; id: number };
+    }>;
+  }>;
 };
 
 export const BookDetailsFragmentDoc = gql`
@@ -815,6 +935,43 @@ export function useUpdateBookReadingProgressMutation() {
     UpdateBookReadingProgressMutation,
     UpdateBookReadingProgressMutationVariables
   >(UpdateBookReadingProgressDocument);
+}
+export const AddBookToShelfDocument = gql`
+  mutation AddBookToShelf($input: AddBookToShelfInput!) {
+    addBookToShelf(input: $input) {
+      __typename
+      ... on AddBookToShelfError {
+        message
+      }
+    }
+  }
+`;
+
+export function useAddBookToShelfMutation() {
+  return Urql.useMutation<
+    AddBookToShelfMutation,
+    AddBookToShelfMutationVariables
+  >(AddBookToShelfDocument);
+}
+export const RemoveBookFromShelfDocument = gql`
+  mutation RemoveBookFromShelf($input: RemoveBookToShelfInput!) {
+    removeBookFromShelf(input: $input) {
+      __typename
+      ... on RemoveBookToShelfResult {
+        noop
+      }
+      ... on RemoveBookToShelfError {
+        message
+      }
+    }
+  }
+`;
+
+export function useRemoveBookFromShelfMutation() {
+  return Urql.useMutation<
+    RemoveBookFromShelfMutation,
+    RemoveBookFromShelfMutationVariables
+  >(RemoveBookFromShelfDocument);
 }
 export const CheckUserByIssuerDocument = gql`
   query CheckUserByIssuer($issuer: String!) {
@@ -1013,7 +1170,7 @@ export const GetBookStatisticsDocument = gql`
   query GetBookStatistics($bookId: BigInt!) {
     bookStatistics(bookId: $bookId) {
       readBy
-      reviewedBy
+      addedToShelves
     }
   }
 `;
@@ -1023,6 +1180,28 @@ export function useGetBookStatisticsQuery(
 ) {
   return Urql.useQuery<GetBookStatisticsQuery>({
     query: GetBookStatisticsDocument,
+    ...options,
+  });
+}
+export const GetUserShelvesDocument = gql`
+  query GetUserShelves($take: NonNegativeInt!) {
+    getUserShelves(take: $take) {
+      name
+      id
+      booksInThisShelf {
+        book {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export function useGetUserShelvesQuery(
+  options: Omit<Urql.UseQueryArgs<GetUserShelvesQueryVariables>, 'query'>
+) {
+  return Urql.useQuery<GetUserShelvesQuery>({
+    query: GetUserShelvesDocument,
     ...options,
   });
 }

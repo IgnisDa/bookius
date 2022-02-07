@@ -149,7 +149,21 @@ export const GET_BOOK_STATISTICS = gql`
   query GetBookStatistics($bookId: BigInt!) {
     bookStatistics(bookId: $bookId) {
       readBy
-      reviewedBy
+      addedToShelves
+    }
+  }
+`;
+
+export const GET_USER_SHELVES = gql`
+  query GetUserShelves($take: NonNegativeInt!) {
+    getUserShelves(take: $take) {
+      name
+      id
+      booksInThisShelf {
+        book {
+          id
+        }
+      }
     }
   }
 `;
