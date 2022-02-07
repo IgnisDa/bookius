@@ -12,7 +12,7 @@ export class BookStatisticsDto {
   readBy: number;
 
   @Field(() => GraphQLNonNegativeInt, {
-    description: 'The number of people who have reviewed this book',
+    description: 'The number of shelves this book has been added to',
   })
-  reviewedBy: number;
+  addedToShelves: number;
 }

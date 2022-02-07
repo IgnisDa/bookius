@@ -94,9 +94,10 @@ export class BooksService {
     const readBy = await this.prisma.bookProgressLog.count({
       where: { bookId: id, status: BookProgressStatus.COMPLETED },
     });
-    // TODO: return correct data here
-    const reviewedBy = 69;
-    return { readBy, reviewedBy };
+    const addedToShelves = await this.prisma.booksInShelves.count({
+      where: { bookId: id },
+    });
+    return { readBy, addedToShelves };
   }
 
   async userParticularBookProgressLogs(bookId: bigint, currentUser: User) {
