@@ -10,6 +10,30 @@ interface APIError {
   message: String!
 }
 
+"""The return type when a book can not be added to a shelf"""
+type AddBookToShelfError implements APIError {
+  """The message explaining what went wrong"""
+  message: String!
+}
+
+"""The input type to add a book to a shelf for a user"""
+input AddBookToShelfInput {
+  """The ID of the book that would get added to the shelf"""
+  bookId: BigInt!
+
+  """The ID of the shelf to which the book will get added to"""
+  shelfId: ID!
+}
+
+"""The return type when a book has been added to the shelf successfully"""
+type AddBookToShelfResult implements NoopDto {
+  """This has no meaning"""
+  noop: Noop
+}
+
+"""The type returned when a book is added to a shelf"""
+union AddBookToShelfResultUnion = AddBookToShelfError | AddBookToShelfResult
+
 """The people who have worked on a book"""
 type ArchitectDto {
   """Details about the author"""
@@ -140,6 +164,12 @@ type BookImageDto {
   coverUrl: URL!
 }
 
+"""A book in a shelf"""
+type BookInShelf {
+  """The book in this record"""
+  book: BookDtoWithoutArchitect!
+}
+
 """Model to track a user's reading progress with a particular book"""
 type BookProgressLogDto {
   """The book this is related to"""
@@ -187,11 +217,11 @@ enum BookProgressStatus {
 
 """The type returned when statistics about a particular book is requested"""
 type BookStatisticsDto {
+  """The number of shelves this book has been added to"""
+  addedToShelves: NonNegativeInt!
+
   """The number of people who have completed this book"""
   readBy: NonNegativeInt!
-
-  """The number of people who have reviewed this book"""
-  reviewedBy: NonNegativeInt!
 }
 
 """
@@ -311,6 +341,9 @@ type LoginResult {
 union LoginResultUnion = LoginError | LoginResult
 
 type Mutation {
+  """Add a book to a shelf for the current user."""
+  addBookToShelf(input: AddBookToShelfInput!): AddBookToShelfResultUnion!
+
   """Mark a book as started reading for the currently logged in user."""
   createBookProgressLog(input: CreateBookProgressLogInput!): CreateBookProgressLogResult!
 
@@ -323,6 +356,9 @@ type Mutation {
   """Login using an authentication token."""
   loginUser(issuer: String!): LoginResultUnion!
 
+  """Remove a book from a shelf for the current user."""
+  removeBookFromShelf(input: RemoveBookToShelfInput!): RemoveBookToShelfResultUnion!
+
   """Update reading progress of a book for the currently logged in user."""
   updateBookProgressLog(input: UpdateBookProgressLogInput!): Boolean!
 }
@@ -332,6 +368,15 @@ scalar NonNegativeFloat
 
 """Integers that will have a value of 0 or more."""
 scalar NonNegativeInt
+
+"""A field whose value holds absolutely no meaning"""
+scalar Noop
+
+"""A noop type which means absolutely nothing"""
+interface NoopDto {
+  """This has no meaning"""
+  noop: Noop
+}
 
 """The response object when communicating with the Open Library API"""
 type OpenLibraryResponse {
@@ -392,7 +437,7 @@ type Query {
   ): [BookDto!]!
 
   """Get a list of all shelves created by this user."""
-  filterUserShelves(
+  getUserShelves(
     """The number of items to take"""
     take: NonNegativeInt!
   ): [ShelfDto!]!
@@ -416,6 +461,30 @@ type Query {
   userRelatedBooks: [BookDto!]!
 }
 
+"""The return type when a book can not be removed from a shelf"""
+type RemoveBookToShelfError implements APIError {
+  """The message explaining what went wrong"""
+  message: String!
+}
+
+"""The input type to remove a book from a shelf for a user"""
+input RemoveBookToShelfInput {
+  """The ID of the book that would get removed from the shelf"""
+  bookId: BigInt!
+
+  """The ID of the shelf to which the book will get removed from"""
+  shelfId: ID!
+}
+
+"""The return type when a book has been removed from a shelf successfully"""
+type RemoveBookToShelfResult implements NoopDto {
+  """This has no meaning"""
+  noop: Noop
+}
+
+"""The type returned when a book is added to a shelf"""
+union RemoveBookToShelfResultUnion = RemoveBookToShelfError | RemoveBookToShelfResult
+
 """Counts of various statistics related to shelves"""
 type ShelfCountDto {
   """The number of books in this shelf"""
@@ -428,7 +497,7 @@ type ShelfDto {
   _count: ShelfCountDto!
 
   """The books that are contained in this shelf"""
-  books: [BookDtoWithoutArchitect!]!
+  booksInThisShelf: [BookInShelf!]!
 
   """The date and time when this shelf was created"""
   createdAt: DateTime!

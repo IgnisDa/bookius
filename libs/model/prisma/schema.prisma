@@ -43,21 +43,21 @@ model UserProfile {
 
 /// This model will keep track of books that will be made available to the users
 model Book {
-  id               BigInt              @id @default(autoincrement())
-  title            String
-  description      String?
-  isbn10           String?
-  isbn13           String?
+  id                BigInt              @id @default(autoincrement())
+  title             String
+  description       String?
+  isbn10            String?
+  isbn13            String?
   /// The unique keys for the book assigned by the Open Library API, eg: OL26868794M
-  openLibraryKeys  String[]
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
-  publishDate      String?
-  publishers       String[]
-  architects       ArchitectsOnBooks[]
-  shelves          Shelf[]
-  bookProgressLogs BookProgressLog[]
-  bookImages       BookImage[]
+  openLibraryKeys   String[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  publishDate       String?
+  publishers        String[]
+  architects        ArchitectsOnBooks[]
+  bookProgressLogs  BookProgressLog[]
+  bookImages        BookImage[]
+  shelvesOfThisBook BooksInShelves[]
 }
 
 /// This model will be used for images of a book
@@ -101,17 +101,28 @@ model Author {
   books          ArchitectsOnBooks[]
 }
 
+/// The associative table to connect books and shelves
+model BooksInShelves {
+  id      BigInt @id @default(autoincrement())
+  book    Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  shelf   Shelf  @relation(fields: [shelfId], references: [id], onDelete: Cascade)
+  bookId  BigInt
+  shelfId String
+
+  @@unique([bookId, shelfId]) // a book can be in a shelf only once
+}
+
 /// A shelf is created by users to collect a number of books together
 model Shelf {
-  id          String   @id @default(cuid())
-  name        String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  description String?
-  isPublic    Boolean  @default(false) // if true, this will be visible to other users
-  books       Book[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String           @id @default(cuid())
+  name             String
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  description      String?
+  isPublic         Boolean          @default(false) // if true, this will be visible to other users
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  booksInThisShelf BooksInShelves[]
 }
 
 /// The human readable status of reading a book
