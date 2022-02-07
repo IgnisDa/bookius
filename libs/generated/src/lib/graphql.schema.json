@@ -36,6 +36,11 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
+            "name": "AddBookToShelfError",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
             "name": "BooksDetailsError",
             "ofType": null
           },
@@ -47,6 +52,137 @@
           {
             "kind": "OBJECT",
             "name": "LoginError",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "RemoveBookToShelfError",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AddBookToShelfError",
+        "description": "The return type when a book can not be added to a shelf",
+        "fields": [
+          {
+            "name": "message",
+            "description": "The message explaining what went wrong",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "APIError",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AddBookToShelfInput",
+        "description": "The input type to add a book to a shelf for a user",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "bookId",
+            "description": "The ID of the book that would get added to the shelf",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "shelfId",
+            "description": "The ID of the shelf to which the book will get added to",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AddBookToShelfResult",
+        "description": "The return type when a book has been added to the shelf successfully",
+        "fields": [
+          {
+            "name": "noop",
+            "description": "This has no meaning",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Noop",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "NoopDto",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "AddBookToShelfResultUnion",
+        "description": "The type returned when a book is added to a shelf",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "AddBookToShelfError",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "AddBookToShelfResult",
             "ofType": null
           }
         ]
@@ -707,6 +843,33 @@
       },
       {
         "kind": "OBJECT",
+        "name": "BookInShelf",
+        "description": "A book in a shelf",
+        "fields": [
+          {
+            "name": "book",
+            "description": "The book in this record",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BookDtoWithoutArchitect",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "BookProgressLogDto",
         "description": "Model to track a user's reading progress with a particular book",
         "fields": [
@@ -891,8 +1054,8 @@
         "description": "The type returned when statistics about a particular book is requested",
         "fields": [
           {
-            "name": "readBy",
-            "description": "The number of people who have completed this book",
+            "name": "addedToShelves",
+            "description": "The number of shelves this book has been added to",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -907,8 +1070,8 @@
             "deprecationReason": null
           },
           {
-            "name": "reviewedBy",
-            "description": "The number of people who have reviewed this book",
+            "name": "readBy",
+            "description": "The number of people who have completed this book",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1499,6 +1662,39 @@
         "description": null,
         "fields": [
           {
+            "name": "addBookToShelf",
+            "description": "Add a book to a shelf for the current user.",
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AddBookToShelfInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "AddBookToShelfResultUnion",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createBookProgressLog",
             "description": "Mark a book as started reading for the currently logged in user.",
             "args": [
@@ -1631,6 +1827,39 @@
             "deprecationReason": null
           },
           {
+            "name": "removeBookFromShelf",
+            "description": "Remove a book from a shelf for the current user.",
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "RemoveBookToShelfInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "RemoveBookToShelfResultUnion",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "updateBookProgressLog",
             "description": "Update reading progress of a book for the currently logged in user.",
             "args": [
@@ -1688,6 +1917,50 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Noop",
+        "description": "A field whose value holds absolutely no meaning",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "NoopDto",
+        "description": "A noop type which means absolutely nothing",
+        "fields": [
+          {
+            "name": "noop",
+            "description": "This has no meaning",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Noop",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "AddBookToShelfResult",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "RemoveBookToShelfResult",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -2084,7 +2357,7 @@
             "deprecationReason": null
           },
           {
-            "name": "filterUserShelves",
+            "name": "getUserShelves",
             "description": "Get a list of all shelves created by this user.",
             "args": [
               {
@@ -2295,6 +2568,132 @@
       },
       {
         "kind": "OBJECT",
+        "name": "RemoveBookToShelfError",
+        "description": "The return type when a book can not be removed from a shelf",
+        "fields": [
+          {
+            "name": "message",
+            "description": "The message explaining what went wrong",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "APIError",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "RemoveBookToShelfInput",
+        "description": "The input type to remove a book from a shelf for a user",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "bookId",
+            "description": "The ID of the book that would get removed from the shelf",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "shelfId",
+            "description": "The ID of the shelf to which the book will get removed from",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RemoveBookToShelfResult",
+        "description": "The return type when a book has been removed from a shelf successfully",
+        "fields": [
+          {
+            "name": "noop",
+            "description": "This has no meaning",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Noop",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "NoopDto",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "RemoveBookToShelfResultUnion",
+        "description": "The type returned when a book is added to a shelf",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "RemoveBookToShelfError",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "RemoveBookToShelfResult",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
         "name": "ShelfCountDto",
         "description": "Counts of various statistics related to shelves",
         "fields": [
@@ -2342,7 +2741,7 @@
             "deprecationReason": null
           },
           {
-            "name": "books",
+            "name": "booksInThisShelf",
             "description": "The books that are contained in this shelf",
             "args": [],
             "type": {
@@ -2356,7 +2755,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "BookDtoWithoutArchitect",
+                    "name": "BookInShelf",
                     "ofType": null
                   }
                 }

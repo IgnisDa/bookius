@@ -48,3 +48,28 @@ export const UPDATE_BOOK_READING_PROGRESS = gql`
     updateBookProgressLog(input: $input)
   }
 `;
+
+export const ADD_BOOK_TO_SHELF = gql`
+  mutation AddBookToShelf($input: AddBookToShelfInput!) {
+    addBookToShelf(input: $input) {
+      __typename
+      ... on AddBookToShelfError {
+        message
+      }
+    }
+  }
+`;
+
+export const REMOVE_BOOK_FROM_SHELF = gql`
+  mutation RemoveBookFromShelf($input: RemoveBookToShelfInput!) {
+    removeBookFromShelf(input: $input) {
+      __typename
+      ... on RemoveBookToShelfResult {
+        noop
+      }
+      ... on RemoveBookToShelfError {
+        message
+      }
+    }
+  }
+`;
