@@ -11,15 +11,16 @@ export const ImageDisplayComponent: FC<ImageDisplayComponentProps> = ({
   book,
 }) => {
   const hasCovers = book.bookImages.length > 0;
+  const bookImage = book.bookImages?.at(0);
 
   return (
-    <div className="relative h-[500px] w-[320px] sm:h-[550px] sm:w-[370px] flex-none lg:h-[700px] lg:w-[450px]">
+    <div className="relative h-[500px] w-[320px] flex-none sm:h-[550px] sm:w-[370px] lg:h-[700px] lg:w-[450px]">
       <Image
-        src={hasCovers ? book.bookImages?.at(0)?.coverUrl! : noBookImage}
+        data-src={bookImage?.coverUrl}
+        data-base64-src={bookImage?.base64String}
+        src={hasCovers ? bookImage?.coverUrl! : noBookImage}
         placeholder={hasCovers ? 'blur' : 'empty'}
-        blurDataURL={
-          hasCovers ? book.bookImages.at(0)?.base64String : undefined
-        }
+        blurDataURL={hasCovers ? bookImage?.base64String : undefined}
         alt={
           hasCovers ? `Image for '${book.title}'` : 'No valid book covers found'
         }

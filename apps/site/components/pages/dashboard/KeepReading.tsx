@@ -45,6 +45,7 @@ export const KeepReadingComponent: FC<PopularAuthorsComponentProps> = ({
                     <Image asChild src={images?.coverUrl}>
                       <NextImageWithRef
                         src={images?.coverUrl!}
+                        placeholder={images?.coverUrl ? 'blur' : 'empty'}
                         blurDataURL={images?.base64String}
                         className="inset-0 object-cover object-top"
                         width={'48px'}
