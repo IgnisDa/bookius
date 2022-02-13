@@ -6,14 +6,14 @@ const IndexPage: NextPage = () => {
     <div className="relative h-full w-full px-3 lg:flex">
       <div className="pointer-events-none fixed inset-0 hidden w-1/2 -translate-x-24 skew-x-12 border-r-2 border-base-100 bg-gray-300 bg-opacity-5 lg:block" />
       <div className="flex h-1/2 flex-col justify-center space-y-10 text-center lg:h-auto lg:w-2/5">
-        <h1 className="text-8xl font-semibold text-accent 2xl:text-9xl">
+        <h1 className="text-7xl font-semibold text-accent md:text-8xl 2xl:text-9xl">
           Bookius
         </h1>
-        <h2 className="font-heading text-4xl">
+        <h2 className="font-heading text-2xl md:text-4xl">
           Make reading books easier for yourself
         </h2>
         <NextLink href="/dashboard">
-          <a className="btn btn-primary mx-auto max-w-xs text-2xl tracking-wider">
+          <a className="btn mx-auto max-w-xs border-transparent pt-1 text-2xl tracking-wider shadow-2xl hover:border-black hover:bg-gray-800">
             Get started
           </a>
         </NextLink>

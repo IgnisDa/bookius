@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { NextPage } from 'next';
-import { DefaultSeo } from 'next-seo';
+import { NextSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import NextNprogress from 'nextjs-progressbar';
@@ -20,12 +20,17 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
+const title = 'Bookius';
+const description = 'A website to track your progress with various books';
+const site = 'https://bookius.ignisda.tech/';
+const handle = '@ignisda';
+
 function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? defaultLayout;
   if (pageProps.urqlState) ssrCache.restoreData(pageProps.urqlState);
 
-  /* const darkMode = */ useDarkMode(true, {
+  useDarkMode(true, {
     onChange: (enabled) => {
       if (enabled) {
         document.body.setAttribute('data-theme', 'dark');
@@ -41,17 +46,25 @@ function NextApp({ Component, pageProps, router }: AppPropsWithLayout) {
         <title>Bookius</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <DefaultSeo />
+      <NextSeo
+        title={title}
+        description={description}
+        canonical={site}
+        openGraph={{
+          url: site,
+          title: title,
+          description: description,
+          images: [],
+          site_name: title,
+        }}
+        twitter={{
+          handle: handle,
+          site: handle,
+          cardType: 'summary_large_image',
+        }}
+      />
       <NextNprogress />
       <Provider value={client}>
-        {/* {process.env.NODE_ENV === 'development' && (
-          <button
-            className="absolute px-4 py-2 bg-blue-400 btn rounded-2xl"
-            onClick={darkMode.toggle}
-          >
-            Theme
-          </button>
-        )} */}
         <ToastContainer position="bottom-center" />
         {getLayout(
           <AnimatePresence exitBeforeEnter>
