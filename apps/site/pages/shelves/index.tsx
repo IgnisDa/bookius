@@ -1,4 +1,5 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import Head from 'next/head';
 import {
   getRedirectUnauthenticatedRequests,
   hasRequiredRequestCookies,
@@ -9,6 +10,9 @@ const ShelvesIndex = (
 ) => {
   return (
     <>
+      <Head>
+        <title>Shelves</title>
+      </Head>
       <div>
         <h1>All shelves</h1>
       </div>

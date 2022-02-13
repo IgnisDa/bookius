@@ -4,6 +4,7 @@ import {
   useGetUserRelatedBooksQuery,
 } from '@bookius/generated';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import Head from 'next/head';
 import { ChangeEvent, useState } from 'react';
 import { KeepReadingComponent } from '../components/pages/dashboard/KeepReading';
 import { MyBooksComponent } from '../components/pages/dashboard/MyBooks';
@@ -35,18 +36,23 @@ const Dashboard = (
     setSearch(e.target.value);
 
   return (
-    <div className="flex w-full max-w-5xl flex-none flex-col space-y-8 lg:flex-col">
-      <div>
-        <SearchInputComponent search={search} updateSearch={updateSearch} />
+    <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
+      <div className="flex w-full max-w-5xl flex-none flex-col space-y-8 lg:flex-col">
+        <div>
+          <SearchInputComponent search={search} updateSearch={updateSearch} />
+        </div>
+        <div>
+          <MyBooksComponent books={userRelatedBooksData!} />
+        </div>
+        <div className="flex flex-col space-y-8 lg:flex-row lg:items-start lg:space-x-5 lg:space-y-0">
+          <YourAuthorsComponent authors={userRelatedAuthorsData!} />
+          <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
+        </div>
       </div>
-      <div>
-        <MyBooksComponent books={userRelatedBooksData!} />
-      </div>
-      <div className="flex flex-col space-y-8 lg:flex-row lg:items-start lg:space-x-5 lg:space-y-0">
-        <YourAuthorsComponent authors={userRelatedAuthorsData!} />
-        <KeepReadingComponent logs={useGetUserBooksProgressLogsData!} />
-      </div>
-    </div>
+    </>
   );
 };
 

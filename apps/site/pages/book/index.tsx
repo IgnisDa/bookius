@@ -6,6 +6,7 @@ import {
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import { ContinueReadingComponent } from '../../components/pages/book/ContinueReading';
 import { DetailsDisplayComponent } from '../../components/pages/book/DetailsDisplay';
@@ -29,23 +30,31 @@ const BookDetailPage = ({
   return (
     <div className="mb-auto flex-grow px-3 md:my-auto md:max-w-6xl">
       {data?.bookDetailsByOlid.__typename === 'BooksDetailsError' ? (
-        <div className="flex flex-col items-center text-center">
-          <h1 className="max-w-2xl text-2xl text-white lg:text-4xl 2xl:text-5xl">
-            {data.bookDetailsByOlid.message}
-          </h1>
-          <div className="flex items-center justify-center">
-            <Image
-              src={ufoImage}
-              alt={`Book was not found`}
-              height={400}
-              width={500}
-              layout="intrinsic"
-              priority
-            />
+        <>
+          <Head>
+            <title>Book not found</title>
+          </Head>
+          <div className="flex flex-col items-center text-center">
+            <h1 className="max-w-2xl text-2xl text-white lg:text-4xl 2xl:text-5xl">
+              {data.bookDetailsByOlid.message}
+            </h1>
+            <div className="flex items-center justify-center">
+              <Image
+                src={ufoImage}
+                alt={`Book was not found`}
+                height={400}
+                width={500}
+                layout="intrinsic"
+                priority
+              />
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         <>
+          <Head>
+            <title>{data?.bookDetailsByOlid.title}</title>
+          </Head>
           {data?.bookDetailsByOlid && (
             <div className="flex flex-col items-center space-y-10 md:flex-row md:items-stretch md:space-x-10 md:space-y-0">
               <ImageDisplayComponent book={data.bookDetailsByOlid} />
