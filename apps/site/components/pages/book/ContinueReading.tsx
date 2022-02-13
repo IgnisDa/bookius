@@ -192,55 +192,58 @@ export const ContinueReadingComponent: FC<ContinueReadingComponentProps> = ({
           <div className="text-center font-heading text-3xl underline decoration-wavy">
             Add to shelves
           </div>
-          <div className="grid grid-cols-2 gap-y-5 text-center md:grid-cols-3">
-            {getUserShelvesQueryData?.getUserShelves.map((shelf) => {
-              const isBookInShelf =
-                shelf.booksInThisShelf
-                  .flatMap((bits) => bits.book.id) // booksInThisShelf
-                  .findIndex((b) => b === book.id) !== -1; // technically this should be a unique array
-              return (
-                <ToggleRoot
-                  key={shelf.id}
-                  defaultPressed={isBookInShelf}
-                  className="flex items-center space-x-4"
-                  onPressedChange={async (pressed) => {
-                    const input = { bookId: book.id, shelfId: shelf.id };
-                    if (pressed) await executeAddBookToShelfMutation({ input });
-                    else await executeRemoveBookFromShelfMutation({ input });
-                    executeGetUserShelvesQuery({
-                      requestPolicy: 'network-only',
-                    });
-                    executeGetBookStatisticsQuery({
-                      networkPolicy: 'network-only',
-                    });
-                  }}
-                >
-                  <AnimatePresence exitBeforeEnter>
-                    {isBookInShelf ? (
-                      <MotionMinusIcon
-                        variants={variants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                        className="h-6 w-6 rounded-lg border-2 border-gray-600 bg-base-300 fill-current text-red-500 transition-transform duration-300 group-hover:scale-110 md:h-7 md:w-7"
-                      />
-                    ) : (
-                      <MotionPlusIcon
-                        variants={variants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                        className="h-6 w-6 rounded-lg border-2 border-gray-600 bg-base-300 fill-current text-green-500 transition-transform duration-300 group-hover:scale-110 md:h-7 md:w-7"
-                      />
-                    )}
-                  </AnimatePresence>
-                  <span className="text-lg">
-                    {truncate(shelf.name, { length: 15 })}
-                  </span>
-                </ToggleRoot>
-              );
-            })}
-          </div>
+          {getUserShelvesQueryData?.getUserShelves.length! > 0 && (
+            <div className="grid grid-cols-2 gap-y-5 text-center md:grid-cols-3">
+              {getUserShelvesQueryData?.getUserShelves.map((shelf) => {
+                const isBookInShelf =
+                  shelf.booksInThisShelf
+                    .flatMap((bits) => bits.book.id) // booksInThisShelf
+                    .findIndex((b) => b === book.id) !== -1; // technically this should be a unique array
+                return (
+                  <ToggleRoot
+                    key={shelf.id}
+                    defaultPressed={isBookInShelf}
+                    className="flex items-center space-x-4"
+                    onPressedChange={async (pressed) => {
+                      const input = { bookId: book.id, shelfId: shelf.id };
+                      if (pressed)
+                        await executeAddBookToShelfMutation({ input });
+                      else await executeRemoveBookFromShelfMutation({ input });
+                      executeGetUserShelvesQuery({
+                        requestPolicy: 'network-only',
+                      });
+                      executeGetBookStatisticsQuery({
+                        networkPolicy: 'network-only',
+                      });
+                    }}
+                  >
+                    <AnimatePresence exitBeforeEnter>
+                      {isBookInShelf ? (
+                        <MotionMinusIcon
+                          variants={variants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          className="h-6 w-6 rounded-lg border-2 border-gray-600 bg-base-300 fill-current text-red-500 transition-transform duration-300 group-hover:scale-110 md:h-7 md:w-7"
+                        />
+                      ) : (
+                        <MotionPlusIcon
+                          variants={variants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          className="h-6 w-6 rounded-lg border-2 border-gray-600 bg-base-300 fill-current text-green-500 transition-transform duration-300 group-hover:scale-110 md:h-7 md:w-7"
+                        />
+                      )}
+                    </AnimatePresence>
+                    <span className="text-lg">
+                      {truncate(shelf.name, { length: 15 })}
+                    </span>
+                  </ToggleRoot>
+                );
+              })}
+            </div>
+          )}
           <form
             className="items-center justify-center space-y-2 md:flex md:space-x-4 md:space-y-0"
             onSubmit={async (e) => {
