@@ -2,30 +2,19 @@ import { ApplicationConfig } from '@bookius/config';
 import { PrismaModule } from '@bookius/model';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
 import { ScheduleModule } from '@nestjs/schedule';
 import { dotenvLoader, TypedConfigModule } from 'nest-typed-config';
-import { RateLimiterGuard, RateLimiterModule } from 'nestjs-rate-limiter';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
 import { CoreModule } from './core/core.module';
 import { ShelvesModule } from './shelves/shelves.module';
 
-const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
-
 @Module({
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RateLimiterGuard,
-    },
-  ],
+  providers: [],
   imports: [
-    RateLimiterModule.register({
-      for: 'ExpressGraphql',
-    }),
     ScheduleModule.forRoot(),
     BullModule.forRootAsync({
       useFactory: async (configService: ApplicationConfig) => {
@@ -45,7 +34,8 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
       schema: ApplicationConfig,
       load: dotenvLoader(),
     }),
-    GraphQLModule.forRoot({
+    GraphQLModule.forRoot<MercuriusDriverConfig>({
+      driver: MercuriusDriver,
       autoSchemaFile: join(
         process.cwd(),
         'libs',
@@ -53,8 +43,6 @@ const IS_PRODUCTION = process.env.NODE_ENV !== 'production';
         'src',
         'schema.graphql'
       ),
-      playground: IS_PRODUCTION,
-      introspection: IS_PRODUCTION,
       sortSchema: true,
     }),
     PrismaModule,
