@@ -17,7 +17,9 @@ async function bootstrap() {
   const PORT = Number(process.env.PORT);
   app.getHttpAdapter().getInstance().register(helmet);
   app.getHttpAdapter().getInstance().register(cors);
-  await app.listen(PORT, () => logger.silly(`Listening on port ${PORT}`));
+  await app.listen(PORT, '0.0.0.0', () =>
+    logger.silly(`Listening on port ${PORT}`)
+  );
 }
 
 bootstrap();
