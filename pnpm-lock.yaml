@@ -111,7 +111,6 @@ specifiers:
   nest-typed-config: 2.3.0
   next: 12.0.10
   next-seo: 5.1.0
-  next-urql: 3.3.2
   nextjs-progressbar: 0.0.13
   nodemailer: 6.7.2
   passport: 0.5.2
@@ -207,7 +206,6 @@ dependencies:
   nest-typed-config: 2.3.0_0f75cad7c3bc55c714d492fe95499bdf
   next: 12.0.10_9ee0ffa523ab8c6f438140d2dc1876c7
   next-seo: 5.1.0_61390be992b634a688f7c2555547b55b
-  next-urql: 3.3.2_react@17.0.2+urql@2.1.2
   nextjs-progressbar: 0.0.13_next@12.0.10+react@17.0.2
   nodemailer: 6.7.2
   passport: 0.5.2
@@ -17726,20 +17724,6 @@ packages:
     resolution: { integrity: sha1-yobR/ogoFpsBICCOPchCS524NCw= }
     dev: false
 
-  /next-urql/3.3.2_react@17.0.2+urql@2.1.2:
-    resolution:
-      {
-        integrity: sha512-oXQHCFU0R3pIwXWtDqZDYOjKcD7SlNP7aove9YuukgKuItdtIR9CRUgo3qMOD5dSQ3wBBGfQ8zR6XtzqV5WiGg==,
-      }
-    peerDependencies:
-      react: '>=16.8.0'
-      urql: ^2.0.0
-    dependencies:
-      react: 17.0.2
-      react-ssr-prepass: 1.4.0_react@17.0.2
-      urql: 2.1.2_graphql@16.3.0+react@17.0.2
-    dev: false
-
   /next/12.0.10_9ee0ffa523ab8c6f438140d2dc1876c7:
     resolution:
       {
@@ -20084,17 +20068,6 @@ packages:
       react: 17.0.2
       react-is: 17.0.2
     dev: true
-
-  /react-ssr-prepass/1.4.0_react@17.0.2:
-    resolution:
-      {
-        integrity: sha512-0SzdmiQUtHvhxCabHg9BI/pkJfijGkQ0jQL6fC4YFy7idaDOuaiQLsajIkkNxffFXtJFHIWFITlve2WB88e0Jw==,
-      }
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0
-    dependencies:
-      react: 17.0.2
-    dev: false
 
   /react-style-singleton/2.1.1_a0c521d4794c7ad97f5f4c1c4a7d5818:
     resolution:
