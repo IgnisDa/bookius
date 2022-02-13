@@ -31,6 +31,7 @@ export const client = createClient({
     : process.env.NEXT_PUBLIC_GRAPHQL_API!,
   exchanges: [
     dedupExchange,
+    // @ts-ignore
     scalarsExchange,
     cacheExchange,
     ssrCache,
