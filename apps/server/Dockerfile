@@ -39,6 +39,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/dist/apps/server/main.js /app/.env ./
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
+RUN npm rebuild sharp
 COPY apps/server/ci/start.sh apps/server/ci/CHECKS libs/model/prisma ./
 EXPOSE 80
 
