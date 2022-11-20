@@ -1,104 +1,5 @@
 {
-  "root": "apps/site",
-  "sourceRoot": "apps/site",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "configurations": {
-        "production": {}
-      },
-      "defaultConfiguration": "production",
-      "executor": "@nrwl/next:build",
-      "options": {
-        "outputPath": "dist/apps/site",
-        "root": "apps/site"
-      },
-      "outputs": ["{options.outputPath}"]
-    },
-    "export": {
-      "executor": "@nrwl/next:export",
-      "options": {
-        "buildTarget": "site:build:production"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/site/**/*.{ts,tsx,js,jsx}"]
-      },
-      "outputs": ["{options.outputFile}"]
-    },
-    "serve": {
-      "configurations": {
-        "production": {
-          "buildTarget": "site:build:production",
-          "dev": false
-        }
-      },
-      "executor": "@nrwl/next:server",
-      "options": {
-        "buildTarget": "site:build",
-        "dev": true
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "options": {
-        "jestConfig": "apps/site/jest.config.js",
-        "passWithNoTests": true
-      },
-      "outputs": ["coverage/apps/site"]
-    }
-  },
-  "tags": [],
   "dependencies": {
-    "development": [
-      "@graphql-codegen/add",
-      "@graphql-codegen/cli",
-      "@graphql-codegen/introspection",
-      "@graphql-codegen/typescript",
-      "@graphql-codegen/typescript-operations",
-      "@graphql-codegen/typescript-urql",
-      "@nrwl/cli",
-      "@nrwl/eslint-plugin-nx",
-      "@nrwl/jest",
-      "@nrwl/linter",
-      "@nrwl/nest",
-      "@nrwl/node",
-      "@nrwl/react",
-      "@nrwl/web",
-      "@nrwl/workspace",
-      "@tailwindcss/typography",
-      "@testing-library/react",
-      "@testing-library/react-hooks",
-      "@types/jest",
-      "@types/js-cookie",
-      "@types/lodash.debounce",
-      "@types/lodash.truncate",
-      "@types/luxon",
-      "@types/react",
-      "@types/react-dom",
-      "@types/sharp",
-      "autoprefixer",
-      "daisyui",
-      "eslint",
-      "eslint-config-next",
-      "eslint-config-prettier",
-      "eslint-plugin-import",
-      "eslint-plugin-jsx-a11y",
-      "eslint-plugin-react",
-      "eslint-plugin-react-hooks",
-      "postcss",
-      "prettier",
-      "prettier-plugin-tailwindcss",
-      "react-test-renderer",
-      "sass",
-      "tailwindcss",
-      "tailwindcss-debug-screens",
-      "ts-jest",
-      "tslib",
-      "typescript"
-    ],
     "required": [
       "@emotion/react",
       "@emotion/styled",
@@ -141,6 +42,114 @@
       "urql",
       "urql-custom-scalars-exchange",
       "use-dark-mode"
+    ],
+    "development": [
+      "@graphql-codegen/add",
+      "@graphql-codegen/cli",
+      "@graphql-codegen/introspection",
+      "@graphql-codegen/typescript",
+      "@graphql-codegen/typescript-operations",
+      "@graphql-codegen/typescript-urql",
+      "@nrwl/cli",
+      "@nrwl/eslint-plugin-nx",
+      "@nrwl/jest",
+      "@nrwl/linter",
+      "@nrwl/nest",
+      "@nrwl/node",
+      "@nrwl/react",
+      "@nrwl/web",
+      "@nrwl/workspace",
+      "@tailwindcss/typography",
+      "@testing-library/react",
+      "@testing-library/react-hooks",
+      "@types/jest",
+      "@types/js-cookie",
+      "@types/lodash.debounce",
+      "@types/lodash.truncate",
+      "@types/luxon",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@types/sharp",
+      "autoprefixer",
+      "daisyui",
+      "eslint",
+      "eslint-config-next",
+      "eslint-config-prettier",
+      "eslint-plugin-import",
+      "eslint-plugin-jsx-a11y",
+      "eslint-plugin-react",
+      "eslint-plugin-react-hooks",
+      "postcss",
+      "prettier",
+      "prettier-plugin-tailwindcss",
+      "react-test-renderer",
+      "sass",
+      "tailwindcss",
+      "tailwindcss-debug-screens",
+      "ts-jest",
+      "tslib",
+      "typescript"
     ]
+  },
+  "projectType": "application",
+  "root": "apps/site",
+  "sourceRoot": "apps/site",
+  "tags": [],
+  "targets": {
+    "build": {
+      "configurations": {
+        "production": {}
+      },
+      "defaultConfiguration": "production",
+      "executor": "@nrwl/next:build",
+      "options": {
+        "outputPath": "dist/apps/site",
+        "root": "apps/site"
+      },
+      "outputs": [
+        "{options.outputPath}"
+      ]
+    },
+    "export": {
+      "executor": "@nrwl/next:export",
+      "options": {
+        "buildTarget": "site:build:production"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/site/**/*.{ts,tsx,js,jsx}"
+        ]
+      },
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    },
+    "serve": {
+      "configurations": {
+        "production": {
+          "buildTarget": "site:build:production",
+          "dev": false
+        }
+      },
+      "executor": "@nrwl/next:server",
+      "options": {
+        "buildTarget": "site:build",
+        "dev": true
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/site/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": [
+        "coverage/apps/site"
+      ]
+    }
   }
 }

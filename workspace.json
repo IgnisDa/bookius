@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "projects": {
     "config": "libs/config",
     "data": "libs/data",
@@ -9,5 +8,6 @@
     "server": "apps/server",
     "site": "apps/site",
     "ui": "libs/ui"
-  }
+  },
+  "version": 2
 }
