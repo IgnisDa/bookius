@@ -5,9 +5,11 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml workspace.json ./
 COPY apps/server/project.json ./apps/server/project.json
 RUN yarn global add pnpm && \
-    curl https://raw.githubusercontent.com/IgnisDa/developrs/main/packages/esteem/install.sh | sh -s -- --yes && \
+    wget https://github.com/IgnisDa/developrs/releases/download/esteem-v0.3.1/esteem-v0.3.1-x86_64-unknown-linux-musl.tar.gz && \
+    tar -xzf esteem-v0.3.1-x86_64-unknown-linux-musl.tar.gz && \
+    mv esteem-v0.3.1-x86_64-unknown-linux-musl/esteem  /usr/bin && \
     esteem install-isolated server && \
-    pnpm install
+    pnpm install --ignore-scripts
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
