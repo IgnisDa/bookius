@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3-labs
-FROM node:16-alpine AS deps
+FROM node:19-alpine AS deps
 RUN apk add --no-cache curl
 WORKDIR /app
 COPY package.json pnpm-lock.yaml workspace.json ./
@@ -10,7 +10,7 @@ RUN yarn global add pnpm && \
     pnpm install
 
 # Rebuild the source code only when needed
-FROM node:16-alpine AS builder
+FROM node:19-alpine AS builder
 ARG NEXT_PUBLIC_GRAPHQL_API
 ARG NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY
 ARG NEXT_SERVER_GRAPHQL_API
@@ -31,7 +31,7 @@ RUN yarn global add nx pnpm && \
     pnpm install --production --ignore-scripts --prefer-offline
 
 # Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+FROM node:19-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production \
